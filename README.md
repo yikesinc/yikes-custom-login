@@ -1,4 +1,4 @@
-### YIKES Custom Login
+### YIKES Inc. Custom Login
 
 A WordPress plugin that replaces the login flow with custom pages.
 
