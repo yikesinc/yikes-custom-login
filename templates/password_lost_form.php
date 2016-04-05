@@ -1,6 +1,6 @@
 <div id="password-lost-form" class="widecolumn">
 	<?php if ( $attributes['show_title'] ) : ?>
-		<h3><?php _e( 'Forgot Your Password?', 'yikes-custom-login' ); ?></h3>
+		<h3><?php _e( 'Forgot Your Password?', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
 
 	<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
@@ -22,13 +22,13 @@
 
 	<form id="lostpasswordform" action="<?php echo wp_lostpassword_url(); ?>" method="post">
 		<p class="form-row">
-			<label for="user_login"><?php _e( 'Email', 'yikes-custom-login' ); ?>
+			<label for="user_login"><?php _e( 'Email', 'yikes-inc-custom-login' ); ?>
 			<input type="text" name="user_login" id="user_login">
 		</p>
 
 		<p class="lostpassword-submit">
 			<input type="submit" name="submit" class="lostpassword-button"
-			       value="<?php _e( 'Reset Password', 'yikes-custom-login' ); ?>"/>
+			       value="<?php _e( 'Reset Password', 'yikes-inc-custom-login' ); ?>"/>
 		</p>
 	</form>
 </div>

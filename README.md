@@ -9,3 +9,10 @@ A WordPress plugin that replaces the login flow with custom pages.
 * `[custom-password-lost-form]`
 * `[custom-password-reset-form]`
 * `[account-info]` <small>(todo)</small>
+
+
+#### Filters
+
+* `yikes-inc-custom-login-redirect`
+
+Page to redirect non-admin users to when they successfully login.
