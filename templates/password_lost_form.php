@@ -1,4 +1,10 @@
 <div id="password-lost-form" class="widecolumn">
+
+	<?php
+		/** Custom Action Hook - Before Password Lost Form */
+		do_action( 'yikes-inc-custom-login-before-password-lost-form' );
+	?>
+
 	<?php if ( $attributes['show_title'] ) : ?>
 		<h3><?php _e( 'Forgot Your Password?', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
@@ -15,7 +21,7 @@
 		<?php
 			_e(
 				"Enter your email address and we'll send you a link you can use to pick a new password.",
-				'personalize_login'
+				'yikes-inc-custom-login'
 			);
 		?>
 	</p>
@@ -31,4 +37,10 @@
 			       value="<?php _e( 'Reset Password', 'yikes-inc-custom-login' ); ?>"/>
 		</p>
 	</form>
+
+	<?php
+		/** Custom Action Hook - After Password Lost Form */
+		do_action( 'yikes-inc-custom-login-after-password-lost-form' );
+	?>
+
 </div>

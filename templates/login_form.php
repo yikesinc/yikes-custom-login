@@ -71,6 +71,10 @@
 </div>
 <?php else : ?>
 	<div class="login-form-container">
+		<?php
+			/** Custom Action Hook - Before Login Form */
+			do_action( 'yikes-inc-custom-login-before-login-form' );
+		?>
 		<form method="post" action="<?php echo wp_login_url(); ?>">
 			<p class="login-username">
 				<label for="user_login"><?php _e( 'Email', 'yikes-inc-custom-login' ); ?></label>
@@ -84,5 +88,9 @@
 				<input type="submit" value="<?php _e( 'Sign In', 'yikes-inc-custom-login' ); ?>">
 			</p>
 		</form>
+		<?php
+			/** Custom Action Hook - After Login Form */
+			do_action( 'yikes-inc-custom-login-after-login-form' );
+		?>
 	</div>
 <?php endif; ?>

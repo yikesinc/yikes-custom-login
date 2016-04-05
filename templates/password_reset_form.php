@@ -1,4 +1,10 @@
 <div id="password-reset-form" class="widecolumn">
+
+	<?php
+		/** Custom Action Hook - Before Password Reset Form */
+		do_action( 'yikes-inc-custom-login-before-password-reset-form' );
+	?>
+
 	<?php if ( $attributes['show_title'] ) : ?>
 		<h3><?php _e( 'Pick a New Password', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
@@ -31,4 +37,10 @@
 			       class="button" value="<?php _e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
 		</p>
 	</form>
+
+	<?php
+		/** Custom Action Hook - After Password Reset Form */
+		do_action( 'yikes-inc-custom-login-after-password-reset-form' );
+	?>
+
 </div>

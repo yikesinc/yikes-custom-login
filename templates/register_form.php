@@ -1,4 +1,10 @@
 <div id="register-form" class="widecolumn">
+
+	<?php
+		/** Custom Action Hook - Before Register Form */
+		do_action( 'yikes-inc-custom-login-before-register-form' );
+	?>
+
 	<?php if ( $attributes['show_title'] ) : ?>
 		<h3><?php _e( 'Register', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
@@ -43,4 +49,10 @@
 			<input type="submit" name="submit" class="register-button" value="<?php _e( 'Register', 'yikes-inc-custom-login' ); ?>"/>
 		</p>
 	</form>
+
+	<?php
+		/** Custom Action Hook - After Register Form */
+		do_action( 'yikes-inc-custom-login-after-register-form' );
+	?>
+
 </div>
