@@ -10,6 +10,9 @@ A WordPress plugin that replaces the login flow with custom pages.
 * `[custom-password-reset-form]`
 * `[account-info]` <small>(todo)</small>
 
+#### Custom Templates:
+
+Users can override the default templates by copying `yikes-custom-login/templates/` into the theme root, and renaming the directory `/yikes-custom-login/`. You can remove any of the templates you don't need.
 
 #### Filters
 

@@ -10,7 +10,7 @@
  * Text Domain:       yikes-custom-login
  */
 
-class Personalize_Login_Plugin {
+class YIKES_Custom_Login {
 
 	/**
 	 * Initializes the plugin.
@@ -46,6 +46,7 @@ class Personalize_Login_Plugin {
 
 		// Shortcodes
 		add_shortcode( 'custom-login-form', array( $this, 'render_login_form' ) );
+		add_shortcode( 'account-info', array( $this, 'render_account_info_form' ) );
 		add_shortcode( 'custom-register-form', array( $this, 'render_register_form' ) );
 		add_shortcode( 'custom-password-lost-form', array( $this, 'render_password_lost_form' ) );
 		add_shortcode( 'custom-password-reset-form', array( $this, 'render_password_reset_form' ) );
@@ -59,24 +60,24 @@ class Personalize_Login_Plugin {
 	public static function plugin_activated() {
 		// Information needed for creating the plugin's pages
 		$page_definitions = array(
-			apply_filters( 'yikes-inc-custom-login-login-slug', 'member-login' ) => array(
-				'title' => __( 'Sign In', 'yikes-inc-custom-login' ),
+			apply_filters( 'yikes-custom-login-login-slug', 'member-login' ) => array(
+				'title' => __( 'Sign In', 'yikes-custom-login' ),
 				'content' => '[custom-login-form]',
 			),
-			/* apply_filters( 'yikes-inc-custom-login-account-slug', 'member-account' ) => array(
-				'title' => __( 'Your Account', 'yikes-inc-custom-login' ),
+			apply_filters( 'yikes-custom-login-account-slug', 'member-account' ) => array(
+				'title' => __( 'Your Account', 'yikes-custom-login' ),
 				'content' => '[account-info]',
-			), */
-			apply_filters( 'yikes-inc-custom-login-register-slug', 'member-register' ) => array(
-				'title' => __( 'Register', 'yikes-inc-custom-login' ),
+			),
+			apply_filters( 'yikes-custom-login-register-slug', 'member-register' ) => array(
+				'title' => __( 'Register', 'yikes-custom-login' ),
 				'content' => '[custom-register-form]',
 			),
-			apply_filters( 'yikes-inc-custom-login-password-lost-slug', 'member-password-lost' ) => array(
-				'title' => __( 'Forgot Your Password?', 'yikes-inc-custom-login' ),
+			apply_filters( 'yikes-custom-login-password-lost-slug', 'member-password-lost' ) => array(
+				'title' => __( 'Forgot Your Password?', 'yikes-custom-login' ),
 				'content' => '[custom-password-lost-form]',
 			),
-			apply_filters( 'yikes-inc-custom-login-password-reset-slug', 'member-password-reset' ) => array(
-				'title' => __( 'Pick a New Password', 'yikes-inc-custom-login' ),
+			apply_filters( 'yikes-custom-login-password-reset-slug', 'member-password-reset' ) => array(
+				'title' => __( 'Pick a New Password', 'yikes-custom-login' ),
 				'content' => '[custom-password-reset-form]',
 			),
 		);
@@ -182,9 +183,9 @@ class Personalize_Login_Plugin {
 			}
 		} else {
 			// Non-admin users always go to their account page after login
-			$redirect_url = apply_filters( 'yikes-inc-custom-login-redirect', home_url( 'member-account' ) );
+			$redirect_url = home_url( 'member-account' );
 		}
-		return wp_validate_redirect( $redirect_url, home_url() );
+		return wp_validate_redirect( apply_filters( 'yikes-custom-login-redirect', $redirect_url ), home_url() );
 	}
 
 	/**
@@ -272,7 +273,7 @@ class Personalize_Login_Plugin {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
+			return __( 'You are already signed in.', 'yikes-custom-login' );
 		}
 
 		// Pass the redirect parameter to the WordPress login functionality: by default,
@@ -307,7 +308,20 @@ class Personalize_Login_Plugin {
 		$attributes['password_updated'] = isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'];
 
 		// Render the login form using an external template
-		return $this->get_template_html( 'login_form', $attributes );
+		return $this->get_template_html( 'login-form', $attributes );
+	}
+
+	/**
+	 * A shortcode for rendering the login form.
+	 *
+	 * @param  array   $attributes  Shortcode attributes.
+	 * @param  string  $content     The text content for shortcode. Not used.
+	 *
+	 * @return string  The shortcode output
+	 */
+	public function render_account_info_form( $attributes, $content = null ) {
+		// Render the login form using an external template
+		return $this->get_template_html( 'account-info-form', $attributes );
 	}
 
 	/**
@@ -324,9 +338,9 @@ class Personalize_Login_Plugin {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
+			return __( 'You are already signed in.', 'yikes-custom-login' );
 		} elseif ( ! get_option( 'users_can_register' ) ) {
-			return __( 'Registering new users is currently not allowed.', 'yikes-inc-custom-login' );
+			return __( 'Registering new users is currently not allowed.', 'yikes-custom-login' );
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -341,7 +355,7 @@ class Personalize_Login_Plugin {
 			// Retrieve recaptcha key
 			$attributes['recaptcha_site_key'] = get_option( 'personalize-login-recaptcha-site-key', null );
 
-			return $this->get_template_html( 'register_form', $attributes );
+			return $this->get_template_html( 'register-form', $attributes );
 		}
 	}
 
@@ -359,7 +373,7 @@ class Personalize_Login_Plugin {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
+			return __( 'You are already signed in.', 'yikes-custom-login' );
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -371,7 +385,7 @@ class Personalize_Login_Plugin {
 				}
 			}
 
-			return $this->get_template_html( 'password_lost_form', $attributes );
+			return $this->get_template_html( 'password-lost-form', $attributes );
 		}
 	}
 
@@ -389,7 +403,7 @@ class Personalize_Login_Plugin {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
+			return __( 'You are already signed in.', 'yikes-custom-login' );
 		} else {
 			if ( isset( $_REQUEST['login'] ) && isset( $_REQUEST['key'] ) ) {
 				$attributes['login'] = $_REQUEST['login'];
@@ -406,9 +420,9 @@ class Personalize_Login_Plugin {
 				}
 				$attributes['errors'] = $errors;
 
-				return $this->get_template_html( 'password_reset_form', $attributes );
+				return $this->get_template_html( 'password-reset-form', $attributes );
 			} else {
-				return __( 'Invalid password reset link.', 'yikes-inc-custom-login' );
+				return __( 'Invalid password reset link.', 'yikes-custom-login' );
 			}
 		}
 	}
@@ -436,11 +450,20 @@ class Personalize_Login_Plugin {
 
 		ob_start();
 
-		do_action( 'personalize_login_before_' . $template_name );
+		do_action( 'yikes_custom_login_before_' . $template_name );
 
-		require( 'templates/' . $template_name . '.php' );
+		/**
+		 * Check if the user has created a custom template
+		 * Note: Users can create a directory in their theme root '/yikes-custom-login/' and add templates ot it to override defaults.
+		 * @since 1.0.0
+		 */
+		if ( file_exists( get_template_directory() . '/yikes-custom-login/' . $template_name . '.php' ) ) {
+			require( get_template_directory() . '/yikes-custom-login/' . $template_name . '.php' );
+		} else {
+			require( 'templates/' . $template_name . '.php' );
+		}
 
-		do_action( 'personalize_login_after_' . $template_name );
+		do_action( 'yikes_custom_login_after_' . $template_name );
 
 		$html = ob_get_contents();
 		ob_end_clean();
@@ -590,12 +613,12 @@ class Personalize_Login_Plugin {
 	 */
 	public function replace_retrieve_password_message( $message, $key, $user_login, $user_data ) {
 		// Create new message
-		$msg  = __( 'Hello!', 'yikes-inc-custom-login' ) . "\r\n\r\n";
-		$msg .= sprintf( __( 'You asked us to reset your password for your account using the email address %s.', 'yikes-inc-custom-login' ), $user_login ) . "\r\n\r\n";
-		$msg .= __( "If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'yikes-inc-custom-login' ) . "\r\n\r\n";
-		$msg .= __( 'To reset your password, visit the following address:', 'yikes-inc-custom-login' ) . "\r\n\r\n";
+		$msg  = __( 'Hello!', 'yikes-custom-login' ) . "\r\n\r\n";
+		$msg .= sprintf( __( 'You asked us to reset your password for your account using the email address %s.', 'yikes-custom-login' ), $user_login ) . "\r\n\r\n";
+		$msg .= __( "If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'yikes-custom-login' ) . "\r\n\r\n";
+		$msg .= __( 'To reset your password, visit the following address:', 'yikes-custom-login' ) . "\r\n\r\n";
 		$msg .= site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . "\r\n\r\n";
-		$msg .= __( 'Thanks!', 'yikes-inc-custom-login' ) . "\r\n";
+		$msg .= __( 'Thanks!', 'yikes-custom-login' ) . "\r\n";
 
 		return $msg;
 	}
@@ -639,7 +662,7 @@ class Personalize_Login_Plugin {
 			'first_name'    => $first_name,
 			'last_name'     => $last_name,
 			'nickname'      => $first_name,
-			'role'					=> apply_filters( 'yikes-inc-custom-login-new-user-role', 'subscriber' ),
+			'role'					=> apply_filters( 'yikes-custom-login-new-user-role', 'subscriber' ),
 		);
 
 		$user_id = wp_insert_user( $user_data );
@@ -697,7 +720,7 @@ class Personalize_Login_Plugin {
 				wp_redirect( admin_url() );
 			}
 		} else {
-			$logged_in_redirect_url = apply_filters( 'yikes-inc-custom-login-redirect', home_url( 'member-account' ) );
+			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', home_url( 'member-account' ) );
 			wp_redirect( $logged_in_redirect_url );
 		}
 	}
@@ -714,64 +737,64 @@ class Personalize_Login_Plugin {
 			// Login errors
 
 			case 'empty_username':
-				return __( 'You do have an email address, right?', 'yikes-inc-custom-login' );
+				return __( 'You do have an email address, right?', 'yikes-custom-login' );
 
 			case 'empty_password':
-				return __( 'You need to enter a password to login.', 'yikes-inc-custom-login' );
+				return __( 'You need to enter a password to login.', 'yikes-custom-login' );
 
 			case 'invalid_username':
 				return __(
 					"We don't have any users with that email address. Maybe you used a different one when signing up?",
-					'yikes-inc-custom-login'
+					'yikes-custom-login'
 				);
 
 			case 'incorrect_password':
 				$err = __(
 					"The password you entered wasn't quite right. <a href='%s'>Did you forget your password</a>?",
-					'yikes-inc-custom-login'
+					'yikes-custom-login'
 				);
 				return sprintf( $err, wp_lostpassword_url() );
 
 			// Registration errors
 
 			case 'email':
-				return __( 'The email address you entered is not valid.', 'yikes-inc-custom-login' );
+				return __( 'The email address you entered is not valid.', 'yikes-custom-login' );
 
 			case 'email_exists':
-				return __( 'An account exists with this email address.', 'yikes-inc-custom-login' );
+				return __( 'An account exists with this email address.', 'yikes-custom-login' );
 
 			case 'closed':
-				return __( 'Registering new users is currently not allowed.', 'yikes-inc-custom-login' );
+				return __( 'Registering new users is currently not allowed.', 'yikes-custom-login' );
 
 			case 'captcha':
-				return __( 'The Google reCAPTCHA check failed. Are you a robot?', 'yikes-inc-custom-login' );
+				return __( 'The Google reCAPTCHA check failed. Are you a robot?', 'yikes-custom-login' );
 
 			// Lost password
 
 			case 'empty_username':
-				return __( 'You need to enter your email address to continue.', 'yikes-inc-custom-login' );
+				return __( 'You need to enter your email address to continue.', 'yikes-custom-login' );
 
 			case 'invalid_email':
 			case 'invalidcombo':
-				return __( 'There are no users registered with this email address.', 'yikes-inc-custom-login' );
+				return __( 'There are no users registered with this email address.', 'yikes-custom-login' );
 
 			// Reset password
 
 			case 'expiredkey':
 			case 'invalidkey':
-				return __( 'The password reset link you used is not valid anymore.', 'yikes-inc-custom-login' );
+				return __( 'The password reset link you used is not valid anymore.', 'yikes-custom-login' );
 
 			case 'password_reset_mismatch':
-				return __( "The two passwords you entered don't match.", 'yikes-inc-custom-login' );
+				return __( "The two passwords you entered don't match.", 'yikes-custom-login' );
 
 			case 'password_reset_empty':
-				return __( "Sorry, we don't accept empty passwords.", 'yikes-inc-custom-login' );
+				return __( "Sorry, we don't accept empty passwords.", 'yikes-custom-login' );
 
 			default:
 				break;
 		}
 
-		return __( 'An unknown error occurred. Please try again later.', 'yikes-inc-custom-login' );
+		return __( 'An unknown error occurred. Please try again later.', 'yikes-custom-login' );
 	}
 
 
@@ -789,14 +812,14 @@ class Personalize_Login_Plugin {
 
 		add_settings_field(
 			'personalize-login-recaptcha-site-key',
-			'<label for="personalize-login-recaptcha-site-key">' . __( 'reCAPTCHA site key' , 'yikes-inc-custom-login' ) . '</label>',
+			'<label for="personalize-login-recaptcha-site-key">' . __( 'reCAPTCHA site key' , 'yikes-custom-login' ) . '</label>',
 			array( $this, 'render_recaptcha_site_key_field' ),
 			'general'
 		);
 
 		add_settings_field(
 			'personalize-login-recaptcha-secret-key',
-			'<label for="personalize-login-recaptcha-secret-key">' . __( 'reCAPTCHA secret key' , 'yikes-inc-custom-login' ) . '</label>',
+			'<label for="personalize-login-recaptcha-secret-key">' . __( 'reCAPTCHA secret key' , 'yikes-custom-login' ) . '</label>',
 			array( $this, 'render_recaptcha_secret_key_field' ),
 			'general'
 		);
@@ -814,7 +837,7 @@ class Personalize_Login_Plugin {
 }
 
 // Initialize the plugin
-$personalize_login_pages_plugin = new Personalize_Login_Plugin();
+$personalize_login_pages_plugin = new YIKES_Custom_Login();
 
 // Create the custom pages at plugin activation
-register_activation_hook( __FILE__, array( 'Personalize_Login_Plugin', 'plugin_activated' ) );
+register_activation_hook( __FILE__, array( 'YIKES_Custom_Login', 'plugin_activated' ) );
