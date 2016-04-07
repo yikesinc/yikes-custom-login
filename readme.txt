@@ -17,6 +17,7 @@ Shortcodes:
 `[custom-register-form]`
 `[custom-password-lost-form]`
 `[custom-password-reset-form]`
+`[account-info]`
 
 
 == Installation ==

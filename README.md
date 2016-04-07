@@ -1,3 +1,9 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
+<!-- When we have our unit tests set up, uncomment this line
+[![Code Coverage](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
+-->
+[![Build Status](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/build.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/build-status/master)
+
 ### YIKES Inc. Custom Login
 
 A WordPress plugin that replaces the login flow with custom pages.
@@ -8,11 +14,11 @@ A WordPress plugin that replaces the login flow with custom pages.
 * `[custom-register-form]`
 * `[custom-password-lost-form]`
 * `[custom-password-reset-form]`
-* `[account-info]` <small>(todo)</small>
+* `[account-info]` <small>(in the works)</small>
 
 #### Custom Templates:
 
-Users can override the default templates by copying `yikes-custom-login/templates/` into the theme root, and renaming the directory `/yikes-custom-login/`. You can remove any of the templates you don't need.
+Users can override the default templates by copying `wp-content/plugins/yikes-custom-login/templates/` into the theme root, and renaming the directory `/yikes-custom-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
 
 #### Filters
 
@@ -25,8 +31,8 @@ Default redirects to the Account Info ( 'member-account' ) page.
 **Example Usage:**
 ```php
 function yikes_custom_login_redirect_non_admins() {
-	// Redirect non-
-	return get_the_permalink( 8 );
+	// Redirect non-admins to page 8
+	return esc_url( get_the_permalink( 8 ) );
 }
 add_filter( 'yikes-inc-custom-login-redirect', 'yikes_custom_login_redirect_non_admins' );
 ```

@@ -6,35 +6,34 @@
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
-		<h3><?php _e( 'Pick a New Password', 'yikes-inc-custom-login' ); ?></h3>
+		<h3><?php esc_attr_e( 'Pick a New Password', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
 
-	<form name="resetpassform" id="resetpassform" action="<?php echo site_url( 'wp-login.php?action=resetpass' ); ?>" method="post" autocomplete="off">
+	<form id="yikes-reset-password-form" name="resetpassform" action="<?php echo site_url( 'wp-login.php?action=resetpass' ); ?>" method="post" autocomplete="off">
 		<input type="hidden" id="user_login" name="rp_login" value="<?php echo esc_attr( $attributes['login'] ); ?>" autocomplete="off" />
 		<input type="hidden" name="rp_key" value="<?php echo esc_attr( $attributes['key'] ); ?>" />
 
 		<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
 			<?php foreach ( $attributes['errors'] as $error ) : ?>
-				<p>
-					<?php echo $error; ?>
+				<p class="login-error yikes-custom-login-alert yikes-custom-login-alert-danger yikes-animated <?php echo esc_attr( $this->options['notice_animation'] ); ?>">
+					<?php echo wp_kses_post( $error ); ?>
 				</p>
 			<?php endforeach; ?>
 		<?php endif; ?>
 
 		<p>
-			<label for="pass1"><?php _e( 'New password', 'yikes-inc-custom-login' ) ?></label>
+			<label for="pass1"><?php esc_attr_e( 'New password', 'yikes-inc-custom-login' ) ?></label>
 			<input type="password" name="pass1" id="pass1" class="input" size="20" value="" autocomplete="off" />
 		</p>
 		<p>
-			<label for="pass2"><?php _e( 'Repeat new password', 'yikes-inc-custom-login' ) ?></label>
+			<label for="pass2"><?php esc_attr_e( 'Repeat new password', 'yikes-inc-custom-login' ) ?></label>
 			<input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off" />
 		</p>
 
 		<p class="description"><?php echo wp_get_password_hint(); ?></p>
 
 		<p class="resetpass-submit">
-			<input type="submit" name="submit" id="resetpass-button"
-			       class="button" value="<?php _e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
+			<input type="submit" name="submit" id="resetpass-button" class="button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
 		</p>
 	</form>
 

@@ -1,0 +1,26 @@
+/**
+ * YIKES Inc Custom Login
+ * Admin Styles
+ * @since 1.0
+ */
+
+/**
+ * Admin Options Styles
+ */
+#postbox-container-1 .yikes-plugins-logo,
+.options-sidebar .yikes-plugins-logo {
+	display: block;
+	width: 100%;
+	background: #649DCB;
+	padding: 8px 10px 5px 8px;
+	box-sizing: border-box;
+	border-radius: 3px;
+}
+
+.options-sidebar .meta-box-sortables .postbox .inside {
+	margin: 0 !important;
+	padding: 0;
+}
+/* End Admin Options Styles */
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInlpa2VzLWN1c3RvbS1sb2dpbi1hZG1pbi5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7R0FJRyIsImZpbGUiOiJ5aWtlcy1jdXN0b20tbG9naW4tYWRtaW4uY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBZSUtFUyBJbmMgQ3VzdG9tIExvZ2luXG4gKiBBZG1pbiBTdHlsZXNcbiAqIEBzaW5jZSAxLjBcbiAqL1xyXG4iXX0= */

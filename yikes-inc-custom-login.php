@@ -12,6 +12,9 @@
 
 class YIKES_Custom_Login {
 
+	// Private variable to store our options
+	private $options, $option_class;
+
 	/**
 	 * Initializes the plugin.
 	 *
@@ -19,6 +22,14 @@ class YIKES_Custom_Login {
 	 * hooks in the constructor.
 	 */
 	public function __construct() {
+
+		// Define constants
+		if ( ! defined( 'YIKES_CUSTOM_LOGIN_VERSION' ) ) {
+			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.0' );
+		}
+
+		// Restrict admin dashboard access to only admins ('manage_options' capability)
+		add_action( 'admin_init', 'yikes_restrict_admin_dashboard', 1 );
 
 		// Redirects
 		add_action( 'login_form_login', array( $this, 'redirect_to_custom_login' ) );
@@ -50,12 +61,50 @@ class YIKES_Custom_Login {
 		add_shortcode( 'custom-register-form', array( $this, 'render_register_form' ) );
 		add_shortcode( 'custom-password-lost-form', array( $this, 'render_password_lost_form' ) );
 		add_shortcode( 'custom-password-reset-form', array( $this, 'render_password_reset_form' ) );
+
+		// Include our settings page
+		if ( ! class_exists( 'YIKES_Login_Settings' ) ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/options.php' );
+			// Store our options
+			$this->options = self::get_yikes_custom_login_options();
+		}
+	}
+
+	/**
+	 * Restirct admin dashboard access for non-admin users
+	 * @since 1.0
+	 */
+	public function yikes_restrict_admin_dashboard() {
+		if ( ! current_user_can( 'manage_options' ) && '/wp-admin/admin-ajax.php' !== $_SERVER['PHP_SELF'] ) {
+			wp_redirect( site_url() );
+		}
+	}
+	/**
+	 * Enqueue frontend styles for all of our shortcodes
+	 * Used where all of our shortcodes are being used
+	 * @since 1.0
+	 */
+	public function enqueue_yikes_custom_login_styles() {
+		wp_enqueue_style( 'yikes-custom-login-public', plugin_dir_url( __FILE__ ) . '/lib/css/min/yikes-custom-login-public.min.css', array(), YIKES_CUSTOM_LOGIN_VERSION );
+	}
+
+	/**
+	 * Helper function to get the custom login options
+	 * @return array The custom login options.
+	 * @since 1.0
+	 */
+	public static function get_yikes_custom_login_options() {
+		return get_option( 'yikes_custom_login', array(
+			'admin_redirect' => 1,
+			'notice_animation' => 'none',
+		) );
 	}
 
 	/**
 	 * Plugin activation hook.
 	 *
 	 * Creates all WordPress pages needed by the plugin.
+	 * @since 1.0
 	 */
 	public static function plugin_activated() {
 		// Information needed for creating the plugin's pages
@@ -108,6 +157,7 @@ class YIKES_Custom_Login {
 
 	/**
 	 * Redirect the user to the custom login page instead of wp-login.php.
+	 * @since 1.0
 	 */
 	public function redirect_to_custom_login() {
 		if ( 'GET' === $_SERVER['REQUEST_METHOD'] ) {
@@ -139,6 +189,7 @@ class YIKES_Custom_Login {
 	 * @param string            $password   The password used to log in.
 	 *
 	 * @return Wp_User|Wp_Error The logged in user, or error information if there were errors.
+	 * @since 1.0
 	 */
 	public function maybe_redirect_at_authenticate( $user, $username, $password ) {
 		// Check if the earlier authenticate filter (most likely,
@@ -166,12 +217,20 @@ class YIKES_Custom_Login {
 	 * @param WP_User|WP_Error $user                  WP_User object if login was successful, WP_Error object otherwise.
 	 *
 	 * @return string Redirect URL
+	 * @since 1.0
 	 */
 	public function redirect_after_login( $redirect_to, $requested_redirect_to, $user ) {
 		$redirect_url = home_url();
 
 		if ( ! isset( $user->ID ) ) {
 			return $redirect_url;
+		}
+
+		// If admin_redirect is not set, abort
+		if ( 0 === $this->options['admin_redirect'] ) {
+			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', home_url( 'member-account' ) );
+			wp_redirect( $logged_in_redirect_url );
+			return;
 		}
 
 		if ( user_can( $user, 'manage_options' ) ) {
@@ -190,6 +249,7 @@ class YIKES_Custom_Login {
 
 	/**
 	 * Redirect to custom login page after the user has been logged out.
+	 * @since 1.0
 	 */
 	public function redirect_after_logout() {
 		$redirect_url = home_url( 'member-login?logged_out=true' );
@@ -198,8 +258,8 @@ class YIKES_Custom_Login {
 	}
 
 	/**
-	 * Redirects the user to the custom registration page instead
-	 * of wp-login.php?action=register.
+	 * Redirects the user to the custom registration page instead of wp-login.php?action=register.
+	 * @since 1.0
 	 */
 	public function redirect_to_custom_register() {
 		if ( 'GET' === $_SERVER['REQUEST_METHOD'] ) {
@@ -213,8 +273,8 @@ class YIKES_Custom_Login {
 	}
 
 	/**
-	 * Redirects the user to the custom "Forgot your password?" page instead of
-	 * wp-login.php?action=lostpassword.
+	 * Redirects the user to the custom "Forgot your password?" page instead of wp-login.php?action=lostpassword.
+	 * @since 1.0
 	 */
 	public function redirect_to_custom_lostpassword() {
 		if ( 'GET' === $_SERVER['REQUEST_METHOD'] ) {
@@ -229,8 +289,8 @@ class YIKES_Custom_Login {
 	}
 
 	/**
-	 * Redirects to the custom password reset page, or the login page
-	 * if there are errors.
+	 * Redirects to the custom password reset page, or the login page if there are errors.
+	 * @since 1.0
 	 */
 	public function redirect_to_custom_password_reset() {
 		if ( 'GET' === $_SERVER['REQUEST_METHOD'] ) {
@@ -266,8 +326,12 @@ class YIKES_Custom_Login {
 	 * @param  string  $content     The text content for shortcode. Not used.
 	 *
 	 * @return string  The shortcode output
+	 * @since 1.0
 	 */
 	public function render_login_form( $attributes, $content = null ) {
+		// Enqueue the plugin frontend styles
+		$this->enqueue_yikes_custom_login_styles();
+
 		// Parse shortcode attributes
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
@@ -307,6 +371,9 @@ class YIKES_Custom_Login {
 		// Check if user just updated password
 		$attributes['password_updated'] = isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'];
 
+		// Store the username
+		$attributes['username_value'] = isset( $_POST['log'] ) ? $_POST['log'] : '';
+
 		// Render the login form using an external template
 		return $this->get_template_html( 'login-form', $attributes );
 	}
@@ -318,8 +385,11 @@ class YIKES_Custom_Login {
 	 * @param  string  $content     The text content for shortcode. Not used.
 	 *
 	 * @return string  The shortcode output
+	 * @since 1.0
 	 */
 	public function render_account_info_form( $attributes, $content = null ) {
+		// Enqueue the plugin frontend styles
+		$this->enqueue_yikes_custom_login_styles();
 		// Render the login form using an external template
 		return $this->get_template_html( 'account-info-form', $attributes );
 	}
@@ -331,8 +401,11 @@ class YIKES_Custom_Login {
 	 * @param  string  $content     The text content for shortcode. Not used.
 	 *
 	 * @return string  The shortcode output
+	 * @since 1.0
 	 */
 	public function render_register_form( $attributes, $content = null ) {
+		// Enqueue the plugin frontend styles
+		$this->enqueue_yikes_custom_login_styles();
 		// Parse shortcode attributes
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
@@ -366,8 +439,11 @@ class YIKES_Custom_Login {
 	 * @param  string  $content     The text content for shortcode. Not used.
 	 *
 	 * @return string  The shortcode output
+	 * @since 1.0
 	 */
 	public function render_password_lost_form( $attributes, $content = null ) {
+		// Enqueue the plugin frontend styles
+		$this->enqueue_yikes_custom_login_styles();
 		// Parse shortcode attributes
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
@@ -396,8 +472,11 @@ class YIKES_Custom_Login {
 	 * @param  string  $content     The text content for shortcode. Not used.
 	 *
 	 * @return string  The shortcode output
+	 * @since 1.0
 	 */
 	public function render_password_reset_form( $attributes, $content = null ) {
+		// Enqueue the plugin frontend styles
+		$this->enqueue_yikes_custom_login_styles();
 		// Parse shortcode attributes
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
@@ -430,6 +509,7 @@ class YIKES_Custom_Login {
 	/**
 	 * An action function used to include the reCAPTCHA JavaScript file
 	 * at the end of the page.
+	 * @since 1.0
 	 */
 	public function add_captcha_js_to_footer() {
 		echo "<script src='https://www.google.com/recaptcha/api.js?hl=en'></script>";
@@ -442,6 +522,7 @@ class YIKES_Custom_Login {
 	 * @param array  $attributes    The PHP variables for the template
 	 *
 	 * @return string               The contents of the template.
+	 * @since 1.0
 	 */
 	private function get_template_html( $template_name, $attributes = null ) {
 		if ( ! $attributes ) {
@@ -455,7 +536,6 @@ class YIKES_Custom_Login {
 		/**
 		 * Check if the user has created a custom template
 		 * Note: Users can create a directory in their theme root '/yikes-custom-login/' and add templates ot it to override defaults.
-		 * @since 1.0.0
 		 */
 		if ( file_exists( get_template_directory() . '/yikes-custom-login/' . $template_name . '.php' ) ) {
 			require( get_template_directory() . '/yikes-custom-login/' . $template_name . '.php' );
@@ -481,6 +561,7 @@ class YIKES_Custom_Login {
 	 *
 	 * Used through the action hook "login_form_register" activated on wp-login.php
 	 * when accessed through the registration action.
+	 * @since 1.0
 	 */
 	public function do_register_user() {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
@@ -517,6 +598,7 @@ class YIKES_Custom_Login {
 
 	/**
 	 * Initiates password reset.
+	 * @since 1.0
 	 */
 	public function do_password_lost() {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
@@ -541,6 +623,7 @@ class YIKES_Custom_Login {
 
 	/**
 	 * Resets the user's password if the password reset form was submitted.
+	 * @since 1.0
 	 */
 	public function do_password_reset() {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
@@ -610,6 +693,7 @@ class YIKES_Custom_Login {
 	 * @param WP_User $user_data  WP_User object.
 	 *
 	 * @return string   The mail message to send.
+	 * @since 1.0
 	 */
 	public function replace_retrieve_password_message( $message, $key, $user_login, $user_data ) {
 		// Create new message
@@ -636,6 +720,7 @@ class YIKES_Custom_Login {
 	 * @param string $last_name     The new user's last name
 	 *
 	 * @return int|WP_Error         The id of the user that was created, or error if failed.
+	 * @since 1.0
 	 */
 	private function register_user( $email, $first_name, $last_name ) {
 		$errors = new WP_Error();
@@ -676,6 +761,7 @@ class YIKES_Custom_Login {
 	 * request is valid.
 	 *
 	 * @return bool True if the CAPTCHA is OK, otherwise false.
+	 * @since 1.0
 	 */
 	private function verify_recaptcha() {
 		// This field is set by the recaptcha widget if check is successful
@@ -710,9 +796,11 @@ class YIKES_Custom_Login {
 	 * is an admin or not.
 	 *
 	 * @param string $redirect_to   An optional redirect_to URL for admin users
+	 * @since 1.0
 	 */
 	private function redirect_logged_in_user( $redirect_to = null ) {
 		$user = wp_get_current_user();
+		// Check if the user has the 'manage_options' capabilities
 		if ( user_can( $user, 'manage_options' ) ) {
 			if ( $redirect_to ) {
 				wp_safe_redirect( $redirect_to );
@@ -804,6 +892,7 @@ class YIKES_Custom_Login {
 
 	/**
 	 * Registers the settings fields needed by the plugin.
+	 * @since 1.0
 	 */
 	public function register_settings_fields() {
 		// Create settings fields for the two keys used by reCAPTCHA
