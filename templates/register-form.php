@@ -1,4 +1,4 @@
-<div id="register-form" class="widecolumn">
+<div id="register-form" class="yikes-register-form">
 
 	<?php
 		/** Custom Action Hook - Before Register Form */
@@ -49,11 +49,11 @@
 			</em>
 		</p>
 
-		<?php if ( $attributes['recaptcha_site_key'] ) : ?>
+		<?php if ( $this->options['recaptcha_site_key'] && $this->options['recaptcha_secret_key'] ) { ?>
 			<div class="recaptcha-container">
-				<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $attributes['recaptcha_site_key'] ); ?>"></div>
+				<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $this->options['recaptcha_site_key'] ); ?>"></div>
 			</div>
-		<?php endif; ?>
+		<?php } ?>
 
 		<p></p>
 

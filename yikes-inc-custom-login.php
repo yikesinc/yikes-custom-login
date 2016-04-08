@@ -54,6 +54,7 @@ class YIKES_Custom_Login {
 		// Setup
 		add_action( 'wp_print_footer_scripts', array( $this, 'add_captcha_js_to_footer' ) );
 		add_filter( 'admin_init' , array( $this, 'register_settings_fields' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_yikes_custom_login_options_scripts_and_styles' ) );
 
 		// Shortcodes
 		add_shortcode( 'custom-login-form', array( $this, 'render_login_form' ) );
@@ -68,6 +69,9 @@ class YIKES_Custom_Login {
 			// Store our options
 			$this->options = self::get_yikes_custom_login_options();
 		}
+
+		/* Clear our transient each time a page is updated/published - clears the pages settings dropdowns */
+		add_action( 'save_post', array( $this, 'clear_transient_on_page_save' ), 10, 3 );
 	}
 
 	/**
@@ -79,6 +83,7 @@ class YIKES_Custom_Login {
 			wp_redirect( site_url() );
 		}
 	}
+
 	/**
 	 * Enqueue frontend styles for all of our shortcodes
 	 * Used where all of our shortcodes are being used
@@ -86,6 +91,23 @@ class YIKES_Custom_Login {
 	 */
 	public function enqueue_yikes_custom_login_styles() {
 		wp_enqueue_style( 'yikes-custom-login-public', plugin_dir_url( __FILE__ ) . '/lib/css/min/yikes-custom-login-public.min.css', array(), YIKES_CUSTOM_LOGIN_VERSION );
+	}
+
+	/**
+	 * Enqueue options page scripts & styles
+	 * @since 1.0
+	 */
+	public function enqueue_yikes_custom_login_options_scripts_and_styles() {
+		$screen = get_current_screen();
+		// Confirm we are on the options page
+		if ( isset( $screen ) && isset( $screen->base ) && 'settings_page_yikes-custom-login' === $screen->base ) {
+			// select2 css
+			wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . '/lib/css/min/select2.min.css', array( 'yikes-admin-styles' ), YIKES_CUSTOM_LOGIN_VERSION );
+			// select2 js
+			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . '/lib/js/min/select2.min.js', array( 'jquery' ), YIKES_CUSTOM_LOGIN_VERSION, true );
+			// Options page scriptts
+			wp_enqueue_script( 'yikes-options-script', plugin_dir_url( __FILE__ ) . '/lib/js/min/yikes-custom-login-options.min.js', array( 'select2' ), YIKES_CUSTOM_LOGIN_VERSION, true );
+		}
 	}
 
 	/**
@@ -97,6 +119,12 @@ class YIKES_Custom_Login {
 		return get_option( 'yikes_custom_login', array(
 			'admin_redirect' => 1,
 			'notice_animation' => 'none',
+			'register_page' => null,
+			'login_page' => null,
+			'account_info_page' => null,
+			'password_lost_page' => null,
+			'recaptcha_site_key' => false,
+			'recaptcha_secret_key' => false,
 		) );
 	}
 
@@ -118,7 +146,7 @@ class YIKES_Custom_Login {
 				'content' => '[account-info]',
 			),
 			apply_filters( 'yikes-custom-login-register-slug', 'member-register' ) => array(
-				'title' => __( 'Register', 'yikes-custom-login' ),
+				'title' => __( 'Registration', 'yikes-custom-login' ),
 				'content' => '[custom-register-form]',
 			),
 			apply_filters( 'yikes-custom-login-password-lost-slug', 'member-password-lost' ) => array(
@@ -130,13 +158,15 @@ class YIKES_Custom_Login {
 				'content' => '[custom-password-reset-form]',
 			),
 		);
-
+		// Store our options
+		$plugin_options = self::get_yikes_custom_login_options();
+		// Loop over the pages
 		foreach ( $page_definitions as $slug => $page ) {
 			// Check that the page doesn't exist already
 			$query = new WP_Query( 'pagename=' . $slug );
 			if ( ! $query->have_posts() ) {
 				// Add the page using the data from the array above
-				wp_insert_post(
+				$page_id = wp_insert_post(
 					array(
 						'post_content'   => $page['content'],
 						'post_name'      => $slug,
@@ -147,6 +177,25 @@ class YIKES_Custom_Login {
 						'comment_status' => 'closed',
 					)
 				);
+				// Update our option so we can use it on the options page & in our redirections
+				switch ( $slug ) {
+					case 'member-login':
+						$plugin_options['login_page'] = $page_id;
+						break;
+					case 'member-account':
+						$plugin_options['account_info_page'] = $page_id;
+						break;
+					case 'member-register':
+						$plugin_options['register_page'] = $page_id;
+						break;
+					case 'member-password-lost':
+						$plugin_options['password_lost_page'] = $page_id;
+						break;
+					default:
+						break;
+				}
+				// Update our options with the new page ID values
+				update_option( 'yikes_custom_login', $plugin_options );
 			}
 		}
 	}
@@ -424,10 +473,6 @@ class YIKES_Custom_Login {
 					$attributes['errors'][] = $this->get_error_message( $error_code );
 				}
 			}
-
-			// Retrieve recaptcha key
-			$attributes['recaptcha_site_key'] = get_option( 'personalize-login-recaptcha-site-key', null );
-
 			return $this->get_template_html( 'register-form', $attributes );
 		}
 	}
@@ -767,28 +812,24 @@ class YIKES_Custom_Login {
 		// This field is set by the recaptcha widget if check is successful
 		if ( isset( $_POST['g-recaptcha-response'] ) ) {
 			$captcha_response = $_POST['g-recaptcha-response'];
-		} else {
-			return false;
+			// Verify the captcha response from Google
+			$response = wp_remote_post(
+				'https://www.google.com/recaptcha/api/siteverify',
+				array(
+					'body' => array(
+						'secret' => get_option( 'personalize-login-recaptcha-secret-key' ),
+						'response' => $captcha_response,
+					),
+				)
+			);
+			$success = false;
+			if ( $response && is_array( $response ) ) {
+				$decoded_response = json_decode( $response['body'] );
+				$success = $decoded_response->success;
+			}
+			return $success;
 		}
-
-		// Verify the captcha response from Google
-		$response = wp_remote_post(
-			'https://www.google.com/recaptcha/api/siteverify',
-			array(
-				'body' => array(
-					'secret' => get_option( 'personalize-login-recaptcha-secret-key' ),
-					'response' => $captcha_response,
-				),
-			)
-		);
-
-		$success = false;
-		if ( $response && is_array( $response ) ) {
-			$decoded_response = json_decode( $response['body'] );
-			$success = $decoded_response->success;
-		}
-
-		return $success;
+		return true;
 	}
 
 	/**
@@ -922,6 +963,21 @@ class YIKES_Custom_Login {
 	public function render_recaptcha_secret_key_field() {
 		$value = get_option( 'personalize-login-recaptcha-secret-key', '' );
 		echo '<input type="text" id="personalize-login-recaptcha-secret-key" name="personalize-login-recaptcha-secret-key" value="' . esc_attr( $value ) . '" />';
+	}
+
+	/**
+	 * Clear the 'yikes_custom_login_pages_query' transient when pages are updated/published
+	 * @param  int 		$post_id 	The post ID that is being updated/published
+	 * @param  object $post    	The post object.
+	 * @param  bool 	$update		Whether this is an existing post being updated or not  [description]
+	 */
+	public function clear_transient_on_page_save( $post_id, $post, $update ) {
+		// if it is not a page, abort
+		if ( 'page' !== $post->post_type ) {
+			return;
+		}
+		// clear our transient
+		delete_transient( 'yikes_custom_login_pages_query' );
 	}
 }
 

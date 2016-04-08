@@ -33,11 +33,33 @@ class YIKES_Login_Settings {
 	}
 
 	/**
+	 * Render our
+	 * @param  string $current [description]
+	 * @return [type]          [description]
+	 */
+	public function yikes_admin_tabs( $current = 'general' ) {
+		$tabs = array(
+			'general' => 'General',
+			'pages' => 'Pages',
+			'recaptcha' => '<img class="recaptcha-icon" src="' . esc_url( plugin_dir_url( __FILE__ ) . '../images/recaptcha-icon.png' ) . '" /> reCAPTCHA',
+		);
+		$links = array();
+		echo '<div id="icon-themes" class="icon32"><br></div>';
+		echo '<h2 class="nav-tab-wrapper">';
+		foreach ( $tabs as $tab => $name ) {
+			$class = ( $tab === $current ) ? ' nav-tab-active' : '';
+			echo '<a class="nav-tab' . esc_attr( $class ) . '" href="options-general.php?page=yikes-custom-login&tab=' . esc_attr( $tab ) . '">' . wp_kses_post( $name ) . '</a>';
+		}
+		echo '</h2>';
+	}
+
+	/**
 	* Options page callback
 	*/
 	public function create_admin_page() {
 		// Store the options by retreiving it from our parent class
 		$this->options = YIKES_Custom_Login::get_yikes_custom_login_options();
+		$tab = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : 'general';
 		?>
 		<!-- Begin Options Content -->
 		<div class="wrap">
@@ -47,6 +69,14 @@ class YIKES_Login_Settings {
 			<h1><?php esc_attr_e( 'Custom Login Settings', 'yikes-inc-custom-login' ); ?></h1>
 
 			<p class="description"><?php esc_attr_e( 'Adjust the settings for the custom login plugin below.', 'yikes-inc-custom-login' ); ?></p>
+
+			<?php
+			// Store our tab
+			$tab = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : 'general';
+			// Generate our settings tabs
+			$this->yikes_admin_tabs( $tab );
+			?>
+
 			<div id="poststuff">
 
 				<div id="post-body" class="metabox-holder columns-2">
@@ -60,7 +90,7 @@ class YIKES_Login_Settings {
 
 								<div class="inside">
 
-									<form method="post" action="options.php">
+									<form method="post" action="options.php" class="yikes-custom-login-settings-<?php echo esc_attr( $tab ); ?>">
 										<?php
 										// This prints out all hidden setting fields
 										settings_fields( 'yikes_custom_login_option_group' );
@@ -119,12 +149,14 @@ class YIKES_Login_Settings {
 	 * Register and add settings
 	 */
 	public function page_init() {
+		// Generate Setting
 		register_setting(
 			'yikes_custom_login_option_group', // Option group
 			'yikes_custom_login', // Option name
 			array( $this, 'sanitize' ) // Sanitize
 		);
 
+		/* Add General Settings Section */
 		add_settings_section(
 			'yikes_custom_login_general_section', // ID
 			'', // Title
@@ -148,6 +180,94 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
+
+		/** Add Pages Settings Section **/
+		add_settings_section(
+			'yikes_custom_login_pages_section', // ID
+			'', // Title
+			array( $this, 'print_section_info' ), // Callback
+			'yikes-custom-login' // Page
+		);
+
+		/* Login Page Option */
+		add_settings_field(
+			'login_page', // ID
+			'Login Page', // Title
+			array( $this, 'page_select_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_pages_section', // Section
+			array(
+				'field' => 'login_page',
+			)
+		);
+
+		/* Account Info Page Option */
+		add_settings_field(
+			'account_info_page', // ID
+			'Account Page', // Title
+			array( $this, 'page_select_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_pages_section', // Section
+			array(
+				'field' => 'account_info_page',
+			)
+		);
+
+		/* Registration PAge Option */
+		add_settings_field(
+			'register_page', // ID
+			'Registration Page', // Title
+			array( $this, 'page_select_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_pages_section', // Section
+			array(
+				'field' => 'register_page',
+			)
+		);
+
+		/* Login Page Option */
+		add_settings_field(
+			'password_lost_page', // ID
+			'Reset Password Page', // Title
+			array( $this, 'page_select_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_pages_section', // Section
+			array(
+				'field' => 'password_lost_page',
+			)
+		);
+
+		/** Add Recaptcha Settings Section **/
+		add_settings_section(
+			'yikes_custom_login_recaptcha_section', // ID
+			'', // Title
+			array( $this, 'print_section_info' ), // Callback
+			'yikes-custom-login' // Page
+		);
+
+		/* reCAPTCHA Site Key Option */
+		add_settings_field(
+			'recaptcha_site_key', // ID
+			'Site Key', // Title
+			array( $this, 'recaptcha_field_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_recaptcha_section', // Section
+			array(
+				'field' => 'recaptcha_site_key',
+			)
+		);
+
+		/* reCAPTCHA Secret Key Option */
+		add_settings_field(
+			'recaptcha_secret_key', // ID
+			'Secret Key', // Title
+			array( $this, 'recaptcha_field_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_recaptcha_section', // Section
+			array(
+				'field' => 'recaptcha_secret_key',
+			)
+		);
 	}
 
 	/**
@@ -161,10 +281,19 @@ class YIKES_Login_Settings {
 		$new_input['admin_redirect'] = ( isset( $input['admin_redirect'] ) ) ? absint( $input['admin_redirect'] ) : 0;
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? $input['notice_animation'] : 'none';
-		// Title
-		if ( isset( $input['title'] ) ) {
-			$new_input['title'] = sanitize_text_field( $input['title'] );
-		}
+		// Login Page
+		$new_input['register_page'] = ( isset( $input['register_page'] ) ) ? $input['register_page'] : $this->options['register_page'];
+		// Login Page
+		$new_input['login_page'] = ( isset( $input['login_page'] ) ) ? $input['login_page'] : $this->options['login_page'];
+		// Login Page
+		$new_input['account_info_page'] = ( isset( $input['account_info_page'] ) ) ? $input['account_info_page'] : $this->options['account_info_page'];
+		// Login Page
+		$new_input['password_lost_page'] = ( isset( $input['password_lost_page'] ) ) ? $input['password_lost_page'] : $this->options['password_lost_page'];
+		// Recaptcha Site Key
+		$new_input['recaptcha_site_key'] = ( isset( $input['recaptcha_site_key'] ) ) ? $input['recaptcha_site_key'] : false;
+		// Recaptcha Secret
+		$new_input['recaptcha_secret_key'] = ( isset( $input['recaptcha_secret_key'] ) ) ? $input['recaptcha_secret_key'] : false;
+		// Return the saved data
 		return $new_input;
 	}
 
@@ -223,7 +352,62 @@ class YIKES_Login_Settings {
 			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
 		);
 	}
-}
+
+	/**
+	 * Render our select 2 field
+	 */
+	public function page_select_callback( $args ) {
+		// Check for an existing transient for page load times
+		if ( false === ( $pages_query = get_transient( 'yikes_custom_login_pages_query' ) ) ) {
+			/* Query all pages */
+			$pages_query = new WP_Query( array(
+				'post_type' => 'page',
+				'post_status' => 'publish',
+				'posts_per_page' => -1,
+			) );
+			/* Setup our transient for 24 hours */
+			set_transient( 'yikes_custom_login_pages_query', $pages_query, 24 * HOUR_IN_SECONDS );
+		}
+		// if pages are found
+		if ( $pages_query->have_posts() ) {
+			?>
+			<select class="yikes-select2" name="yikes_custom_login[<?php echo esc_attr( $args['field'] ); ?>]">
+				<?php
+				while ( $pages_query->have_posts() ) {
+					$pages_query->the_post();
+					// Loop over each page and create an option
+					printf(
+						'<option value="%s" %s>%s</option>',
+						esc_attr( get_the_ID() ),
+						esc_attr( selected( $this->options[ $args['field'] ], get_the_ID() ) ),
+						esc_attr( get_the_title() )
+					);
+				}
+				?>
+			</select>
+			<?php
+		}
+	}
+
+	/**
+	 * Render our recaptcah site and secret key fields
+	 */
+	public function recaptcha_field_callback( $args ) {
+		$recaptcha_key = $this->options[ $args['field'] ];
+		/* Field */
+		printf(
+			'<input type="text" id="' . esc_attr( $args['field'] ) . '" name="yikes_custom_login[' . esc_attr( $args['field'] ) . ']" value="%s" class="widefat" placeholder="%s">',
+			esc_attr( $recaptcha_key ),
+			esc_attr( ucwords( str_replace( 'recaptcha ', '', str_replace( '_', ' ', $args['field'] ) ) ) )
+		);
+		/* Descriptions */
+		printf(
+			'<p class="description">%s</p>',
+			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . str_replace( '_', ' ', $args['field'] ) . '</strong>' )
+		);
+	}
+} // End Class
+
 
 // Iniitalize the settings page
 if ( is_admin() ) {

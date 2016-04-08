@@ -21,6 +21,39 @@
 	margin: 0 !important;
 	padding: 0;
 }
+
+.recaptcha-icon {
+	vertical-align: middle;
+}
+
+/**
+ * Pages Section Styles
+ */
+	select.yikes-select2 + .select2 {
+		min-width: 100%;
+	}
 /* End Admin Options Styles */
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInlpa2VzLWN1c3RvbS1sb2dpbi1hZG1pbi5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7R0FJRyIsImZpbGUiOiJ5aWtlcy1jdXN0b20tbG9naW4tYWRtaW4uY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBZSUtFUyBJbmMgQ3VzdG9tIExvZ2luXG4gKiBBZG1pbiBTdHlsZXNcbiAqIEBzaW5jZSAxLjBcbiAqL1xyXG4iXX0= */
+
+/**
+ * Admin Settings sections
+	*	Sections:
+	*		-	General
+	*		- Pages
+ */
+	body.settings_page_yikes-custom-login .yikes-custom-login-settings-general table:nth-child(n+6) /* All sections after 'General' Section */ {
+		display: none;
+	}
+
+	body.settings_page_yikes-custom-login .yikes-custom-login-settings-pages table:nth-child(5), /* General Section */
+	body.settings_page_yikes-custom-login .yikes-custom-login-settings-pages table:nth-child(n+7) /* All sections after 'Pages' Section */ {
+		display: none;
+	}
+
+	body.settings_page_yikes-custom-login .yikes-custom-login-settings-recaptcha table:nth-child(5), /* General Section */
+	body.settings_page_yikes-custom-login .yikes-custom-login-settings-recaptcha table:nth-child(6) /* Pages Section */ {
+		display: none;
+	}
+
+/* End Admin Settings Sections */
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInlpa2VzLWN1c3RvbS1sb2dpbi1hZG1pbi5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7R0FJRzs7QUFFSDs7R0FFRztBQUNIOztDQUVDLGVBQWU7Q0FDZixZQUFZO0NBQ1osb0JBQW9CO0NBQ3BCLDBCQUEwQjtDQUMxQix1QkFBdUI7Q0FDdkIsbUJBQW1CO0NBQ25COztBQUVEO0NBQ0MscUJBQXFCO0NBQ3JCLFdBQVc7Q0FDWDtBQUNELDhCQUE4Qjs7O0FBRzlCOzs7OztHQUtHO0NBQ0Y7RUFDQyxjQUFjO0VBQ2Q7O0NBRUQ7O0VBRUMsY0FBYztFQUNkOztBQUVGLGlDQUFpQyIsImZpbGUiOiJ5aWtlcy1jdXN0b20tbG9naW4tYWRtaW4uY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBZSUtFUyBJbmMgQ3VzdG9tIExvZ2luXG4gKiBBZG1pbiBTdHlsZXNcbiAqIEBzaW5jZSAxLjBcbiAqL1xyXG4iXX0= */

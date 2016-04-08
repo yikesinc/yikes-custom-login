@@ -8,11 +8,9 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					// admin scripts
-					/*
-			    'admin/js/min/yikes-inc-easy-mailchimp-dashboard-widget.min.js': [ // widget specific script
-			        'admin/js/yikes-inc-easy-mailchimp-dashboard-widget.js'
+			    'lib/js/min/yikes-custom-login-options.min.js': [ // Settings page scripts (init select2 etc.)
+			        'lib/js/yikes-custom-login-options.js'
 			    ],
-					*/
 				}
 			}
 		},
@@ -51,6 +49,15 @@ module.exports = function( grunt ) {
 			 	// public css
 				files: 'lib/css/*.css',
 				tasks: ['cssmin'],
+				options: {
+					spawn: false,
+					event: ['all']
+				},
+			},
+			all_js_files: {
+			 	// public css
+				files: 'lib/js/*.js',
+				tasks: ['uglify'],
 				options: {
 					spawn: false,
 					event: ['all']
