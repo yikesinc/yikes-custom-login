@@ -63,6 +63,31 @@
 		display: block;
 		width: 100%;
 	}
+
+	#yikes-register-form input[type="text"],
+	#yikes-register-form input[type="email"] {
+		padding: 3px 5px;
+		color: #555;
+	}
+/** End Registration Form Styles */
+
+/**
+ * Account Info Form Styles
+ */
+	#yikes-account-info-form label,
+	#yikes-account-info-form input[type="text"],
+	#yikes-account-info-form input[type="email"],
+	#yikes-account-info-form input[type="url"] {
+		display: block;
+		width: 100%;
+	}
+
+	#yikes-account-info-form input[type="text"],
+	#yikes-account-info-form input[type="email"],
+	#yikes-account-info-form input[type="url"] {
+		padding: 3px 5px;
+		color: #555;
+	}
 /** End Registration Form Styles */
 
 /**

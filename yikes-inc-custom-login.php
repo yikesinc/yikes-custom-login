@@ -926,45 +926,173 @@ class YIKES_Custom_Login {
 		return __( 'An unknown error occurred. Please try again later.', 'yikes-custom-login' );
 	}
 
+	/**
+	 * Get all of the available profile meta fieilds
+	 * Used when building the 'Update Profile' form
+	 * @return array The fields to be used when rendering the 'Update Profile' form.
+	 */
+	public function yikes_custom_login_get_profile_fields( $user_id ) {
+		// If no user id is specified
+		if ( ! $user_id ) {
+			return false;
+		}
 
-	//
-	// PLUGIN SETUP
-	//
+		/* Fields that we should NOT display on the frontend for users to edit */
+		$excluded_fields = apply_filters( 'yikes-custom-login-excluded-profile-fields', array(
+			'rich_editing',
+			'comment_shortcuts',
+			'admin_color',
+			'use_ssl',
+			'show_admin_bar_front',
+			'wp_capabilities',
+			'wp_user_level',
+			'dismissed_wp_pointers',
+			'show_welcome_panel',
+			'session_tokens',
+			'wp_dashboard_quick_press_last_post_id',
+			'wp_user-settings',
+			'wp_user-settings-time',
+		) );
+
+		// Get ALL meta fields
+		$user_meta_fields = get_user_meta( $user_id );
+
+		// Loop and unset our fields
+		foreach ( $excluded_fields as $meta_id ) {
+			unset( $user_meta_fields[ $meta_id ] );
+		}
+
+		// Create an array to loop over for the_author_meta()
+		$author_meta_array = apply_filters( 'yikes-custom-login-author-meta-fields', array(
+			'user_email',
+			'user_url',
+		) );
+
+		// Loop over and push the additional fields to our fields array
+		foreach ( $author_meta_array as $meta_id ) {
+			$user_meta_fields[ $meta_id ] = array( get_the_author_meta( $meta_id, $user_id ) );
+		}
+
+		// store an int value to increment and retreive our keys (for label parameter)
+		$key_location = 0;
+		$user_meta_field_keys = array_keys( $user_meta_fields );
+
+		// Loop over the keys and push the field label into our array
+		foreach ( $user_meta_field_keys as $key => $meta_id ) {
+			$user_meta_fields[ $meta_id ][] = $meta_id;
+		}
+
+		// Finally loop over our final fields array, and push two new parameters - 'type' and 'label'
+		$user_meta_fields = array_map( function( $user_meta_fields ) {
+			return array(
+				'label' => esc_textarea( $this->yikes_custom_login_get_form_field_label( $user_meta_fields[1] ) ),
+				'type' => $this->yikes_custom_login_get_form_field_type( $user_meta_fields[1] ),
+				'data' => $this->yikes_custom_login_escape_form_field_data( $user_meta_fields[1], $user_meta_fields[0] ),
+			);
+		}, $user_meta_fields );
+
+		/* Re-arrange the 'Biography' textarea field to the end of the form */
+		$biography_field = $user_meta_fields['description'];
+		unset( $user_meta_fields['description'] );
+		$user_meta_fields[] = $biography_field;
+
+		// Return the newly formed array
+		return apply_filters( 'yikes-custom-login-profile-fields', $user_meta_fields, $user_id );
+	}
 
 	/**
-	 * Registers the settings fields needed by the plugin.
+	 * Switch statement to return an appropriate form field label for a given key
+	 * @param  string $field_key The name of the field (eg first_name)
+	 * @return string            The newly formatted field label
 	 * @since 1.0
 	 */
-	public function register_settings_fields() {
-		// Create settings fields for the two keys used by reCAPTCHA
-		register_setting( 'general', 'personalize-login-recaptcha-site-key' );
-		register_setting( 'general', 'personalize-login-recaptcha-secret-key' );
-
-		add_settings_field(
-			'personalize-login-recaptcha-site-key',
-			'<label for="personalize-login-recaptcha-site-key">' . __( 'reCAPTCHA site key' , 'yikes-custom-login' ) . '</label>',
-			array( $this, 'render_recaptcha_site_key_field' ),
-			'general'
-		);
-
-		add_settings_field(
-			'personalize-login-recaptcha-secret-key',
-			'<label for="personalize-login-recaptcha-secret-key">' . __( 'reCAPTCHA secret key' , 'yikes-custom-login' ) . '</label>',
-			array( $this, 'render_recaptcha_secret_key_field' ),
-			'general'
-		);
+	public function yikes_custom_login_get_form_field_label( $field_key ) {
+		// if no field key is set, abort
+		if ( ! $field_key ) {
+			return;
+		}
+		// Switch statement over the field key to dictate the label
+		switch ( $field_key ) {
+			default:
+			case 'nickname':
+				$label = __( 'Nickname', 'yikes-inc-custom-login' );
+				break;
+			case 'first_name':
+				$label = __( 'First Name', 'yikes-inc-custom-login' );
+				break;
+			case 'last_name':
+				$label = __( 'Last Name', 'yikes-inc-custom-login' );
+				break;
+			case 'description':
+				$label = __( 'Biography', 'yikes-inc-custom-login' );
+				break;
+			case 'user_email':
+				$label = __( 'Email Address', 'yikes-inc-custom-login' );
+				break;
+			case 'user_url':
+				$label = __( 'Website', 'yikes-inc-custom-login' );
+				break;
+		}
+		return apply_filters( 'yikes-custom-login-' . $field_key . '-label', $label );
 	}
 
-	public function render_recaptcha_site_key_field() {
-		$value = get_option( 'personalize-login-recaptcha-site-key', '' );
-		echo '<input type="text" id="personalize-login-recaptcha-site-key" name="personalize-login-recaptcha-site-key" value="' . esc_attr( $value ) . '" />';
+	/**
+	 * Set the appropriate field type based on the field key passed in
+	 * @param  string $field_key The key/name of the field.
+	 * @return string            The field type to be used.
+	 */
+	public function yikes_custom_login_get_form_field_type( $field_key ) {
+		// if no field key is set, abort
+		if ( ! $field_key ) {
+			return;
+		}
+		// Switch statement over the field key to dictate the label
+		switch ( $field_key ) {
+			default:
+			case 'nickname':
+			case 'first_name':
+			case 'last_name':
+				$type = 'text';
+				break;
+			case 'description':
+				$type = 'textarea';
+				break;
+			case 'user_email':
+				$type = 'email';
+				break;
+			case 'user_url':
+				$type = 'url';
+				break;
+		}
+		return apply_filters( 'yikes-custom-login-' . $field_key . '-type', $type );
 	}
 
-	public function render_recaptcha_secret_key_field() {
-		$value = get_option( 'personalize-login-recaptcha-secret-key', '' );
-		echo '<input type="text" id="personalize-login-recaptcha-secret-key" name="personalize-login-recaptcha-secret-key" value="' . esc_attr( $value ) . '" />';
+	/**
+	 * Escape and return the field data for use in the form
+	 * @param  string $field_key  The field key, used to decide how to sanitize
+	 * @param  string $field_data The field data that will be sanitized and returned
+	 * @return string             The escaped form data that will be used
+	 */
+	public function yikes_custom_login_escape_form_field_data( $field_key, $field_data ) {
+		// if no field key is set, abort
+		if ( ! $field_key ) {
+			return;
+		}
+		// Switch statement over the field key to dictate the label
+		switch ( $field_key ) {
+			default:
+			case 'text':
+			case 'textarea':
+				return esc_textarea( $field_data );
+				break;
+			case 'url':
+				return esc_url( $field_data );
+				break;
+			case 'email':
+				return sanitize_email( $field_data );
+				break;
+		}
 	}
-
 	/**
 	 * Clear the 'yikes_custom_login_pages_query' transient when pages are updated/published
 	 * @param  int 		$post_id 	The post ID that is being updated/published
@@ -981,6 +1109,10 @@ class YIKES_Custom_Login {
 	}
 }
 
+//
+// PLUGIN SETUP
+//
+//
 // Initialize the plugin
 $personalize_login_pages_plugin = new YIKES_Custom_Login();
 

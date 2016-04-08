@@ -4,17 +4,9 @@
  *  @since 1.0
  */
 global $current_user;
-get_currentuserinfo()
+get_currentuserinfo();
+$available_meta_fields = $this->yikes_custom_login_get_profile_fields( $current_user->ID );
 ?>
-
-<div class="section group">
-	<div class="col span_1_of_2">
-	This is column 1
-	</div>
-	<div class="col span_1_of_2">
-	This is column 2
-	</div>
-</div>
 
 <!-- Profile Edit Template -->
 <div id="post-<?php the_ID(); ?>">
@@ -36,8 +28,70 @@ get_currentuserinfo()
 				echo '<p class="error">' . esc_html( implode( '<br />', $error ) ) . '</p>';
 			}
 			?>
+			<!-- YIKES Inc. Custom Account Info Form -->
+			<form id="yikes-account-info-form" method="post" class="section group" action="<?php the_permalink(); ?>">
+					<?php
+					// setup integer value to setup columns
+					$field_count = 1;
+					foreach ( $available_meta_fields as $field_key => $field_data ) {
+						// Add our row
+						if ( 1 === $field_count ) {
+							?><div class="section group"><?php
+						}
+						?>
+						<p class="form-field col span_1_of_2">
+							<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo esc_attr( $field_data['label'] ); ?></label>
+							<?php
+							// Setup the field key (name/id attributes on the form field)
+							$field_name = str_replace( 'user-', '', $field_key );
+							switch ( $field_data['type'] ) {
+								default:
+								case 'text':
+								case 'email':
+								case 'url':
+									printf(
+										'<input type="%s" class="text-input" name="%s" id="%s" value="%s" />',
+										esc_attr( $field_data['type'] ),
+										esc_attr( $field_name ),
+										esc_attr( $field_name ),
+										esc_textarea( get_the_author_meta( $field_key, $current_user->ID ) )
+									);
+									break;
+								case 'textarea':
+									printf(
+										'<textarea name="%s" id="%s" rows="3" cols="50">%s</textarea>',
+										esc_attr( $field_name ),
+										esc_attr( $field_name ),
+										esc_textarea( get_the_author_meta( $field_key, $current_user->ID ) )
+									);
+									break;
+							}
+							?>
+						</p>
+						<?php
+						// Close our row
+						if ( 2 === $field_count ) {
+							?></div><?php
+							// reset the count
+							$field_count = 0;
+						}
+						// increment the field count
+						$field_count++;
+					}
+					?>
 
-			<form method="post" class="section group" id="adduser" action="<?php the_permalink(); ?>">
+					<br />
+					<!-- Submit button and nonces -->
+					<p class="form-submit span_2_of_2">
+						<?php echo esc_attr( $referer ); ?>
+						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'yikes-inc-custom-login' ); ?>" />
+						<?php wp_nonce_field( 'update-user' ) ?>
+						<input name="action" type="hidden" id="action" value="update-user" />
+					</p><!-- .form-submit -->
+
+					<hr />
+
+					<h2>Static Fields (to delete)</h2>
 			    <p class="form-username">
 			        <label for="first-name"><?php _e('First Name', 'yikes-inc-custom-login'); ?></label>
 			        <input class="text-input" name="first-name" type="text" id="first-name" value="<?php the_author_meta( 'first_name', $current_user->ID ); ?>" />
@@ -67,16 +121,6 @@ get_currentuserinfo()
 			        <textarea name="description" id="description" rows="3" cols="50"><?php the_author_meta( 'description', $current_user->ID ); ?></textarea>
 			    </p><!-- .form-textarea -->
 
-			    <?php
-			      // Custom hook for additional form fieilds
-			      do_action( 'edit_user_profile', $current_user );
-			    ?>
-			    <p class="form-submit">
-			        <?php echo $referer; ?>
-			        <input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php _e('Update', 'yikes-inc-custom-login'); ?>" />
-			        <?php wp_nonce_field( 'update-user' ) ?>
-			        <input name="action" type="hidden" id="action" value="update-user" />
-			    </p><!-- .form-submit -->
 			</form><!-- #adduser -->
 
 		<?php } /* End Else */ ?>
