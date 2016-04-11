@@ -28,17 +28,37 @@ To get custom fields to display on the 'Update Profile' page, you need to assign
 
 Here is a simple example to create a `twitter` text input field, where users can enter their Twitter handle.
 
+**Example**
 ```php
+/**
+ * Assign 'twitter' meta data to all of your users, and thus have it appear on the profile form
+ */
 function add_twitter_usermeta() {
 	$users = get_users();
 	foreach ( $users as $user ) {
-		update_usermeta( $user->ID, 'twitter', '' );
+		update_user_meta( $user->ID, 'twitter', ' ' );
 	}
 }
 add_action( 'admin_init', 'add_twitter_usermeta' );
 ```
 
-**Note:** The above example will run every time the dashboard is loaded, so you'll want to load the dashboard once or twice, and then remove this snippet. Once run, you should see a text input field appear on the 'Profile' page. You may need to update the label.
+Additionally, if you no longer want a specific field to display on the field **and** don't need the data stored in the database anymore, you can use the same function as above, but swap `update_user_meta` to `delete_user_meta` and delete the third parameter. Deleting the user meta will also remove the field from the 'Profile' form.
+
+**Example**
+```php
+/**
+ * Delete the 'twitter' meta data we created above, and thus remove it from the profile form
+ */
+function delete_twitter_usermeta() {
+	$users = get_users();
+	foreach ( $users as $user ) {
+		delete_user_meta( $user->ID, 'twitter' );
+	}
+}
+add_action( 'admin_init', 'delete_twitter_usermeta' );
+```
+
+**Note:** The above two functions will run every time the dashboard is loaded, so you'll want to load the dashboard once or twice, and then remove this snippet from your **functions.php** file. Once run, you should see a text input field appear on the 'Profile' page. You may need to update the label <small>(see below)</small>.
 
 To update the new form field label you'll want to use the built in filter `yikes-custom-login-KEY-label`, where KEY is the field `meta_id` or 'twitter' (2nd parameter in `update_uesr_meta` above). So the filter we'll use for the 'twitter' field is `yikes-custom-login-twitter-label`.
 

@@ -764,10 +764,10 @@ class YIKES_Custom_Login {
 			foreach ( $_POST as $profile_data_key => $profile_data_value ) {
 				// If it's usermeta, update it, else push to our data array
 				if ( get_user_meta( $current_user->ID, $profile_data_key ) ) {
-					update_user_meta( $current_user->ID, $profile_data_key, $profile_data_value );
+					update_user_meta( $current_user->ID, $profile_data_key, trim( sanitize_text_field( $profile_data_value ) ) );
 				} else {
 					// push our data to the array, and sanitize it
-					$user_data[ $profile_data_key ] = $profile_data_value;
+					$user_data[ $profile_data_key ] = trim( sanitize_text_field( $profile_data_value ) );
 				}
 			}
 			// Now update the user
