@@ -5,7 +5,6 @@
  */
 global $current_user;
 get_currentuserinfo();
-$available_meta_fields = $this->yikes_custom_login_get_profile_fields( $current_user->ID );
 ?>
 
 <!-- Profile Edit Template -->
@@ -22,17 +21,22 @@ $available_meta_fields = $this->yikes_custom_login_get_profile_fields( $current_
 			);
 
 		} else { // If the user is logged in.
-
-			/* If errors are found, display them */
-			if ( count( $error ) > 0 ) {
-				echo '<p class="error">' . esc_html( implode( '<br />', $error ) ) . '</p>';
-			}
+			// display the errors if present
+			$this->yikes_custom_login_display_alerts( $error );
 			?>
 			<!-- YIKES Inc. Custom Account Info Form -->
 			<form id="yikes-account-info-form" method="post" class="section group" action="<?php the_permalink(); ?>">
 					<?php
-					// setup integer value to setup columns
+					// Store the available fields
+					$available_meta_fields = $this->yikes_custom_login_profile_fields( $current_user->ID );
+					// Setup integer value to setup columns
 					$field_count = 1;
+					$total_count = 1;
+
+					// Get the length
+					$field_length = count( $available_meta_fields );
+
+					// Loop over the available fields
 					foreach ( $available_meta_fields as $field_key => $field_data ) {
 						// Add our row
 						if ( 1 === $field_count ) {
@@ -40,43 +44,26 @@ $available_meta_fields = $this->yikes_custom_login_get_profile_fields( $current_
 						}
 						?>
 						<p class="form-field col span_1_of_2">
-							<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo esc_attr( $field_data['label'] ); ?></label>
+							<label for="<?php echo esc_attr( $field_key ); ?>">
+								<?php echo esc_attr( $field_data['label'] ); ?>
+							</label>
 							<?php
-							// Setup the field key (name/id attributes on the form field)
-							$field_name = str_replace( 'user-', '', $field_key );
-							switch ( $field_data['type'] ) {
-								default:
-								case 'text':
-								case 'email':
-								case 'url':
-									printf(
-										'<input type="%s" class="text-input" name="%s" id="%s" value="%s" />',
-										esc_attr( $field_data['type'] ),
-										esc_attr( $field_name ),
-										esc_attr( $field_name ),
-										esc_textarea( get_the_author_meta( $field_key, $current_user->ID ) )
-									);
-									break;
-								case 'textarea':
-									printf(
-										'<textarea name="%s" id="%s" rows="3" cols="50">%s</textarea>',
-										esc_attr( $field_name ),
-										esc_attr( $field_name ),
-										esc_textarea( get_the_author_meta( $field_key, $current_user->ID ) )
-									);
-									break;
-							}
+							// instantiate our profile fields class
+							$yikes_profile_fields = new YIKES_Profile_Fields( $current_user->ID, $this->options );
+							// Render our field based on the field type
+							$yikes_profile_fields->render_profile_field( $field_key, $current_user->ID, $field_data['type'], str_replace( 'user-', '', $field_key ) );
 							?>
 						</p>
 						<?php
 						// Close our row
-						if ( 2 === $field_count ) {
+						if ( 2 === $field_count || $total_count === $field_length ) {
 							?></div><?php
 							// reset the count
 							$field_count = 0;
 						}
-						// increment the field count
+						// increment the field and total count
 						$field_count++;
+						$total_count++;
 					}
 					?>
 
@@ -85,43 +72,16 @@ $available_meta_fields = $this->yikes_custom_login_get_profile_fields( $current_
 					<p class="form-submit span_2_of_2">
 						<?php echo esc_attr( $referer ); ?>
 						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'yikes-inc-custom-login' ); ?>" />
+						<a href="#new-password-popup" class="button reset-pass"><?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?></a>
 						<?php wp_nonce_field( 'update-user' ) ?>
 						<input name="action" type="hidden" id="action" value="update-user" />
 					</p><!-- .form-submit -->
 
-					<hr />
-
-					<h2>Static Fields (to delete)</h2>
-			    <p class="form-username">
-			        <label for="first-name"><?php _e('First Name', 'yikes-inc-custom-login'); ?></label>
-			        <input class="text-input" name="first-name" type="text" id="first-name" value="<?php the_author_meta( 'first_name', $current_user->ID ); ?>" />
-			    </p><!-- .form-username -->
-			    <p class="form-username">
-			        <label for="last-name"><?php _e('Last Name', 'yikes-inc-custom-login'); ?></label>
-			        <input class="text-input" name="last-name" type="text" id="last-name" value="<?php the_author_meta( 'last_name', $current_user->ID ); ?>" />
-			    </p><!-- .form-username -->
-			    <p class="form-email">
-			        <label for="email"><?php _e('E-mail *', 'yikes-inc-custom-login'); ?></label>
-			        <input class="text-input" name="email" type="text" id="email" value="<?php the_author_meta( 'user_email', $current_user->ID ); ?>" />
-			    </p><!-- .form-email -->
-			    <p class="form-url">
-			        <label for="url"><?php _e('Website', 'yikes-inc-custom-login'); ?></label>
-			        <input class="text-input" name="url" type="text" id="url" value="<?php the_author_meta( 'user_url', $current_user->ID ); ?>" />
-			    </p><!-- .form-url -->
-			    <p class="form-password">
-			        <label for="pass1"><?php _e('Password *', 'yikes-inc-custom-login'); ?> </label>
-			        <input class="text-input" name="pass1" type="password" id="pass1" />
-			    </p><!-- .form-password -->
-			    <p class="form-password">
-			        <label for="pass2"><?php _e('Repeat Password *', 'yikes-inc-custom-login'); ?></label>
-			        <input class="text-input" name="pass2" type="password" id="pass2" />
-			    </p><!-- .form-password -->
-			    <p class="form-textarea">
-			        <label for="description"><?php _e('Biographical Information', 'yikes-inc-custom-login') ?></label>
-			        <textarea name="description" id="description" rows="3" cols="50"><?php the_author_meta( 'description', $current_user->ID ); ?></textarea>
-			    </p><!-- .form-textarea -->
-
 			</form><!-- #adduser -->
+
+			<!-- Testing Pure CSS Popups -->
+			<?php echo $this->get_template_html( 'account-password-reset-popup', null ); ?>
+
 
 		<?php } /* End Else */ ?>
 

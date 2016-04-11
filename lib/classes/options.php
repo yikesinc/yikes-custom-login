@@ -172,6 +172,22 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
+		// Admin Redirection Setting
+		add_settings_field(
+			'restrict_dashboard_access', // ID
+			__( 'Restrict Dashboard Access', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'restrict_dashboard_access_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_general_section' // Section
+		);
+		// Admin Redirection Setting
+		add_settings_field(
+			'password_strength_meter', // ID
+			__( 'Password Strength Meter', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'password_strength_meter_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_general_section' // Section
+		);
 		/* Notice Animations */
 		add_settings_field(
 			'notice_anmation', // ID
@@ -279,6 +295,10 @@ class YIKES_Login_Settings {
 		$new_input = array();
 		// Admin Redirect Sanitization
 		$new_input['admin_redirect'] = ( isset( $input['admin_redirect'] ) ) ? absint( $input['admin_redirect'] ) : 0;
+		// Restrict Dashboard Access Sanitization
+		$new_input['restrict_dashboard_access'] = ( isset( $input['restrict_dashboard_access'] ) ) ? 1 : 0;
+		// Use password strength meter and enforce strong passwords
+		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? 1 : 0;
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? $input['notice_animation'] : 'none';
 		// Login Page
@@ -318,6 +338,64 @@ class YIKES_Login_Settings {
 			'<p class="description">%s</p>',
 			esc_attr__( 'Redirect admins to /wp-admin/ on login?', 'yikes-inc-custom-login' )
 		);
+	}
+
+	/**
+	 * Restrict dashboard access from certain users
+	 */
+	public function restrict_dashboard_access_callback() {
+		/* Field */
+		printf(
+			'<input type="checkbox" id="restrict_dashboard_access" name="yikes_custom_login[restrict_dashboard_access]" value="1" %s />',
+			checked( $this->options['restrict_dashboard_access'], 1, false )
+		);
+		/* Description */
+		printf(
+			'<p class="description">%s</p>',
+			esc_attr__( 'Restrict access to the dashboaord (/wp-admin/) from non-admins?', 'yikes-inc-custom-login' )
+		);
+		/* Display notice about who will be blocked */
+		printf(
+			'<p class="description">%s %s</p>',
+			esc_attr__( 'The following users will not have access to the dashboard:', 'yikes-inc-custom-login' ),
+			wp_kses_post( self::get_restricted_users() )
+		);
+	}
+
+	/**
+	 * Restrict dashboard access from certain users
+	 */
+	public function password_strength_meter_callback() {
+		/* Field */
+		printf(
+			'<input type="checkbox" id="password_strength_meter" name="yikes_custom_login[password_strength_meter]" value="1" %s />',
+			checked( $this->options['password_strength_meter'], 1, false )
+		);
+		/* Description */
+		printf(
+			'<p class="description">%s</p>',
+			esc_attr__( 'Display the WordPress strength meter and encforce strong passwords?', 'yikes-inc-custom-login' )
+		);
+	}
+	/**
+	 * Get a complete list of users who are going to be restricted from the dashboard
+	 * @return string Comma delimited string of restricted user roles.
+	 */
+	private static function get_restricted_users() {
+		$all_user_roles = get_editable_roles();
+		/* Allow users to decide who can access the dashboard by capability */
+		$user_cap = apply_filters( 'yikes-custom-login-restrict-dashboard-capability', 'manage_options' );
+		/* Create empty array for user roles */
+		$specific_user_roles = array();
+		/* Loop and populate the array */
+		foreach ( $all_user_roles as $user_role_name => $user_role_data ) {
+			/* Loop over the capabilities and push to our array */
+			if ( ! isset( $user_role_data['capabilities'][ $user_cap ] ) || 0 === $user_role_data['capabilities'][ $user_cap ] ) {
+				$specific_user_roles[] = ucfirst( $user_role_name );
+			}
+		}
+		/* Return our string of roles */
+		return '<code>' . implode( ', ', $specific_user_roles ) . '</code>';
 	}
 
 	/**

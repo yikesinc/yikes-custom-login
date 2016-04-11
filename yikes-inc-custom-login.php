@@ -29,7 +29,7 @@ class YIKES_Custom_Login {
 		}
 
 		// Restrict admin dashboard access to only admins ('manage_options' capability)
-		add_action( 'admin_init', 'yikes_restrict_admin_dashboard', 1 );
+		add_action( 'admin_init', array( $this, 'yikes_restrict_admin_dashboard' ) );
 
 		// Redirects
 		add_action( 'login_form_login', array( $this, 'redirect_to_custom_login' ) );
@@ -47,6 +47,7 @@ class YIKES_Custom_Login {
 		add_action( 'login_form_lostpassword', array( $this, 'do_password_lost' ) );
 		add_action( 'login_form_rp', array( $this, 'do_password_reset' ) );
 		add_action( 'login_form_resetpass', array( $this, 'do_password_reset' ) );
+		add_action( 'init', array( $this, 'do_update_user_profile' ) );
 
 		// Other customizations
 		add_filter( 'retrieve_password_message', array( $this, 'replace_retrieve_password_message' ), 10, 4 );
@@ -79,7 +80,13 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function yikes_restrict_admin_dashboard() {
-		if ( ! current_user_can( 'manage_options' ) && '/wp-admin/admin-ajax.php' !== $_SERVER['PHP_SELF'] ) {
+		/* If the user has elected to not restrict dashboard access, abort */
+		if ( 0 === $this->options['restrict_dashboard_access'] ) {
+			return;
+		}
+		/* Allow users to decide who can access the dashboard by capability */
+		$user_cap = apply_filters( 'yikes-custom-login-restrict-dashboard-capability', 'manage_options' );
+		if ( ! current_user_can( $user_cap ) && '/wp-admin/admin-ajax.php' !== $_SERVER['PHP_SELF'] ) {
 			wp_redirect( site_url() );
 		}
 	}
@@ -118,11 +125,14 @@ class YIKES_Custom_Login {
 	public static function get_yikes_custom_login_options() {
 		return get_option( 'yikes_custom_login', array(
 			'admin_redirect' => 1,
+			'restrict_dashboard_access' => 1,
+			'password_strength_meter' => 1,
 			'notice_animation' => 'none',
 			'register_page' => null,
 			'login_page' => null,
 			'account_info_page' => null,
 			'password_lost_page' => null,
+			'password_reset_page' => null,
 			'recaptcha_site_key' => false,
 			'recaptcha_secret_key' => false,
 		) );
@@ -191,6 +201,9 @@ class YIKES_Custom_Login {
 					case 'member-password-lost':
 						$plugin_options['password_lost_page'] = $page_id;
 						break;
+					case 'member-password-reset':
+						$plugin_options['password_reset_page'] = $page_id;
+						break;
 					default:
 						break;
 				}
@@ -216,7 +229,7 @@ class YIKES_Custom_Login {
 			}
 
 			// The rest are redirected to the login page
-			$login_url = home_url( 'member-login' );
+			$login_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
 			if ( ! empty( $_REQUEST['redirect_to'] ) ) {
 				$login_url = add_query_arg( 'redirect_to', $_REQUEST['redirect_to'], $login_url );
 			}
@@ -247,7 +260,7 @@ class YIKES_Custom_Login {
 			if ( is_wp_error( $user ) ) {
 				$error_codes = join( ',', $user->get_error_codes() );
 
-				$login_url = home_url( 'member-login' );
+				$login_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
 				$login_url = add_query_arg( 'login', $error_codes, $login_url );
 
 				wp_redirect( $login_url );
@@ -277,7 +290,7 @@ class YIKES_Custom_Login {
 
 		// If admin_redirect is not set, abort
 		if ( 0 === $this->options['admin_redirect'] ) {
-			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', home_url( 'member-account' ) );
+			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
 			wp_redirect( $logged_in_redirect_url );
 			return;
 		}
@@ -291,7 +304,7 @@ class YIKES_Custom_Login {
 			}
 		} else {
 			// Non-admin users always go to their account page after login
-			$redirect_url = home_url( 'member-account' );
+			$redirect_url = esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 		}
 		return wp_validate_redirect( apply_filters( 'yikes-custom-login-redirect', $redirect_url ), home_url() );
 	}
@@ -301,7 +314,7 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function redirect_after_logout() {
-		$redirect_url = home_url( 'member-login?logged_out=true' );
+		$redirect_url = esc_url( get_the_permalink( $this->options['login_page'] ) . '?logged_out=true' );
 		wp_redirect( $redirect_url );
 		exit;
 	}
@@ -315,7 +328,7 @@ class YIKES_Custom_Login {
 			if ( is_user_logged_in() ) {
 				$this->redirect_logged_in_user();
 			} else {
-				wp_redirect( home_url( 'member-register' ) );
+				wp_redirect( esc_url( get_the_permalink( $this->options['register_page'] ) ) );
 			}
 			exit;
 		}
@@ -332,7 +345,7 @@ class YIKES_Custom_Login {
 				exit;
 			}
 
-			wp_redirect( home_url( 'member-password-lost' ) );
+			wp_redirect( esc_url( get_the_permalink( $this->options['password_lost_page'] ) ) );
 			exit;
 		}
 	}
@@ -347,14 +360,14 @@ class YIKES_Custom_Login {
 			$user = check_password_reset_key( $_REQUEST['key'], $_REQUEST['login'] );
 			if ( ! $user || is_wp_error( $user ) ) {
 				if ( $user && $user->get_error_code() === 'expired_key' ) {
-					wp_redirect( home_url( 'member-login?login=expiredkey' ) );
+					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=expiredkey' ) );
 				} else {
-					wp_redirect( home_url( 'member-login?login=invalidkey' ) );
+					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=invalidkey' ) );
 				}
 				exit;
 			}
 
-			$redirect_url = home_url( 'member-password-reset' );
+			$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
 			$redirect_url = add_query_arg( 'login', esc_attr( $_REQUEST['login'] ), $redirect_url );
 			$redirect_url = add_query_arg( 'key', esc_attr( $_REQUEST['key'] ), $redirect_url );
 
@@ -610,7 +623,7 @@ class YIKES_Custom_Login {
 	 */
 	public function do_register_user() {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$redirect_url = home_url( 'member-register' );
+			$redirect_url = esc_url( get_the_permalink( $this->options['register_page'] ) );
 
 			if ( ! get_option( 'users_can_register' ) ) {
 				// Registration closed, display error
@@ -631,7 +644,7 @@ class YIKES_Custom_Login {
 					$redirect_url = add_query_arg( 'register-errors', $errors, $redirect_url );
 				} else {
 					// Success, redirect to login page.
-					$redirect_url = home_url( 'member-login' );
+					$redirect_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
 					$redirect_url = add_query_arg( 'registered', $email, $redirect_url );
 				}
 			}
@@ -650,11 +663,11 @@ class YIKES_Custom_Login {
 			$errors = retrieve_password();
 			if ( is_wp_error( $errors ) ) {
 				// Errors found
-				$redirect_url = home_url( 'member-password-lost' );
+				$redirect_url = esc_url( get_the_permalink( $this->options['password_lost_page'] ) );
 				$redirect_url = add_query_arg( 'errors', join( ',', $errors->get_error_codes() ), $redirect_url );
 			} else {
 				// Email sent
-				$redirect_url = home_url( 'member-login' );
+				$redirect_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
 				$redirect_url = add_query_arg( 'checkemail', 'confirm', $redirect_url );
 				if ( ! empty( $_REQUEST['redirect_to'] ) ) {
 					$redirect_url = $_REQUEST['redirect_to'];
@@ -679,9 +692,9 @@ class YIKES_Custom_Login {
 
 			if ( ! $user || is_wp_error( $user ) ) {
 				if ( $user && $user->get_error_code() === 'expired_key' ) {
-					wp_redirect( home_url( 'member-login?login=expiredkey' ) );
+					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=expiredkey' ) );
 				} else {
-					wp_redirect( home_url( 'member-login?login=invalidkey' ) );
+					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=invalidkey' ) );
 				}
 				exit;
 			}
@@ -689,7 +702,7 @@ class YIKES_Custom_Login {
 			if ( isset( $_POST['pass1'] ) ) {
 				if ( $_POST['pass1'] !== $_POST['pass2'] ) {
 					// Passwords don't match
-					$redirect_url = home_url( 'member-password-reset' );
+					$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
 
 					$redirect_url = add_query_arg( 'key', $rp_key, $redirect_url );
 					$redirect_url = add_query_arg( 'login', $rp_login, $redirect_url );
@@ -701,7 +714,7 @@ class YIKES_Custom_Login {
 
 				if ( empty( $_POST['pass1'] ) ) {
 					// Password is empty
-					$redirect_url = home_url( 'member-password-reset' );
+					$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
 
 					$redirect_url = add_query_arg( 'key', $rp_key, $redirect_url );
 					$redirect_url = add_query_arg( 'login', $rp_login, $redirect_url );
@@ -709,12 +722,11 @@ class YIKES_Custom_Login {
 
 					wp_redirect( $redirect_url );
 					exit;
-
 				}
 
 				// Parameter checks OK, reset password
 				reset_password( $user, $_POST['pass1'] );
-				wp_redirect( home_url( 'member-login?password=changed' ) );
+				wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?password=changed' ) );
 			} else {
 				echo 'Invalid request.';
 			}
@@ -723,6 +735,97 @@ class YIKES_Custom_Login {
 		}
 	}
 
+	/**
+	 * Update the given members profile based on the submitted data
+	 * @since 1.0
+	 */
+	public function do_update_user_profile() {
+		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
+			// if not update user, abort
+			if ( empty( $_POST['action'] ) || 'update-user' !== $_POST['action'] ) {
+				return;
+			}
+			// verify our nonce
+			if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'update-user' ) ) {
+				wp_redirect( add_query_arg( array(
+					'update' => 'nonce_error',
+				), esc_url( wp_get_referer() ) ) );
+				exit;
+			}
+			// Setup our globals
+			global $current_user, $wp_roles;
+			// unset the nonce, so we can loop over each piece of data
+			unset( $_POST['_wpnonce'], $_POST['_wp_http_referer'], $_POST['action'], $_POST['updateuser'] );
+			// Setup a new array of data
+			$user_data = array(
+				'ID' => $current_user->ID,
+			);
+			// Loop over the remaining data, and update it!
+			foreach ( $_POST as $profile_data_key => $profile_data_value ) {
+				// If it's usermeta, update it, else push to our data array
+				if ( get_user_meta( $current_user->ID, $profile_data_key ) ) {
+					update_user_meta( $current_user->ID, $profile_data_key, $profile_data_value );
+				} else {
+					// push our data to the array, and sanitize it
+					$user_data[ $profile_data_key ] = $profile_data_value;
+				}
+			}
+			// Now update the user
+			$update_user = wp_update_user( $user_data );
+			if ( is_wp_error( $update_user ) ) {
+				wp_redirect( add_query_arg( array(
+					'update' => 'error',
+				), esc_url( wp_get_referer() ) ) );
+				exit;
+			}
+			// Success
+			wp_redirect( add_query_arg( array(
+				'update' => 'success',
+			), esc_url( wp_get_referer() ) ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Display errors above a given form
+	 * @since 1.0
+	 */
+	public function yikes_custom_login_display_alerts( $errors ) {
+		/* If errors are found, display them */
+		if ( count( $errors ) > 0 ) {
+			printf(
+				'<p class="error %s %s">%s</p>',
+				'yikes-custom-login-alert yikes-custom-login-alert-danger yikes-animated',
+				esc_attr( $this->options['notice_animation'] ),
+				esc_html( implode( '<br />', $error ) )
+			);
+		}
+		// if there's an error
+		if ( isset( $_GET['update'] ) ) {
+			switch ( $_GET['update'] ) {
+				default:
+				case 'error':
+					$alert_class = 'yikes-custom-login-alert-danger';
+					$message = sprintf( __( '%s An error occured, please try again.', 'yikes-inc-custom-login' ), '&#10007;' );
+					break;
+				case 'nonce_error':
+					$alert_class = 'yikes-custom-login-alert-danger';
+					$message = sprintf( __( '%s The security check did not pass. Please refresh the page and try again.', 'yikes-inc-custom-login' ), '&#10007;' );
+					break;
+				case 'success':
+					$alert_class = 'yikes-custom-login-alert-success';
+					$message = sprintf( __( '%s Profile successfully updated.', 'yikes-inc-custom-login' ), '&#10003;' );
+					break;
+			}
+			printf(
+				'<p class="error %s %s %s">%s</p>',
+				'yikes-custom-login-alert yikes-animated',
+				esc_attr( $alert_class ),
+				esc_attr( $this->options['notice_animation'] ),
+				esc_attr( $message )
+			);
+		}
+	}
 
 	//
 	// OTHER CUSTOMIZATIONS
@@ -849,7 +952,7 @@ class YIKES_Custom_Login {
 				wp_redirect( admin_url() );
 			}
 		} else {
-			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', home_url( 'member-account' ) );
+			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
 			wp_redirect( $logged_in_redirect_url );
 		}
 	}
@@ -927,172 +1030,22 @@ class YIKES_Custom_Login {
 	}
 
 	/**
-	 * Get all of the available profile meta fieilds
-	 * Used when building the 'Update Profile' form
-	 * @return array The fields to be used when rendering the 'Update Profile' form.
-	 */
-	public function yikes_custom_login_get_profile_fields( $user_id ) {
-		// If no user id is specified
-		if ( ! $user_id ) {
-			return false;
-		}
-
-		/* Fields that we should NOT display on the frontend for users to edit */
-		$excluded_fields = apply_filters( 'yikes-custom-login-excluded-profile-fields', array(
-			'rich_editing',
-			'comment_shortcuts',
-			'admin_color',
-			'use_ssl',
-			'show_admin_bar_front',
-			'wp_capabilities',
-			'wp_user_level',
-			'dismissed_wp_pointers',
-			'show_welcome_panel',
-			'session_tokens',
-			'wp_dashboard_quick_press_last_post_id',
-			'wp_user-settings',
-			'wp_user-settings-time',
-		) );
-
-		// Get ALL meta fields
-		$user_meta_fields = get_user_meta( $user_id );
-
-		// Loop and unset our fields
-		foreach ( $excluded_fields as $meta_id ) {
-			unset( $user_meta_fields[ $meta_id ] );
-		}
-
-		// Create an array to loop over for the_author_meta()
-		$author_meta_array = apply_filters( 'yikes-custom-login-author-meta-fields', array(
-			'user_email',
-			'user_url',
-		) );
-
-		// Loop over and push the additional fields to our fields array
-		foreach ( $author_meta_array as $meta_id ) {
-			$user_meta_fields[ $meta_id ] = array( get_the_author_meta( $meta_id, $user_id ) );
-		}
-
-		// store an int value to increment and retreive our keys (for label parameter)
-		$key_location = 0;
-		$user_meta_field_keys = array_keys( $user_meta_fields );
-
-		// Loop over the keys and push the field label into our array
-		foreach ( $user_meta_field_keys as $key => $meta_id ) {
-			$user_meta_fields[ $meta_id ][] = $meta_id;
-		}
-
-		// Finally loop over our final fields array, and push two new parameters - 'type' and 'label'
-		$user_meta_fields = array_map( function( $user_meta_fields ) {
-			return array(
-				'label' => esc_textarea( $this->yikes_custom_login_get_form_field_label( $user_meta_fields[1] ) ),
-				'type' => $this->yikes_custom_login_get_form_field_type( $user_meta_fields[1] ),
-				'data' => $this->yikes_custom_login_escape_form_field_data( $user_meta_fields[1], $user_meta_fields[0] ),
-			);
-		}, $user_meta_fields );
-
-		/* Re-arrange the 'Biography' textarea field to the end of the form */
-		$biography_field = $user_meta_fields['description'];
-		unset( $user_meta_fields['description'] );
-		$user_meta_fields[] = $biography_field;
-
-		// Return the newly formed array
-		return apply_filters( 'yikes-custom-login-profile-fields', $user_meta_fields, $user_id );
-	}
-
-	/**
-	 * Switch statement to return an appropriate form field label for a given key
-	 * @param  string $field_key The name of the field (eg first_name)
-	 * @return string            The newly formatted field label
+	 * Instantiate our profile fields class
 	 * @since 1.0
 	 */
-	public function yikes_custom_login_get_form_field_label( $field_key ) {
-		// if no field key is set, abort
-		if ( ! $field_key ) {
-			return;
+	public function yikes_custom_login_profile_fields( $user_id ) {
+		// $registered_fields = $this->yikes_custom_login_get_profile_fields( $current_user->ID );
+		// Include our profile fields class
+		if ( ! class_exists( 'YIKES_Profile_Fields' ) ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/profile-fields.php' );
+			// Init the class
+			$yikes_profile_fields = new YIKES_Profile_Fields( $user_id, $this->options );
+			// Get our fields
+			return $yikes_profile_fields->yikes_custom_login_get_profile_fields( $user_id );
 		}
-		// Switch statement over the field key to dictate the label
-		switch ( $field_key ) {
-			default:
-			case 'nickname':
-				$label = __( 'Nickname', 'yikes-inc-custom-login' );
-				break;
-			case 'first_name':
-				$label = __( 'First Name', 'yikes-inc-custom-login' );
-				break;
-			case 'last_name':
-				$label = __( 'Last Name', 'yikes-inc-custom-login' );
-				break;
-			case 'description':
-				$label = __( 'Biography', 'yikes-inc-custom-login' );
-				break;
-			case 'user_email':
-				$label = __( 'Email Address', 'yikes-inc-custom-login' );
-				break;
-			case 'user_url':
-				$label = __( 'Website', 'yikes-inc-custom-login' );
-				break;
-		}
-		return apply_filters( 'yikes-custom-login-' . $field_key . '-label', $label );
+		return false;
 	}
 
-	/**
-	 * Set the appropriate field type based on the field key passed in
-	 * @param  string $field_key The key/name of the field.
-	 * @return string            The field type to be used.
-	 */
-	public function yikes_custom_login_get_form_field_type( $field_key ) {
-		// if no field key is set, abort
-		if ( ! $field_key ) {
-			return;
-		}
-		// Switch statement over the field key to dictate the label
-		switch ( $field_key ) {
-			default:
-			case 'nickname':
-			case 'first_name':
-			case 'last_name':
-				$type = 'text';
-				break;
-			case 'description':
-				$type = 'textarea';
-				break;
-			case 'user_email':
-				$type = 'email';
-				break;
-			case 'user_url':
-				$type = 'url';
-				break;
-		}
-		return apply_filters( 'yikes-custom-login-' . $field_key . '-type', $type );
-	}
-
-	/**
-	 * Escape and return the field data for use in the form
-	 * @param  string $field_key  The field key, used to decide how to sanitize
-	 * @param  string $field_data The field data that will be sanitized and returned
-	 * @return string             The escaped form data that will be used
-	 */
-	public function yikes_custom_login_escape_form_field_data( $field_key, $field_data ) {
-		// if no field key is set, abort
-		if ( ! $field_key ) {
-			return;
-		}
-		// Switch statement over the field key to dictate the label
-		switch ( $field_key ) {
-			default:
-			case 'text':
-			case 'textarea':
-				return esc_textarea( $field_data );
-				break;
-			case 'url':
-				return esc_url( $field_data );
-				break;
-			case 'email':
-				return sanitize_email( $field_data );
-				break;
-		}
-	}
 	/**
 	 * Clear the 'yikes_custom_login_pages_query' transient when pages are updated/published
 	 * @param  int 		$post_id 	The post ID that is being updated/published
