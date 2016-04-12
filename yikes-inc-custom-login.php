@@ -54,7 +54,6 @@ class YIKES_Custom_Login {
 
 		// Setup
 		add_action( 'wp_print_footer_scripts', array( $this, 'add_captcha_js_to_footer' ) );
-		add_filter( 'admin_init' , array( $this, 'register_settings_fields' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_yikes_custom_login_options_scripts_and_styles' ) );
 
 		// Shortcodes
@@ -127,7 +126,7 @@ class YIKES_Custom_Login {
 			'admin_redirect' => 1,
 			'restrict_dashboard_access' => 1,
 			'password_strength_meter' => 1,
-			'notice_animation' => 'none',
+			'notice_animation' => 'yikes-fadeInDown',
 			'register_page' => null,
 			'login_page' => null,
 			'account_info_page' => null,
