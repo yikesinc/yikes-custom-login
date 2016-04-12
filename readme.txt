@@ -1,5 +1,5 @@
 === YIKES Custom Login ===
-Contributors: yikesinc, eherman24
+Contributors: yikesinc, eherman24, liljimmi
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
 Tested up to: 4.4.2

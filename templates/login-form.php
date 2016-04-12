@@ -57,7 +57,7 @@
 		/* Render the login form */
 		wp_login_form(
 			array(
-				'label_username' => __( 'Email/Username', 'yikes-inc-custom-login' ),
+				'label_username' => __( 'Email or Username', 'yikes-inc-custom-login' ),
 				'label_log_in' => __( 'Sign In', 'yikes-inc-custom-login' ),
 				'form_id' => 'yikes-custom-login-form',
 				'value_username' => null,
