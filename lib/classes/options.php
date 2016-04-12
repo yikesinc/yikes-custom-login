@@ -16,6 +16,7 @@ class YIKES_Login_Settings {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'page_init' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'yikes_custom_login_load_option_styles' ) );
 	}
 
 	/**
@@ -481,14 +482,22 @@ class YIKES_Login_Settings {
 		/* Descriptions */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . str_replace( '_', ' ', $args['field'] ) . '</strong>' )
+			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
 		);
+	}
+
+	/**
+	 * Enqueue our styles properly on the admin side options page
+	 * @since 1.0.0
+	 */
+	public function yikes_custom_login_load_option_styles() {
+		// Enqueue the options styles
+		wp_enqueue_style( 'yikes-admin-styles', plugin_dir_url( __FILE__ ) . '../css/min/yikes-custom-login-admin.min.css', array(), YIKES_CUSTOM_LOGIN_VERSION );
 	}
 } // End Class
 
 
 // Iniitalize the settings page
 if ( is_admin() ) {
-	wp_enqueue_style( 'yikes-admin-styles', plugin_dir_url( __FILE__ ) . '../css/min/yikes-custom-login-admin.min.css', array(), YIKES_CUSTOM_LOGIN_VERSION );
 	$yikes_login_settings = new YIKES_Login_Settings();
 }
