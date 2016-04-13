@@ -1,2 +1,0 @@
-mkdir /test/dir
-put -rp "~/clone/" /test/dir/
