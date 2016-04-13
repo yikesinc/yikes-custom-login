@@ -1,5 +1,4 @@
 <div id="password-lost-form" class="widecolumn">
-
 	<?php
 		/** Custom Action Hook - Before Password Lost Form */
 		do_action( 'yikes-inc-custom-login-before-password-lost-form' );
@@ -20,13 +19,13 @@
 	<p>
 		<?php
 			esc_attr_e(
-				"Enter your email address and click Reset Password to send yourself link to choose a new password.",
+				'Enter your email address and click Reset Password to send yourself a link to choose a new password.',
 				'yikes-inc-custom-login'
 			);
 		?>
 	</p>
 
-	<form id="yikes-lost-password-form" action="<?php echo wp_lostpassword_url(); ?>" method="post">
+	<form id="yikes-lost-password-form" action="<?php echo esc_url( wp_lostpassword_url() ); ?>" method="post">
 		<p class="form-row">
 			<label for="user_login"><?php esc_attr_e( 'Email', 'yikes-inc-custom-login' ); ?>
 			<input type="text" name="user_login" id="user_login">

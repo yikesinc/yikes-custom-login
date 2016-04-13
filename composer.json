@@ -1,6 +1,6 @@
 {
 	"name": "YIKES Inc. Custom Login",
-    "description": "Custom login flow, including registration/login forms.",
+    "description": "Custom login plugin, including registration/login forms.",
     "keywords": [ "plugin", "WordPress", "login", "custom", "forms", "form" ],
     "homepage": "https://yikesplugins.com",
     "type": "wordpress-theme",
