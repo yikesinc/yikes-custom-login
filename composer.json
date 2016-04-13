@@ -1,0 +1,25 @@
+{
+	"name": "YIKES Inc. Custom Login",
+    "description": "Custom login flow, including registration/login forms.",
+    "keywords": [ "plugin", "WordPress", "login", "custom", "forms", "form" ],
+    "homepage": "https://yikesplugins.com",
+    "type": "wordpress-theme",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "YIKES Inc.",
+            "email": "info@yikesinc.com",
+            "homepage": "http://www.yikesinc.com"
+        },
+				{
+            "name": "Evan Herman",
+            "email": "Evan@yikesinc.com",
+            "homepage": "https://www.yikesinc.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+    }
+}
