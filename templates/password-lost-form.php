@@ -6,7 +6,7 @@
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
-		<h3><?php esc_attr_e( 'Forgot Your Password?', 'yikes-inc-custom-login' ); ?></h3>
+		<h3><?php esc_attr_e( 'Reset Your Password', 'yikes-inc-custom-login' ); ?></h3>
 	<?php endif; ?>
 
 	<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
@@ -20,7 +20,7 @@
 	<p>
 		<?php
 			esc_attr_e(
-				"Enter your email address and we'll send you a link you can use to pick a new password.",
+				"Enter your email address and click Reset Password to send yourself link to choose a new password.",
 				'yikes-inc-custom-login'
 			);
 		?>

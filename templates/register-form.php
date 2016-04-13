@@ -43,7 +43,7 @@
 			<em>
 				<?php
 					printf(
-						esc_attr__( '%s: Your password will be generated automatically and emailed to the address you specify above.', 'yikes-inc-custom-login' ),
+						esc_attr__( '%s: Your password will be generated automatically and emailed to the address you entered above.', 'yikes-inc-custom-login' ),
 						'<strong>Note</strong>'
 					); ?>
 			</em>
