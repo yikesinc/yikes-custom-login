@@ -1,8 +1,9 @@
+[ ![Codeship Status for yikesinc/yikes-inc-custom-login](https://codeship.com/projects/81bd4740-e3b0-0133-076d-5e6dd4ce3e38/status?branch=master)](https://codeship.com/projects/146087)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/build.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/build-status/master)
 <!-- When we have our unit tests set up, uncomment this line
 [![Code Coverage](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
 -->
-[![Build Status](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/build.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/build-status/master)
 
 ### YIKES Inc. Custom Login
 
