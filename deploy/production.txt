@@ -1,2 +1,0 @@
-mkdir /wp-content/plugins/yikes-inc-custom-login
-put -rp "~/clone/" /wp-content/plugins/yikes-inc-custom-login/
