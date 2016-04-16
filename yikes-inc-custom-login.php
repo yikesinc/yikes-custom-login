@@ -34,6 +34,9 @@ class YIKES_Custom_Login {
 			define( 'YIKES_CUSTOM_LOGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 		}
 
+		// Include our custom widgets
+		include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/login-widget.php' );
+
 		// Restrict admin dashboard access to only admins ('manage_options' capability)
 		add_action( 'admin_init', array( $this, 'yikes_restrict_admin_dashboard' ) );
 
@@ -42,6 +45,7 @@ class YIKES_Custom_Login {
 		add_filter( 'authenticate', array( $this, 'maybe_redirect_at_authenticate' ), 101, 3 );
 		add_filter( 'login_redirect', array( $this, 'redirect_after_login' ), 10, 3 );
 		add_action( 'wp_logout', array( $this, 'redirect_after_logout' ) );
+		add_action( 'init', array( $this, 'redirect_logged_in_users' ) );
 
 		add_action( 'login_form_register', array( $this, 'redirect_to_custom_register' ) );
 		add_action( 'login_form_lostpassword', array( $this, 'redirect_to_custom_lostpassword' ) );
@@ -62,6 +66,9 @@ class YIKES_Custom_Login {
 		add_action( 'wp_print_footer_scripts', array( $this, 'add_captcha_js_to_footer' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_yikes_custom_login_options_scripts_and_styles' ) );
 
+		// Frontend setup
+		add_action( 'wp_enqueue_scripts', array( $this, 'euqueue_yikes_custom_login_frontend_scripts_and_styles' ) );
+
 		// Shortcodes
 		add_shortcode( 'custom-login-form', array( $this, 'render_login_form' ) );
 		add_shortcode( 'account-info', array( $this, 'render_account_info_form' ) );
@@ -78,6 +85,19 @@ class YIKES_Custom_Login {
 
 		/* Clear our transient each time a page is updated/published - clears the pages settings dropdowns */
 		add_action( 'save_post', array( $this, 'clear_transient_on_page_save' ), 10, 3 );
+
+		/* Define our custom page template */
+		add_filter( 'page_template', array( $this, 'yikes_custom_login_page_template' ) );
+
+		/* Add some login page advertising text */
+		add_action( 'yikes-custom-login-login-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
+		add_action( 'yikes-custom-login-password-lost-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
+
+		/* Add back links to the password reset form */
+		add_action( 'yikes-custom-login-password-lost-page-after-form', array( $this, 'yikes_custom_password_lost_page_backlinks' ) );
+
+		/* Append the custom site logo to the login form, registration form, password lost form and appropriate emails */
+		add_action( 'yikes-custom-login-login-page-top', array( $this, 'yikes_custom_login_generate_branding_logo' ) );
 	}
 
 	/**
@@ -117,8 +137,21 @@ class YIKES_Custom_Login {
 			wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . '/lib/css/min/select2.min.css', array( 'yikes-admin-styles' ), YIKES_CUSTOM_LOGIN_VERSION );
 			// select2 js
 			wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . '/lib/js/min/select2.min.js', array( 'jquery' ), YIKES_CUSTOM_LOGIN_VERSION, true );
+			// File uploader for the branding tab
+			wp_enqueue_media();
 			// Options page scriptts
 			wp_enqueue_script( 'yikes-options-script', plugin_dir_url( __FILE__ ) . '/lib/js/min/yikes-custom-login-options.min.js', array( 'select2' ), YIKES_CUSTOM_LOGIN_VERSION, true );
+		}
+	}
+
+	/**
+	 * Enqueue front end scripts
+	 * @since 1.0
+	 */
+	public function euqueue_yikes_custom_login_frontend_scripts_and_styles() {
+		// Load the login page script
+		if ( is_page( $this->options['login_page'] ) ) {
+			wp_enqueue_script( 'yikes-login-page-script', plugin_dir_url( __FILE__ ) . '/lib/js/min/yikes-login-page.min.js', array( 'jquery' ), YIKES_CUSTOM_LOGIN_VERSION, true );
 		}
 	}
 
@@ -327,6 +360,23 @@ class YIKES_Custom_Login {
 	}
 
 	/**
+	 * Prevent access from certain pages for logged in users
+	 * eg: 'Sign In'
+	 * @return string redirect if logged in, or null of not
+	 * @since 1.0
+	 */
+	public function redirect_logged_in_users() {
+		// If the current request is equal to the login page, and the user is loged in
+		if ( url_to_postid( site_url() . $_SERVER['REQUEST_URI'] ) === (int) $this->options['login_page'] ) {
+			if ( is_user_logged_in() ) {
+				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
+				exit;
+			}
+		}
+		return;
+	}
+
+	/**
 	 * Redirects the user to the custom registration page instead of wp-login.php?action=register.
 	 * @since 1.0
 	 */
@@ -408,8 +458,11 @@ class YIKES_Custom_Login {
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
+		// if the user is already logged in
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+			// display user details container
+			include_once( plugin_dir_path( __FILE__ ) . 'templates/logged-in-user-details.php' );
+			return;
 		}
 
 		// Pass the redirect parameter to the WordPress login functionality: by default,
@@ -432,16 +485,16 @@ class YIKES_Custom_Login {
 		$attributes['errors'] = $errors;
 
 		// Check if user just logged out
-		$attributes['logged_out'] = isset( $_REQUEST['logged_out'] ) && true === $_REQUEST['logged_out'];
+		$attributes['logged_out'] = ( isset( $_GET['logged_out'] ) && 'true' === $_GET['logged_out'] ) ? 'true' : 'false';
 
 		// Check if the user just registered
 		$attributes['registered'] = isset( $_REQUEST['registered'] );
 
 		// Check if the user just requested a new password
-		$attributes['lost_password_sent'] = isset( $_REQUEST['checkemail'] ) && 'confirm' === $_REQUEST['checkemail'];
+		$attributes['lost_password_sent'] = ( isset( $_REQUEST['checkemail'] ) && 'confirm' === $_REQUEST['checkemail'] );
 
 		// Check if user just updated password
-		$attributes['password_updated'] = isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'];
+		$attributes['password_updated'] = ( isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'] );
 
 		// Store the username
 		$attributes['username_value'] = isset( $_POST['log'] ) ? $_POST['log'] : '';
@@ -1080,6 +1133,68 @@ class YIKES_Custom_Login {
 		}
 		// clear our transient
 		delete_transient( 'yikes_custom_login_pages_query' );
+	}
+
+	/**
+	 * Use a custom page template for the login page
+	 * @param  string $page_template Name of the template to use
+	 * @return string                The template to use
+	 */
+	public function yikes_custom_login_page_template( $page_template ) {
+		// Login Page Template
+		if ( is_page( $this->options['login_page'] ) ) {
+			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/login-page-template.php';
+		}
+		if ( is_page( $this->options['password_lost_page'] ) ) {
+			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/password-lost-page-template.php';
+		}
+		return $page_template;
+	}
+
+	/**
+	 * Add custom back links etc. to the template pages
+	 * @return string html markup to be used
+	 */
+	public function yikes_custom_password_lost_page_backlinks() {
+		ob_start();
+		?>
+		<a href="<?php echo esc_url( get_the_permalink( $this->options['login_page'] ) ); ?>">&#xab; Back</a>
+		<?php
+		$links = ob_get_contents();
+		ob_get_clean();
+		echo wp_kses_post( $links );
+	}
+
+	/**
+	 * Add custom 'Powered By' link/ad to the login page (bottom left)
+	 * @return string html markup to be used
+	 */
+	public function yikes_custom_login_page_text() {
+		ob_start();
+		?>
+		<div class="powered-by-yikes">⚡ Powered by <a href="https://www.yikesplugins.com" target="_blank">YIKES Plugins</a>.</div>
+		<?php
+		$div = ob_get_contents();
+		ob_get_clean();
+		echo wp_kses_post( $div );
+	}
+
+	/**
+	 * Generate the back link with the site branding image
+	 * @return string HTMl to be used for the site branding
+	 */
+	public function yikes_custom_login_generate_branding_logo() {
+		if ( '' !== $this->options['branding_logo'] && '' !== $this->options['branding_logo_id'] ) {
+			ob_start();
+			?>
+			<a class="yikes-custom-login-site-branding" href="<?php echo esc_url( site_url() ); ?>" title="<?php echo esc_attr( get_bloginfo( 'site_title' ) ); ?>">
+				<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" />
+			</a>
+			<?php
+			$branding = ob_get_contents();
+			ob_get_clean();
+			echo wp_kses_post( $branding );
+		}
 	}
 }
 

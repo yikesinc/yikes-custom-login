@@ -11,6 +11,10 @@ module.exports = function( grunt ) {
 			    'lib/js/min/yikes-custom-login-options.min.js': [ // Settings page scripts (init select2 etc.)
 			        'lib/js/yikes-custom-login-options.js'
 			    ],
+					// login page script
+			    'lib/js/min/yikes-login-page.min.js': [ // Login page script to show/hide preloader etc
+			        'lib/js/yikes-login-page.js'
+			    ],
 				}
 			}
 		},

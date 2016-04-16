@@ -40,9 +40,10 @@ class YIKES_Login_Settings {
 	 */
 	public function yikes_admin_tabs( $current = 'general' ) {
 		$tabs = array(
-			'general' => 'General',
-			'pages' => 'Pages',
+			'general' => __( 'General', 'yikes-inc-custom-login' ),
+			'pages' => __( 'Pages', 'yikes-inc-custom-login' ),
 			'recaptcha' => '<img class="recaptcha-icon" src="' . esc_url( plugin_dir_url( __FILE__ ) . '../images/recaptcha-icon.png' ) . '" /> reCAPTCHA',
+			'branding'=> __( 'Branding', 'yikes-inc-custom-login' ),
 		);
 		$links = array();
 		echo '<div id="icon-themes" class="icon32"><br></div>';
@@ -192,7 +193,7 @@ class YIKES_Login_Settings {
 		/* Notice Animations */
 		add_settings_field(
 			'notice_anmation', // ID
-			'Notice Animation', // Title
+			__( 'Notice Animation', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'notice_anmation_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -209,7 +210,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
-			'Login Page', // Title
+			__( 'Login Page', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -221,7 +222,7 @@ class YIKES_Login_Settings {
 		/* Account Info Page Option */
 		add_settings_field(
 			'account_info_page', // ID
-			'Account Page', // Title
+			__( 'Account Page', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -233,7 +234,7 @@ class YIKES_Login_Settings {
 		/* Registration PAge Option */
 		add_settings_field(
 			'register_page', // ID
-			'Registration Page', // Title
+			__( 'Registration Page', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -245,7 +246,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'password_lost_page', // ID
-			'Reset Password Page', // Title
+			__( 'Reset Password Page', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -257,7 +258,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'pick_new_password_page', // ID
-			'Select New Password Page', // Title
+			__( 'Select New Password Page', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -277,7 +278,7 @@ class YIKES_Login_Settings {
 		/* reCAPTCHA Site Key Option */
 		add_settings_field(
 			'recaptcha_site_key', // ID
-			'Site Key', // Title
+			__( 'Site Key', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'recaptcha_field_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_recaptcha_section', // Section
@@ -289,13 +290,30 @@ class YIKES_Login_Settings {
 		/* reCAPTCHA Secret Key Option */
 		add_settings_field(
 			'recaptcha_secret_key', // ID
-			'Secret Key', // Title
+			__( 'Secret Key', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'recaptcha_field_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_recaptcha_section', // Section
 			array(
 				'field' => 'recaptcha_secret_key',
 			)
+		);
+
+		/** Add Branding Settings Section **/
+		add_settings_section(
+			'yikes_custom_login_branding_section', // ID
+			'', // Title
+			array( $this, 'print_section_info' ), // Callback
+			'yikes-custom-login' // Page
+		);
+
+		/* Test Branding Option */
+		add_settings_field(
+			'branding_logo', // ID
+			__( 'Site Logo', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'logo_field_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_branding_section' // Section
 		);
 	}
 
@@ -307,27 +325,31 @@ class YIKES_Login_Settings {
 	public function sanitize( $input ) {
 		$new_input = array();
 		// Admin Redirect Sanitization
-		$new_input['admin_redirect'] = ( isset( $input['admin_redirect'] ) ) ? absint( $input['admin_redirect'] ) : 0;
+		$new_input['admin_redirect'] = ( isset( $input['admin_redirect'] ) ) ? absint( $input['admin_redirect'] ) : (int) 0;
 		// Restrict Dashboard Access Sanitization
-		$new_input['restrict_dashboard_access'] = ( isset( $input['restrict_dashboard_access'] ) ) ? 1 : 0;
+		$new_input['restrict_dashboard_access'] = ( isset( $input['restrict_dashboard_access'] ) ) ? (int) 1 : (int) 0;
 		// Use password strength meter and enforce strong passwords
-		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? 1 : 0;
+		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? (int) 1 : (int) 0;
 		// Notice animations
-		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? $input['notice_animation'] : 'none';
+		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? sanitize_text_field( $input['notice_animation'] ) : 'none';
 		// Registration Page
-		$new_input['register_page'] = ( isset( $input['register_page'] ) ) ? $input['register_page'] : $this->options['register_page'];
+		$new_input['register_page'] = ( isset( $input['register_page'] ) ) ? (int) $input['register_page'] : (int) $this->options['register_page'];
 		// Login Page
-		$new_input['login_page'] = ( isset( $input['login_page'] ) ) ? $input['login_page'] : $this->options['login_page'];
+		$new_input['login_page'] = ( isset( $input['login_page'] ) ) ? (int) $input['login_page'] : (int) $this->options['login_page'];
 		// Account Info Page
-		$new_input['account_info_page'] = ( isset( $input['account_info_page'] ) ) ? $input['account_info_page'] : $this->options['account_info_page'];
+		$new_input['account_info_page'] = ( isset( $input['account_info_page'] ) ) ? (int) $input['account_info_page'] : (int) $this->options['account_info_page'];
 		// Password Lost Page
-		$new_input['password_lost_page'] = ( isset( $input['password_lost_page'] ) ) ? $input['password_lost_page'] : $this->options['password_lost_page'];
+		$new_input['password_lost_page'] = ( isset( $input['password_lost_page'] ) ) ? (int) $input['password_lost_page'] : (int) $this->options['password_lost_page'];
 		// Password Lost Page
-		$new_input['pick_new_password_page'] = ( isset( $input['pick_new_password_page'] ) ) ? $input['pick_new_password_page'] : $this->options['pick_new_password_page'];
+		$new_input['pick_new_password_page'] = ( isset( $input['pick_new_password_page'] ) ) ? (int) $input['pick_new_password_page'] : (int) $this->options['pick_new_password_page'];
 		// Recaptcha Site Key
-		$new_input['recaptcha_site_key'] = ( isset( $input['recaptcha_site_key'] ) ) ? $input['recaptcha_site_key'] : false;
+		$new_input['recaptcha_site_key'] = ( isset( $input['recaptcha_site_key'] ) ) ? sanitize_text_field( $input['recaptcha_site_key'] ) : false;
 		// Recaptcha Secret
-		$new_input['recaptcha_secret_key'] = ( isset( $input['recaptcha_secret_key'] ) ) ? $input['recaptcha_secret_key'] : false;
+		$new_input['recaptcha_secret_key'] = ( isset( $input['recaptcha_secret_key'] ) ) ? sanitize_text_field( $input['recaptcha_secret_key'] ) : false;
+		// Branidng Logo
+		$new_input['branding_logo'] = ( isset( $input['branding_logo'] ) ) ? sanitize_url( $input['branding_logo'] ) : '';
+		// Branding Logo ID (hidden field)
+		$new_input['branding_logo_id'] = ( isset( $input['branding_logo'] ) && '' !== $input['branding_logo'] ) ? (int) $input['branding_logo_id'] : '';
 		// Return the saved data
 		return $new_input;
 	}
@@ -500,6 +522,30 @@ class YIKES_Login_Settings {
 		);
 	}
 
+	/**
+	 * Render the 'Logo' field in the Branding Tab
+	 */
+	public function logo_field_callback() {
+		// Branding Logo URL
+		printf(
+			'<input type="text" id="branding_logo" name="yikes_custom_login[branding_logo]" value="%s" class="widefat" placeholder="%s">',
+			esc_attr( $this->options['branding_logo'] ),
+			esc_attr__( 'Site Logo', 'yikes-inc-custom-login' )
+		);
+		// Branding Logo ID
+		printf(
+			'<input type="hidden" id="branding_logo_id" name="yikes_custom_login[branding_logo_id]" value="%s">',
+			esc_attr( $this->options['branding_logo_id'] )
+		);
+		$branding_preview_class = ( '' !== $this->options['branding_logo_id'] ) ? 'preview-active' : '';
+		// Branding Logo URL
+		printf(
+			'<div class="branding_logo_preview %s">%s %s</div>',
+			esc_attr( $branding_preview_class ),
+			wp_kses_post( '<span class="dashicons dashicons-no remove-branding-logo"></span>' ),
+			wp_kses_post( '<img src="' . $this->options['branding_logo'] . '" />' )
+		);
+	}
 	/**
 	 * Enqueue our styles properly on the admin side options page
 	 * @since 1.0.0

@@ -24,9 +24,9 @@
 	<?php endif; ?>
 
 	<!-- Show logged out message if user just logged out -->
-	<?php if ( $attributes['logged_out'] ) : ?>
+	<?php if ( 'true' === $attributes['logged_out'] ) : ?>
 		<p class="login-info yikes-custom-login-alert yikes-custom-login-alert-success yikes-animated <?php echo esc_attr( $this->options['notice_animation'] ); ?>">
-			<?php esc_attr_e( 'You have signed out. Would you like to sign in again?', 'yikes-inc-custom-login' ); ?>
+			<?php esc_attr_e( 'You have logged out.', 'yikes-inc-custom-login' ); ?>
 		</p>
 	<?php endif; ?>
 
@@ -66,8 +66,12 @@
 		);
 	?>
 
-	<a class="forgot-password" href="<?php echo esc_url( wp_lostpassword_url() ); ?>">
+	<a class="forgot-password pull-left" href="<?php echo esc_url( wp_lostpassword_url() ); ?>">
 		<?php esc_attr_e( 'Forgot your password?', 'yikes-inc-custom-login' ); ?>
+	</a>
+
+	<a class="register-account pull-right" href="<?php echo esc_url( get_the_permalink( $this->options['register_page'] ) ); ?>">
+		<?php esc_attr_e( 'Signup', 'yikes-inc-custom-login' ); ?>
 	</a>
 
 	<?php
