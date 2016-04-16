@@ -10,8 +10,8 @@
 	<?php endif; ?>
 
 	<form id="yikes-reset-password-form" name="resetpassform" action="<?php echo site_url( 'wp-login.php?action=resetpass' ); ?>" method="post" autocomplete="off">
-		<input type="hidden" id="user_login" name="rp_login" value="<?php echo esc_attr( $attributes['login'] ); ?>" autocomplete="off" />
-		<input type="hidden" name="rp_key" value="<?php echo esc_attr( $attributes['key'] ); ?>" />
+		<input type="hidden" id="user_login" name="login" value="<?php echo esc_attr( $attributes['login'] ); ?>" autocomplete="off" />
+		<input type="hidden" name="key" value="<?php echo esc_attr( $attributes['key'] ); ?>" />
 
 		<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
 			<?php foreach ( $attributes['errors'] as $error ) : ?>

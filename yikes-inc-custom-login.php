@@ -27,6 +27,12 @@ class YIKES_Custom_Login {
 		if ( ! defined( 'YIKES_CUSTOM_LOGIN_VERSION' ) ) {
 			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.0' );
 		}
+		if ( ! defined( 'YIKES_CUSTOM_LOGIN_PATH' ) ) {
+			define( 'YIKES_CUSTOM_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+		}
+		if ( ! defined( 'YIKES_CUSTOM_LOGIN_URL' ) ) {
+			define( 'YIKES_CUSTOM_LOGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+		}
 
 		// Restrict admin dashboard access to only admins ('manage_options' capability)
 		add_action( 'admin_init', array( $this, 'yikes_restrict_admin_dashboard' ) );
@@ -131,7 +137,7 @@ class YIKES_Custom_Login {
 			'login_page' => null,
 			'account_info_page' => null,
 			'password_lost_page' => null,
-			'password_reset_page' => null,
+			'pick_new_password_page' => null,
 			'recaptcha_site_key' => false,
 			'recaptcha_secret_key' => false,
 		) );
@@ -201,7 +207,7 @@ class YIKES_Custom_Login {
 						$plugin_options['password_lost_page'] = $page_id;
 						break;
 					case 'member-password-reset':
-						$plugin_options['password_reset_page'] = $page_id;
+						$plugin_options['pick_new_password_page'] = $page_id;
 						break;
 					default:
 						break;
@@ -313,7 +319,9 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function redirect_after_logout() {
-		$redirect_url = esc_url( get_the_permalink( $this->options['login_page'] ) . '?logged_out=true' );
+		$redirect_url = add_query_arg( array(
+			'logged_out' => 'true',
+		), esc_url( get_the_permalink( $this->options['login_page'] ) ) );
 		wp_redirect( $redirect_url );
 		exit;
 	}
@@ -359,18 +367,21 @@ class YIKES_Custom_Login {
 			$user = check_password_reset_key( $_REQUEST['key'], $_REQUEST['login'] );
 			if ( ! $user || is_wp_error( $user ) ) {
 				if ( $user && $user->get_error_code() === 'expired_key' ) {
-					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=expiredkey' ) );
+					wp_redirect( add_query_arg( array(
+						'login' => 'expiredkey',
+					), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
 				} else {
-					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=invalidkey' ) );
+					wp_redirect( add_query_arg( array(
+						'login' => 'invalidkey',
+					), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
 				}
 				exit;
 			}
-
-			$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
-			$redirect_url = add_query_arg( 'login', esc_attr( $_REQUEST['login'] ), $redirect_url );
-			$redirect_url = add_query_arg( 'key', esc_attr( $_REQUEST['key'] ), $redirect_url );
-
-			wp_redirect( $redirect_url );
+			$redirect_url = esc_url( get_the_permalink( $this->options['pick_new_password_page'] ) );
+			wp_redirect( add_query_arg( array(
+				'login' => esc_attr( $_REQUEST['login'] ),
+				'key' => esc_attr( $_REQUEST['key'] ),
+			), $redirect_url ) );
 			exit;
 		}
 	}
@@ -684,16 +695,20 @@ class YIKES_Custom_Login {
 	 */
 	public function do_password_reset() {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$rp_key = $_REQUEST['rp_key'];
-			$rp_login = $_REQUEST['rp_login'];
+			$rp_key = $_REQUEST['key'];
+			$rp_login = $_REQUEST['login'];
 
 			$user = check_password_reset_key( $rp_key, $rp_login );
 
 			if ( ! $user || is_wp_error( $user ) ) {
 				if ( $user && $user->get_error_code() === 'expired_key' ) {
-					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=expiredkey' ) );
+					wp_redirect( add_query_arg( array(
+						'login' => 'expiredkey',
+					), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
 				} else {
-					wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?login=invalidkey' ) );
+					wp_redirect( add_query_arg( array(
+						'login' => 'invalidkey',
+					), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
 				}
 				exit;
 			}
@@ -701,19 +716,17 @@ class YIKES_Custom_Login {
 			if ( isset( $_POST['pass1'] ) ) {
 				if ( $_POST['pass1'] !== $_POST['pass2'] ) {
 					// Passwords don't match
-					$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
-
+					$redirect_url = esc_url( get_the_permalink( $this->options['pick_new_password_page'] ) );
 					$redirect_url = add_query_arg( 'key', $rp_key, $redirect_url );
 					$redirect_url = add_query_arg( 'login', $rp_login, $redirect_url );
 					$redirect_url = add_query_arg( 'error', 'password_reset_mismatch', $redirect_url );
-
 					wp_redirect( $redirect_url );
 					exit;
 				}
 
 				if ( empty( $_POST['pass1'] ) ) {
 					// Password is empty
-					$redirect_url = esc_url( get_the_permalink( $this->options['password_reset_page'] ) );
+					$redirect_url = esc_url( get_the_permalink( $this->options['pick_new_password_page'] ) );
 
 					$redirect_url = add_query_arg( 'key', $rp_key, $redirect_url );
 					$redirect_url = add_query_arg( 'login', $rp_login, $redirect_url );
@@ -725,11 +738,13 @@ class YIKES_Custom_Login {
 
 				// Parameter checks OK, reset password
 				reset_password( $user, $_POST['pass1'] );
-				wp_redirect( esc_url( get_the_permalink( $this->options['login_page'] ) . '?password=changed' ) );
+				// Redirect
+				wp_redirect( add_query_arg( array(
+					'password' => 'changed',
+				), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
 			} else {
 				echo 'Invalid request.';
 			}
-
 			exit;
 		}
 	}
@@ -843,14 +858,21 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function replace_retrieve_password_message( $message, $key, $user_login, $user_data ) {
+		// setup the reset password URL
+		$reset_pass_url = add_query_arg( array(
+			'action' => 'rp',
+			'key' => $key,
+			'login' => rawurlencode( $user_login ),
+		), site_url( 'wp-login.php', 'login' ) );
+		// Instantiate the email templates class
+		include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/email-templates.php' );
+		// load the 'password-reset' template
+		ob_start();
+		$email_template = new YIKES_Email_Templates();
+		$email_template::build_email_template( 'password-reset', $key, $user_login, $reset_pass_url );
+		$msg = ob_get_contents();
+		ob_get_clean();
 		// Create new message
-		$msg  = __( 'Hello!', 'yikes-custom-login' ) . "\r\n\r\n";
-		$msg .= sprintf( __( 'You asked us to reset your password for your account using the email address %s.', 'yikes-custom-login' ), $user_login ) . "\r\n\r\n";
-		$msg .= __( "If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'yikes-custom-login' ) . "\r\n\r\n";
-		$msg .= __( 'To reset your password, visit the following address:', 'yikes-custom-login' ) . "\r\n\r\n";
-		$msg .= site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . "\r\n\r\n";
-		$msg .= __( 'Thanks!', 'yikes-custom-login' ) . "\r\n";
-
 		return $msg;
 	}
 

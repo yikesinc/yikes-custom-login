@@ -254,6 +254,18 @@ class YIKES_Login_Settings {
 			)
 		);
 
+		/* Login Page Option */
+		add_settings_field(
+			'pick_new_password_page', // ID
+			'Select New Password Page', // Title
+			array( $this, 'page_select_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_pages_section', // Section
+			array(
+				'field' => 'pick_new_password_page',
+			)
+		);
+
 		/** Add Recaptcha Settings Section **/
 		add_settings_section(
 			'yikes_custom_login_recaptcha_section', // ID
@@ -302,14 +314,16 @@ class YIKES_Login_Settings {
 		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? 1 : 0;
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? $input['notice_animation'] : 'none';
-		// Login Page
+		// Registration Page
 		$new_input['register_page'] = ( isset( $input['register_page'] ) ) ? $input['register_page'] : $this->options['register_page'];
 		// Login Page
 		$new_input['login_page'] = ( isset( $input['login_page'] ) ) ? $input['login_page'] : $this->options['login_page'];
-		// Login Page
+		// Account Info Page
 		$new_input['account_info_page'] = ( isset( $input['account_info_page'] ) ) ? $input['account_info_page'] : $this->options['account_info_page'];
-		// Login Page
+		// Password Lost Page
 		$new_input['password_lost_page'] = ( isset( $input['password_lost_page'] ) ) ? $input['password_lost_page'] : $this->options['password_lost_page'];
+		// Password Lost Page
+		$new_input['pick_new_password_page'] = ( isset( $input['pick_new_password_page'] ) ) ? $input['pick_new_password_page'] : $this->options['pick_new_password_page'];
 		// Recaptcha Site Key
 		$new_input['recaptcha_site_key'] = ( isset( $input['recaptcha_site_key'] ) ) ? $input['recaptcha_site_key'] : false;
 		// Recaptcha Secret
