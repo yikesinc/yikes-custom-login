@@ -2,7 +2,6 @@
 module.exports = function( grunt ) {
 
 	grunt.initConfig({
-
 		// js minification
 		uglify: {
 			dist: {
@@ -47,12 +46,38 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		appDetails: grunt.file.readJSON( 'package.json' ),
+		usebanner: {
+			taskName: {
+				options: {
+	        position: 'top',
+					replace: true,
+	        banner: '/*\n'+
+					' * Plugin: YIKES Inc. Custom Login \n'+
+					' * Version: <%= appDetails.version %> \n'+
+					' * Author: <%= appDetails.author %> \n'+
+					' * Contact: info@yikesinc.com \n'+
+					' * License: <%= appDetails.license %> \n'+
+					' */',
+					linebreak: true
+      	},
+				files: {
+					src: [
+						'lib/css/min/yikes-custom-login-admin.min.css',
+						'lib/css/min/yikes-custom-login-public.min.css',
+						'lib/js/min/yikes-custom-login-options.min.js',
+						'lib/js/min/yikes-login-page.min.js'
+					]
+				}
+			}
+		},
+
 		// watch our project for changes
 		watch: {
 			all_css_files: {
 			 	// public css
 				files: 'lib/css/*.css',
-				tasks: ['cssmin'],
+				tasks: ['cssmin','usebanner'],
 				options: {
 					spawn: false,
 					event: ['all']
@@ -61,7 +86,7 @@ module.exports = function( grunt ) {
 			all_js_files: {
 			 	// public css
 				files: 'lib/js/*.js',
-				tasks: ['uglify'],
+				tasks: ['uglify','usebanner'],
 				options: {
 					spawn: false,
 					event: ['all']
@@ -91,12 +116,14 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-postcss'); // CSS autoprefixer plugin (cross-browser auto pre-fixes)
 	grunt.loadNpmTasks('grunt-contrib-cssmin'); // CSS Minifier
 	grunt.loadNpmTasks('grunt-contrib-watch'); // Watch files for changes
+	grunt.loadNpmTasks('grunt-banner'); // Banner task
 
 	// register task
 	grunt.registerTask('default', [
 		'uglify',
 		'postcss',
 		'cssmin',
+		'usebanner',
 		'watch',
 	]);
 };
