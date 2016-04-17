@@ -155,7 +155,8 @@ class YIKES_Custom_Login {
 	 */
 	public function euqueue_yikes_custom_login_frontend_scripts_and_styles() {
 		// Load the login page script
-		if ( is_page( $this->options['login_page'] ) ) {
+		if ( is_page( $this->options['login_page'] ) || is_page( $this->options['register_page'] ) ||
+		is_page( $this->options['password_lost_page'] ) || is_page( $this->options['pick_new_password_page'] ) ) {
 			wp_enqueue_script( 'yikes-login-page-script', plugin_dir_url( __FILE__ ) . '/lib/js/min/yikes-login-page.min.js', array( 'jquery' ), YIKES_CUSTOM_LOGIN_VERSION, true );
 		}
 	}
@@ -520,6 +521,16 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function render_account_info_form( $attributes, $content = null ) {
+		// Error messages
+		$errors = array();
+		if ( isset( $_REQUEST['error'] ) ) {
+			$error_codes = explode( ',', $_REQUEST['error'] );
+
+			foreach ( $error_codes as $code ) {
+				$errors[] = $this->get_error_message( $code );
+			}
+		}
+		$attributes['errors'] = $errors;
 		// Enqueue the plugin frontend styles
 		$this->enqueue_yikes_custom_login_styles();
 		// Render the login form using an external template

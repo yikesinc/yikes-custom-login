@@ -58,7 +58,7 @@
 		<p></p>
 
 		<p class="signup-submit span_2_of_2">
-			<input type="submit" name="submit" class="register-button" value="<?php esc_attr_e( 'Register', 'yikes-inc-custom-login' ); ?>"/>
+			<input type="submit" name="submit-new-user" class="register-button" value="<?php esc_attr_e( 'Register', 'yikes-inc-custom-login' ); ?>"/>
 		</p>
 	</form>
 

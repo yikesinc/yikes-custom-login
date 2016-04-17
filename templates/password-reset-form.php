@@ -33,7 +33,7 @@
 		<p class="description yikes-register-note"><small><em><?php echo str_replace( 'Hint', '<strong>' . __( 'Hint', 'yikes-inc-custom-login' ) . '</strong>', wp_get_password_hint() ); ?></em></small></p>
 
 		<p class="resetpass-submit">
-			<input type="submit" name="submit" id="resetpass-button" class="button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
+			<input type="submit" name="resetpass-submit" id="resetpass-button" class="button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
 		</p>
 	</form>
 

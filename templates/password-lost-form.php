@@ -32,7 +32,7 @@
 		</p>
 
 		<p class="lostpassword-submit">
-			<input type="submit" name="submit" class="lostpassword-button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>"/>
+			<input type="submit" name="lostpassword-submit" class="lostpassword-button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>"/>
 		</p>
 	</form>
 

@@ -22,7 +22,7 @@ get_currentuserinfo();
 
 		} else { // If the user is logged in.
 			// display the errors if present
-			$this->yikes_custom_login_display_alerts( $error );
+			$this->yikes_custom_login_display_alerts( $attributes['errors'] );
 			?>
 			<!-- YIKES Inc. Custom Account Info Form -->
 			<form id="yikes-account-info-form" method="post" class="section group" action="<?php the_permalink(); ?>">
@@ -70,7 +70,6 @@ get_currentuserinfo();
 					<br />
 					<!-- Submit button and nonces -->
 					<p class="form-submit span_2_of_2">
-						<?php echo esc_attr( $referer ); ?>
 						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'yikes-inc-custom-login' ); ?>" />
 						<a href="#new-password" class="button reset-pass"><?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?></a>
 						<?php wp_nonce_field( 'update-user' ) ?>

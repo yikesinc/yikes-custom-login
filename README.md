@@ -161,6 +161,23 @@ function filter_profile_field_labels( $label ) {
 add_filter( 'yikes-custom-login-twitter-label', 'filter_profile_field_labels' );
 ```
 
+* `yikes-custom-login-preloader`
+
+Use a custom preloader image for all full width page templates (Login, Password Lost/Reset, New User Registration).
+
+**Example Usage**
+```php
+/**
+ *  Use a custom preloader instead of the standard wpspin_light.gif
+ *  In this example, we'll use a cute cupcake
+ */
+function custom_login_preloader_image( $preloader_url ) {
+	// Return a new URL to use as the preloader
+	return esc_url( 'https://media.giphy.com/media/4Lg39ddcSzBIY/giphy.gif' );
+}
+add_filter( 'yikes-custom-login-preloader', 'custom_login_preloader_image' );
+```
+
 #### Actions
 
 ###### Login Form
