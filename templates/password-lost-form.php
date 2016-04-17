@@ -1,7 +1,7 @@
 <div id="password-lost-form" class="widecolumn">
 	<?php
 		/** Custom Action Hook - Before Password Lost Form */
-		do_action( 'yikes-inc-custom-login-before-password-lost-form' );
+		do_action( 'yikes-custom-login-before-password-lost-form' );
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
@@ -38,7 +38,7 @@
 
 	<?php
 		/** Custom Action Hook - After Password Lost Form */
-		do_action( 'yikes-inc-custom-login-after-password-lost-form' );
+		do_action( 'yikes-custom-login-after-password-lost-form' );
 	?>
 
 </div>

@@ -2,7 +2,7 @@
 
 	<?php
 		/** Custom Action Hook - Before Register Form */
-		do_action( 'yikes-inc-custom-login-before-register-form' );
+		do_action( 'yikes-custom-login-before-register-form' );
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
@@ -64,7 +64,7 @@
 
 	<?php
 		/** Custom Action Hook - After Register Form */
-		do_action( 'yikes-inc-custom-login-after-register-form' );
+		do_action( 'yikes-custom-login-after-register-form' );
 	?>
 
 </div>

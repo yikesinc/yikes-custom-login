@@ -5,7 +5,7 @@
  * @since 1.0
  */
 ?>
-<div id="new-password-popup" class="overlay">
+<div id="new-password" class="overlay">
 	<div class="popup">
 		<h2><?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?></h2>
 		<p><?php esc_attr_e( 'Enter your new password in the fields below. You must enter a strong password before you can update it.', 'yikes-inc-custom-login' ); ?></p>

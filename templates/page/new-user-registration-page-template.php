@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom Login Page - Full Width Page Template
+ * New User Registration - Full Width Page Template
  * @since 1.0
  */
 wp_head();
@@ -9,7 +9,7 @@ wp_head();
 <body class="yikes-custom-page-template">
 	<div id="yikes-custom-user-registration-template" class="yikes-custom-page-template-interior">
 
-		<?php do_action( 'yikes-custom-login-login-page-top' ); ?>
+		<?php do_action( 'yikes-custom-login-user-registration-page-top' ); ?>
 
 		<div class="page-container">
 
@@ -21,15 +21,15 @@ wp_head();
 
 				<!-- Login Form -->
 				<?php
-					do_action( 'yikes-custom-login-login-page-before-form' );
-					echo do_shortcode( '[custom-login-form]' );
-					do_action( 'yikes-custom-login-login-page-after-form' );
+					do_action( 'yikes-custom-login-user-registration-page-before-form' );
+					echo do_shortcode( '[custom-register-form]' );
+					do_action( 'yikes-custom-login-user-registration-page-after-form' );
 				?>
 			</div>
 
 		</div>
 
-		<?php do_action( 'yikes-custom-login-login-page-bottom' ); ?>
+		<?php do_action( 'yikes-custom-login-user-registration-page-bottom' ); ?>
 
 	</div>
 </body>

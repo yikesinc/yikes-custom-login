@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       YIKES Custom Login
- * Plugin URI:        https://www.yikesplugins.com
+ * Plugin URI:        https://yikesplugins.com/
  * Description:       A plugin that replaces the WordPress login flow with custom pages.
  * Version:           1.0.0
  * Author:            YIKES, Evan Herman
@@ -92,12 +92,17 @@ class YIKES_Custom_Login {
 		/* Add some login page advertising text */
 		add_action( 'yikes-custom-login-login-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
 		add_action( 'yikes-custom-login-password-lost-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
+		add_action( 'yikes-custom-login-pick-new-password-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
+		add_action( 'yikes-custom-login-user-registration-page-bottom', array( $this, 'yikes_custom_login_page_text' ) );
 
 		/* Add back links to the password reset form */
 		add_action( 'yikes-custom-login-password-lost-page-after-form', array( $this, 'yikes_custom_password_lost_page_backlinks' ) );
 
 		/* Append the custom site logo to the login form, registration form, password lost form and appropriate emails */
-		add_action( 'yikes-custom-login-login-page-top', array( $this, 'yikes_custom_login_generate_branding_logo' ) );
+		add_action( 'yikes-custom-login-branding', array( $this, 'yikes_custom_login_generate_branding_logo' ) );
+
+		/* Custom text below forms */
+		add_action( 'yikes-custom-login-user-registration-page-after-form', array( $this, 'yikes_custom_login_append_already_a_member_text' ) );
 	}
 
 	/**
@@ -166,6 +171,8 @@ class YIKES_Custom_Login {
 			'restrict_dashboard_access' => 1,
 			'password_strength_meter' => 1,
 			'notice_animation' => 'yikes-fadeInDown',
+			'full_page_templates' => 1,
+			'powered_by_yikes' => 1,
 			'register_page' => null,
 			'login_page' => null,
 			'account_info_page' => null,
@@ -536,9 +543,9 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+			return sprintf( __( 'You are already signed in. %s', 'yikes-custom-login' ), '<a href="' . esc_url( get_the_permalink( $this->options['account_info_page'] ) ) . '">' . __( 'View Account', 'yikes-inc-custom-login' ) . '</a>' );
 		} elseif ( ! get_option( 'users_can_register' ) ) {
-			return __( 'Registering new users is currently not allowed.', 'yikes-custom-login' );
+			return __( 'Registering new users is currently disabled.', 'yikes-custom-login' );
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -921,8 +928,8 @@ class YIKES_Custom_Login {
 		include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/email-templates.php' );
 		// load the 'password-reset' template
 		ob_start();
-		$email_template = new YIKES_Email_Templates();
-		$email_template::build_email_template( 'password-reset', $key, $user_login, $reset_pass_url );
+		$email_template = new YIKES_Email_Templates( $this->options );
+		$email_template->send_password_reset_email( $key, $user_login, $reset_pass_url );
 		$msg = ob_get_contents();
 		ob_get_clean();
 		// Create new message
@@ -945,6 +952,8 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	private function register_user( $email, $first_name, $last_name ) {
+		global $wpdb;
+
 		$errors = new WP_Error();
 
 		// Email address is used as both username and email. It is also the only
@@ -959,13 +968,13 @@ class YIKES_Custom_Login {
 			return $errors;
 		}
 
-		// Generate the password so that the subscriber will have to check email...
-		$password = wp_generate_password( 12, false );
+		// Generate the password so that the subscriber will have to check email
+		$key = wp_generate_password( 20, false );
 
 		$user_data = array(
 			'user_login'    => $email,
 			'user_email'    => $email,
-			'user_pass'     => $password,
+			'user_pass'     => $key,
 			'first_name'    => $first_name,
 			'last_name'     => $last_name,
 			'nickname'      => $first_name,
@@ -973,7 +982,23 @@ class YIKES_Custom_Login {
 		);
 
 		$user_id = wp_insert_user( $user_data );
-		wp_new_user_notification( $user_id, $password );
+
+		/** This action is documented in wp-login.php */
+		do_action( 'retrieve_password_key', $user_data->user_login, $key );
+
+		// Now insert the key, hashed, into the DB.
+		if ( empty( $wp_hasher ) ) {
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+			$wp_hasher = new PasswordHash( 8, true );
+		}
+
+		$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
+		$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $email ) );
+
+		// Inclde our custom 'Welcome' email template
+		include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/email-templates.php' );
+		$email_class = new YIKES_Email_Templates( $this->options );
+		$email_class->send_new_user_notifications( $user_id, $key );
 
 		return $user_id;
 	}
@@ -1141,12 +1166,37 @@ class YIKES_Custom_Login {
 	 * @return string                The template to use
 	 */
 	public function yikes_custom_login_page_template( $page_template ) {
+		// If the 'Full Page Templates' option has been disabled
+		if ( ! isset( $this->options['full_page_templates'] ) || 0 === $this->options['full_page_templates'] ) {
+			return $page_template;
+		}
 		// Login Page Template
 		if ( is_page( $this->options['login_page'] ) ) {
 			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/login-page-template.php';
 		}
+		// Password Lost Page
 		if ( is_page( $this->options['password_lost_page'] ) ) {
 			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/password-lost-page-template.php';
+		}
+		// Pick New Password Page
+		if ( is_page( $this->options['pick_new_password_page'] ) ) {
+			// check if the user is logged in
+			if ( is_user_logged_in() ) {
+				// Redirect to account page with new password popup displayed
+				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) . '#new-password' ) );
+				exit;
+			}
+			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/pick-new-password-page-template.php';
+		}
+		// New User Registration Page
+		if ( is_page( $this->options['register_page'] ) ) {
+			// check if the user is logged in
+			if ( is_user_logged_in() ) {
+				// Redirect to account page with new password popup displayed
+				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
+				exit;
+			}
+			$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/new-user-registration-page-template.php';
 		}
 		return $page_template;
 	}
@@ -1170,9 +1220,21 @@ class YIKES_Custom_Login {
 	 * @return string html markup to be used
 	 */
 	public function yikes_custom_login_page_text() {
+		// If the setting has been disabled, abort
+		if ( ! isset( $this->options['powered_by_yikes'] ) || 0 === $this->options['powered_by_yikes'] ) {
+			return;
+		}
 		ob_start();
 		?>
-		<div class="powered-by-yikes">⚡ Powered by <a href="https://www.yikesplugins.com" target="_blank">YIKES Plugins</a>.</div>
+		<div class="powered-by-yikes">
+			<?php
+			printf(
+				esc_attr__( '%s Powered by %s.', 'yikes-inc-custom-login' ),
+				esc_attr( '⚡' ),
+				wp_kses_post( '<a href="https://yikesplugins.com/" target="_blank">YIKES Plugins</a>' )
+			);
+			?>
+		</div>
 		<?php
 		$div = ob_get_contents();
 		ob_get_clean();
@@ -1187,7 +1249,7 @@ class YIKES_Custom_Login {
 		if ( '' !== $this->options['branding_logo'] && '' !== $this->options['branding_logo_id'] ) {
 			ob_start();
 			?>
-			<a class="yikes-custom-login-site-branding" href="<?php echo esc_url( site_url() ); ?>" title="<?php echo esc_attr( get_bloginfo( 'site_title' ) ); ?>">
+			<a class="yikes-custom-login-site-branding yikes-animated yikes-fadeIn" href="<?php echo esc_url( site_url() ); ?>" title="<?php echo esc_attr( get_bloginfo( 'site_title' ) ); ?>">
 				<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" />
 			</a>
 			<?php
@@ -1195,6 +1257,14 @@ class YIKES_Custom_Login {
 			ob_get_clean();
 			echo wp_kses_post( $branding );
 		}
+	}
+	/**
+	 * Append 'Already a member?'
+	 * @return html String to append below the new user registration form
+	 */
+	public function yikes_custom_login_append_already_a_member_text() {
+		$sign_in_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
+		echo wp_kses_post( '<small class="pull-right" class="yikes-already-a-member"><em>' . sprintf( __( 'Already a member? %s', 'yikes-inc-custom-login' ), '<a href="' . $sign_in_url . '">' . __( 'Sign In', 'yikes-inc-custom-login' ) . '</a>' ) . '</em></small>' );
 	}
 }
 

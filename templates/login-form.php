@@ -7,7 +7,7 @@
 
 	<?php
 		/** Custom Action Hook - Before Login Form */
-		do_action( 'yikes-inc-custom-login-before-login-form' );
+		do_action( 'yikes-custom-login-before-login-form' );
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
@@ -34,8 +34,9 @@
 		<p class="login-info yikes-custom-login-alert yikes-custom-login-alert-success yikes-animated <?php echo esc_attr( $this->options['notice_animation'] ); ?>">
 			<?php
 				printf(
-					esc_attr__( 'You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'yikes-inc-custom-login' ),
-					esc_attr( get_bloginfo( 'name' ) )
+					wp_kses_post( 'You have successfully registered to <strong>%s</strong>. Your password has been emailed to %s.', 'yikes-inc-custom-login' ),
+					esc_attr( get_bloginfo( 'name' ) ),
+					sanitize_email( $_GET['registered'] )
 				);
 			?>
 		</p>
@@ -67,16 +68,16 @@
 	?>
 
 	<a class="forgot-password pull-left" href="<?php echo esc_url( wp_lostpassword_url() ); ?>">
-		<?php esc_attr_e( 'Forgot your password?', 'yikes-inc-custom-login' ); ?>
+		<?php apply_filters( 'yikes-custom-login-forgot-password-link-text', esc_attr_e( 'Forgot your password?', 'yikes-inc-custom-login' ) ); ?>
 	</a>
 
 	<a class="register-account pull-right" href="<?php echo esc_url( get_the_permalink( $this->options['register_page'] ) ); ?>">
-		<?php esc_attr_e( 'Signup', 'yikes-inc-custom-login' ); ?>
+		<?php apply_filters( 'yikes-custom-login-register-link-text', esc_attr_e( 'Register', 'yikes-inc-custom-login' ) ); ?>
 	</a>
 
 	<?php
 		/** Custom Action Hook - After Login Form */
-		do_action( 'yikes-inc-custom-login-after-login-form' );
+		do_action( 'yikes-custom-login-after-login-form' );
 	?>
 
 </div>

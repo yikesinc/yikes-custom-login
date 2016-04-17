@@ -295,7 +295,11 @@ table.button.alert:hover table a {border:0 solid #e23317}
                             <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
                               <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; padding:0; text-align:left; font-size:16px" align="left">
-                                  <h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:34px" align="center">Welcome to Kraken Academy</h1>
+																	<!-- Welcome Header -->
+																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:34px" align="center">
+																		<?php printf( esc_attr__( 'Welcome to %s', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
+																	</h1>
+																	<!-- End Welcome Header -->
                                   <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:center; vertical-align:top; width:100%" align="center" valign="top" width="100%">
                                     <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                       <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
@@ -310,10 +314,39 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                       </td>
                                     </tr>
                                   </table>
-                                  <center data-parsed="" style="min-width:532px; width:100%" width="100%"> <img src="http://placehold.it/200x200" align="center" style="-ms-interpolation-mode:bicubic; clear:both; display:block; max-width:100%; outline:none; text-decoration:none; width:auto; float:none; margin:0 auto; text-align:center" width="auto"> </center>
+																	<!-- Site Logo, if set -->
+																	<?php if( '' !== $this->options['branding_logo'] ) { ?>
+	                                  <center data-parsed="" style="min-width:532px; width:100%" width="100%">
+																			<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" align="center" style="-ms-interpolation-mode:bicubic; clear:both; display:block; max-width:100%; outline:none; text-decoration:none; width:auto; float:none; margin:0 auto; text-align:center" width="auto">
+																		</center>
+																	<?php } ?>
+																	<!-- End Site Logo -->
                                   <h4 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; margin-bottom:10px; word-wrap:normal; font-size:24px" align="left">An exciting future of terrorizing sailors awaits you at Kraken Academy.</h4>
                                   <p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; padding:0; text-align:left; font-size:16px; margin-bottom:10px" align="left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque culpa vel architecto, perspiciatis eius cum autem quidem, sunt consequuntur, impedit dolor vitae illum nobis sint nihil aliquid? Assumenda, amet, officia.</p>
-                                  <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
+
+
+																	<!-- Reset Pass and Login Link -->
+																	<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:0 0 16px 0; width:100%" align="left" valign="top" width="100%">
+                                    <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+                                      <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
+                                        <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
+                                          <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+                                            <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; font-size:16px; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse; width:auto" align="left" valign="top" width="auto">
+																							<center data-parsed="" style="min-width:0; width:100%" width="100%">
+																								<a href="<?php echo esc_url( $new_user_login_url ); ?>" align="center" style="color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:bold; line-height:1.3; margin:0; padding:10px 20px 10px 20px; text-align:center; text-decoration:none; width:calc(100% - 20px); border:0 solid #2199e8; border-radius:3px; display:inline-block; font-size:20px" width="calc(100% - 20px)">
+																									<?php esc_attr_e( 'Set Password and Login', 'yikes-inc-custom-login' ); ?>
+																								</a>
+																							</center>
+                                            </td>
+                                            <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; font-size:16px; visibility:hidden; width:auto; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse" align="left" valign="top" width="auto"></td>
+                                          </tr>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </table>
+																	<!-- End reset pass and login link -->
+
+																	<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
                                     <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                       <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:19px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
                                         <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">

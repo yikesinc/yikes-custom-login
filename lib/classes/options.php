@@ -198,7 +198,22 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
-
+		// Admin Redirection Setting
+		add_settings_field(
+			'full_page_templates', // ID
+			__( 'Full Width Page Templates', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'full_page_templates_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_general_section' // Section
+		);
+		// Admin Redirection Setting
+		add_settings_field(
+			'powered_by_yikes', // ID
+			__( 'Display "Powered by YIKES Plugins"', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'powered_by_yikes_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_general_section' // Section
+		);
 		/** Add Pages Settings Section **/
 		add_settings_section(
 			'yikes_custom_login_pages_section', // ID
@@ -332,6 +347,10 @@ class YIKES_Login_Settings {
 		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? (int) 1 : (int) 0;
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? sanitize_text_field( $input['notice_animation'] ) : 'none';
+		// Full Width Page Templates
+		$new_input['full_page_templates'] = ( isset( $input['full_page_templates'] ) ) ? (int) 1 : (int) 0;
+		// Full Width Page Templates
+		$new_input['powered_by_yikes'] = ( isset( $input['powered_by_yikes'] ) ) ? (int) 1 : (int) 0;
 		// Registration Page
 		$new_input['register_page'] = ( isset( $input['register_page'] ) ) ? (int) $input['register_page'] : (int) $this->options['register_page'];
 		// Login Page
@@ -465,6 +484,38 @@ class YIKES_Login_Settings {
 		printf(
 			'<p class="description">%s</p>',
 			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
+		);
+	}
+
+	/**
+	 * Render the checkbox to display the 'Full Width Page Templates' checkbox
+	 */
+	public function full_page_templates_callback() {
+		/* Field */
+		printf(
+			'<input type="checkbox" id="full_page_templates" name="yikes_custom_login[full_page_templates]" value="1" %s />',
+			checked( $this->options['full_page_templates'], 1, false )
+		);
+		/* Description */
+		printf(
+			'<p class="description">%s</p>',
+			esc_attr__( 'Should each custom page use a full width template?', 'yikes-inc-custom-login' )
+		);
+	}
+
+	/**
+	 * Render the checkbox to display the 'Powered by YIKES' checkbox
+	 */
+	public function powered_by_yikes_callback() {
+		/* Field */
+		printf(
+			'<input type="checkbox" id="powered_by_yikes" name="yikes_custom_login[powered_by_yikes]" value="1" %s />',
+			checked( $this->options['powered_by_yikes'], 1, false )
+		);
+		/* Description */
+		printf(
+			'<p class="description">%s</p>',
+			esc_attr__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
 		);
 	}
 

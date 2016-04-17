@@ -2,7 +2,7 @@
 
 	<?php
 		/** Custom Action Hook - Before Password Reset Form */
-		do_action( 'yikes-inc-custom-login-before-password-reset-form' );
+		do_action( 'yikes-custom-login-before-password-reset-form' );
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
@@ -30,7 +30,7 @@
 			<input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off" />
 		</p>
 
-		<p class="description"><?php echo wp_get_password_hint(); ?></p>
+		<p class="description yikes-register-note"><small><em><?php echo str_replace( 'Hint', '<strong>' . __( 'Hint', 'yikes-inc-custom-login' ) . '</strong>', wp_get_password_hint() ); ?></em></small></p>
 
 		<p class="resetpass-submit">
 			<input type="submit" name="submit" id="resetpass-button" class="button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>" />
@@ -39,7 +39,7 @@
 
 	<?php
 		/** Custom Action Hook - After Password Reset Form */
-		do_action( 'yikes-inc-custom-login-after-password-reset-form' );
+		do_action( 'yikes-custom-login-after-password-reset-form' );
 	?>
 
 </div>
