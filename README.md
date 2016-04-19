@@ -228,5 +228,8 @@ add_action( 'yikes-custom-login-login-page-before-form', array( $yikes_custom_lo
 Using the 'Custom Scripts' field on the login page customizer, you can add some JavaScript to populate the placeholder values with whatever text is needed. Feel free to copy the example below, and paste it into the 'Custom Scripts' text area field.
 
 **Example**
+
+```javascript
 jQuery( '#user_login' ).attr( 'placeholder', 'Username/Email' );
 jQuery( '#user_pass' ).attr( 'placeholder', '********' );
+```
