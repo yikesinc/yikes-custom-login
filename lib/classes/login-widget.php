@@ -24,7 +24,7 @@ class YIKES_Custom_Login_Widget extends WP_Widget {
 	 * Enqueue our frontend styles where this widget is used
 	 * @since 1.0
 	 */
-	public function enqueueue_frontend_styles() {
+	public function enqueue_frontend_styles() {
 		wp_enqueue_style( 'yikes-custom-login-public', YIKES_CUSTOM_LOGIN_URL . '/lib/css/min/yikes-custom-login-public.min.css', array(), YIKES_CUSTOM_LOGIN_VERSION );
 	}
 

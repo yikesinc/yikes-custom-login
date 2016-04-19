@@ -228,6 +228,88 @@ function yikes_custom_login_customizer_register( $wp_customize ) {
 	) );
 
 	/**
+	 * Login Container Text Color
+	 */
+	$wp_customize->add_setting( 'login_container_text_color', array(
+		'default' => '#2d2d2d',
+		'type' => 'theme_mod',
+		'capability' => 'edit_theme_options',
+		'transport' => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'login_container_text_color',
+			array(
+				'default' => '#2d2d2d',
+				'label'      => __( 'Login Container Text Color', 'yikes-inc-custom-login' ),
+				'description' => __( 'Set the color of the field labels and "Remember Me" label.', 'yikes-inc-custom-login' ),
+				'section'    => 'login_container',
+				'settings'   => 'login_container_text_color',
+			)
+		)
+	);
+
+	/**
+	 * Sign In Button Text
+	 */
+	$wp_customize->add_setting('login_container_sign_in_button_text', array(
+		'capability' => 'edit_theme_options',
+		'type'       => 'theme_mod',
+	));
+
+	$wp_customize->add_control('login_container_sign_in_button_text', array(
+		'settings' => 'login_container_sign_in_button_text',
+		'section'  => 'login_container',
+		'type'     => 'text',
+		'label' => __( 'Sign In Button Text', 'yikes-inc-custom-login' ),
+		'description' => __( 'Customize the sign in button text.', 'yikes-inc-custom-login' ),
+	));
+
+	/**
+	 * Full Width Sign In Button
+	 */
+	$wp_customize->add_setting('login_container_full_width_sign_in_button', array(
+		'capability' => 'edit_theme_options',
+		'type'       => 'theme_mod',
+	));
+
+	$wp_customize->add_control('login_container_full_width_sign_in_button', array(
+		'settings' => 'login_container_full_width_sign_in_button',
+		'section'  => 'login_container',
+		'type'     => 'checkbox',
+		'label' => __( 'Full Width Sign In Button', 'yikes-inc-custom-login' ),
+		'description' => __( 'Set the "Sign In" button to full width.', 'yikes-inc-custom-login' ),
+	));
+
+	/**
+	 * Login Background color
+	 */
+	$wp_customize->add_setting( 'login_container_link_color', array(
+		'default' => '#0000EE',
+		'type' => 'theme_mod',
+		'capability' => 'edit_theme_options',
+		'transport' => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'login_container_link_color',
+			array(
+				'default' => '#0000EE',
+				'label'      => __( 'Login Container Link Color', 'yikes-inc-custom-login' ),
+				'description' => __( 'Set the color of the "Forgot Password" and "Register" links.', 'yikes-inc-custom-login' ),
+				'section'    => 'login_container',
+				'settings'   => 'login_container_link_color',
+			)
+		)
+	);
+
+	/**
 	 * Hide 'Forgot your password?' link
 	 */
 	$wp_customize->add_setting('login_container_hide_forgot_password_link', array(

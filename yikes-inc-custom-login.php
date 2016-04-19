@@ -112,6 +112,36 @@ class YIKES_Custom_Login {
 
 		/* Load custom customizer styles where set */
 		add_action( 'wp_enqueue_scripts', array( $this, 'yikes_custom_login_generate_customizer_styles' ) );
+
+		/* Custom Login Sign In Button Text */
+		add_filter( 'gettext', array( $this, 'yikes_filter_sign_in_button_text' ), 10, 2 );
+	}
+
+	/**
+	 * Custom filter to alter the 'Sign In' button text
+	 * @param  string $translation Original translation string.
+	 * @param  string $text        Text to look for.
+	 * @return string              The final altered string.
+	 */
+	public function yikes_filter_sign_in_button_text( $translation, $text ) {
+		// If we're admin side - abort
+		if ( is_admin() ) {
+			return $translation;
+		}
+		global $post;
+		// If we're not on the login page, abort
+		if ( $post->ID !== $this->options['login_page'] ) {
+			return $translation;
+		}
+		// Alter 'Sign In' button text
+		if ( 'Sign In' === $text ) {
+			$signin_text = get_theme_mod( 'login_container_sign_in_button_text', false );
+			if ( $signin_text ) {
+				return $signin_text;
+			}
+			return $translation;
+		}
+		return $translation;
 	}
 
 	/**

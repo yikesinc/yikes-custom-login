@@ -25,6 +25,7 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 		return array(
 			$this->options['login_page'],
 			$this->options['pick_new_password_page'],
+			$this->options['pick_new_password_page'],
 			$this->options['password_lost_page'],
 			$this->options['register_page'],
 		);
@@ -163,6 +164,7 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 	public function yikes_custom_login_full_width_template_metabox_callback( $post ) {
 		$page_name = $this->get_custom_login_page_name( $post->ID );
 		$active_template = ( get_post_meta( $post->ID, '_full_width_page_template', true ) ) ? true : false;
+		$page_ids = $this->get_full_width_page_ids();
 		// Nonce field
 		wp_nonce_field( 'yikes_metabox_nonce_action', 'yikes_metabox_nonce' );
 		// Display code/markup goes here. Don't forget to include nonces!
@@ -172,13 +174,13 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 			<?php esc_attr_e( 'Use Full Width Template', 'yikes-inc-custom-login' ); ?>
 		</label>
 		<?php
-		if ( $active_template ) {
+		if ( $active_template && $page_ids[0] == $post->ID ) {
 			$login_page_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
 			$customizer_link = add_query_arg( array(
 				'url' => $login_page_url,
 			), esc_url_raw( admin_url( 'customize.php' ) ) );
 			printf(
-				wp_kses_post( '<p><a href="' . $customizer_link . '" class="button button-primary yikes-login-customize-link">%s</a>.</p>' ),
+				wp_kses_post( '<p><a href="' . $customizer_link . '" class="button button-primary yikes-login-customize-link">%s</a></p>' ),
 				esc_attr__( 'Customize Page', 'yikes-inc-custom-login' )
 			);
 		}
