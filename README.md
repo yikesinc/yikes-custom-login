@@ -200,3 +200,33 @@ add_filter( 'yikes-custom-login-preloader', 'custom_login_preloader_image' );
 
 * `yikes-inc-custom-login-before-register-form`
 * `yikes-inc-custom-login-after-register-form`
+
+
+#### FAQs
+
+* Can I move the logo from above the container, to inside the container - above the form?
+
+Yes! First you'll want to remove the action from the location it currently hooks into (`yikes-custom-login-branding`). After we unhook it from the default location, we'll just re-hook it into the new location where we want it to appear (`yikes-custom-login-login-page-before-form`).
+
+The function that generates the logo above the login, password reset, set new password and registration forms is `yikes_custom_login_generate_branding_logo()`.
+
+**Example**
+```php
+/**
+ * Move the logo from above the container, to inside the container above the forms.
+ * This function should be placed at the bottom of your functions.php file, inside of php tags.
+ */
+global $yikes_custom_login;
+// remove the action
+remove_action( 'yikes-custom-login-branding', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
+// re-hook the function into a new location
+add_action( 'yikes-custom-login-login-page-before-form', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
+```
+
+* How do I add placeholder values to the email and/or passowrd fields on the login form?
+
+Using the 'Custom Scripts' field on the login page customizer, you can add some JavaScript to populate the placeholder values with whatever text is needed. Feel free to copy the example below, and paste it into the 'Custom Scripts' text area field.
+
+**Example**
+jQuery( '#user_login' ).attr( 'placeholder', 'Username/Email' );
+jQuery( '#user_pass' ).attr( 'placeholder', '********' );

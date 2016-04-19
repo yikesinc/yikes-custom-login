@@ -39,13 +39,13 @@ class YIKES_Login_Settings {
 	 * @return [type]          [description]
 	 */
 	public function yikes_admin_tabs( $current = 'general' ) {
-		$tabs = array(
+		// Filter the tabs to allow for add-ons
+		$tabs = apply_filters( 'yikes-custom-login-settings-tabs', array(
 			'general' => __( 'General', 'yikes-inc-custom-login' ),
 			'pages' => __( 'Pages', 'yikes-inc-custom-login' ),
 			'recaptcha' => '<img class="recaptcha-icon" src="' . esc_url( plugin_dir_url( __FILE__ ) . '../images/recaptcha-icon.png' ) . '" /> reCAPTCHA',
-			'branding'=> __( 'Branding', 'yikes-inc-custom-login' ),
-		);
-		$links = array();
+			'branding' => __( 'Branding', 'yikes-inc-custom-login' ),
+		) );
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $tabs as $tab => $name ) {
@@ -118,15 +118,58 @@ class YIKES_Login_Settings {
 
 						<div class="meta-box-sortables">
 
+							<!-- YIKES Plugins Logo -->
 							<div class="postbox">
-
 								<div class="inside">
 									<a href="https://yikesplugins.com/" title="YIKES Plugins" target="_blank" class="yikes-plugins-logo-link">
 										<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . '../images/yikes-plugins-logo.png' ); ?>" class="yikes-plugins-logo" alt="<?php esc_attr_e( 'Yikes Plugins', 'yikes-inc-custom-login' ); ?>" />
 									</a>
 								</div>
 								<!-- .inside -->
+							</div>
+							<!-- .postbox -->
 
+							<!-- Rate & Review Box -->
+							<div class="postbox">
+								<div class="inside rate-and-review-container">
+									<h2><?php esc_attr_e( 'Loving This Plugin?', 'yikes-inc-custom-login' ); ?></h2>
+									<div class="rate-and-review">
+										<a href="#" target="_blank">
+											<span class="dashicons dashicons-star-filled"></span>
+											<span class="dashicons dashicons-star-filled"></span>
+											<span class="dashicons dashicons-star-filled"></span>
+											<span class="dashicons dashicons-star-filled"></span>
+											<span class="dashicons dashicons-star-filled"></span>
+										</a>
+										<p class="description rate-and-review-text">
+											<a href="#" title="<?php esc_attr_e( 'Rate this plugin!', 'yikes-inc-custom-login' ); ?>" target="_blank">
+												<?php esc_attr_e( 'Rate this plugin!', 'yikes-inc-custom-login' ); ?>
+											</a>
+										</p>
+									</div>
+									<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://#" data-text="I'm using the Custom Login plugin by @yikesinc - wow, it's powerful!" data-via="yikesinc">Tweet</a>
+									<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+									<p class="description tweet-experience-text"><?php esc_attr_e( 'Tweet Your Experience', 'yikes-inc-custom-login' ); ?></p>
+								</div>
+								<!-- .inside -->
+							</div>
+							<!-- .postbox -->
+
+							<!-- Documentation -->
+							<div class="postbox">
+								<div class="inside support-and-docs-container">
+									<h2><?php esc_attr_e( 'Support & Documentation', 'yikes-inc-custom-login' ); ?></h2>
+									<p class="support-and-docs-text description">
+										<?php esc_attr_e(
+											'YIKES Inc. proudly supports and stands behind all of our products. If you run into any issues, please reach out to our support staff and we can help get any issues sorted - or answer any questions you may have.',
+											'yikes-inc-custom-login'
+										); ?>
+									</p>
+									<a href="#" class="button button-secondary doc-link wp-bg"><?php esc_attr_e( 'WordPress.org', 'yikes-inc-custom-login' ); ?></a>
+									<a href="#" class="button button-secondary doc-link github-bg"><?php esc_attr_e( 'Github.com', 'yikes-inc-custom-login' ); ?></a>
+									<a href="#" class="button button-secondary doc-link docs-bg"><?php esc_attr_e( 'Documentation', 'yikes-inc-custom-login' ); ?></a>
+								</div>
+								<!-- .inside -->
 							</div>
 							<!-- .postbox -->
 
@@ -195,14 +238,6 @@ class YIKES_Login_Settings {
 			'notice_anmation', // ID
 			__( 'Notice Animation', 'yikes-inc-custom-login' ), // Title
 			array( $this, 'notice_anmation_callback' ), // Callback
-			'yikes-custom-login', // Page
-			'yikes_custom_login_general_section' // Section
-		);
-		// Admin Redirection Setting
-		add_settings_field(
-			'full_page_templates', // ID
-			__( 'Full Width Page Templates', 'yikes-inc-custom-login' ), // Title
-			array( $this, 'full_page_templates_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
@@ -330,6 +365,9 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_branding_section' // Section
 		);
+
+		// Custom action hook to add additional settings sections/fields
+		do_action( 'yikes-custom-login-add-settings' );
 	}
 
 	/**
@@ -347,8 +385,6 @@ class YIKES_Login_Settings {
 		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? (int) 1 : (int) 0;
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? sanitize_text_field( $input['notice_animation'] ) : 'none';
-		// Full Width Page Templates
-		$new_input['full_page_templates'] = ( isset( $input['full_page_templates'] ) ) ? (int) 1 : (int) 0;
 		// Full Width Page Templates
 		$new_input['powered_by_yikes'] = ( isset( $input['powered_by_yikes'] ) ) ? (int) 1 : (int) 0;
 		// Registration Page
@@ -369,8 +405,8 @@ class YIKES_Login_Settings {
 		$new_input['branding_logo'] = ( isset( $input['branding_logo'] ) ) ? sanitize_url( $input['branding_logo'] ) : '';
 		// Branding Logo ID (hidden field)
 		$new_input['branding_logo_id'] = ( isset( $input['branding_logo'] ) && '' !== $input['branding_logo'] ) ? (int) $input['branding_logo_id'] : '';
-		// Return the saved data
-		return $new_input;
+		// Return the saved data (filter to allow for additional settings to be saved)
+		return apply_filters( 'yikes-custom-login-sanitize-settings', $new_input, $input );
 	}
 
 	/**
@@ -484,22 +520,6 @@ class YIKES_Login_Settings {
 		printf(
 			'<p class="description">%s</p>',
 			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
-		);
-	}
-
-	/**
-	 * Render the checkbox to display the 'Full Width Page Templates' checkbox
-	 */
-	public function full_page_templates_callback() {
-		/* Field */
-		printf(
-			'<input type="checkbox" id="full_page_templates" name="yikes_custom_login[full_page_templates]" value="1" %s />',
-			checked( $this->options['full_page_templates'], 1, false )
-		);
-		/* Description */
-		printf(
-			'<p class="description">%s</p>',
-			esc_attr__( 'Should each custom page use a full width template?', 'yikes-inc-custom-login' )
 		);
 	}
 

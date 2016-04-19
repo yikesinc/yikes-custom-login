@@ -282,7 +282,7 @@
 
 				.powered-by-yikes a,
 				.powered-by-yikes a:hover,
-				.powered-by-yikes a:hover:visited {
+				.powered-by-yikes a:visited {
 					color: #fff;
 					text-decoration: none;
 				}
