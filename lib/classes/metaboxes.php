@@ -73,12 +73,12 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 			remove_post_type_support( 'page', 'thumbnail' );
 			remove_post_type_support( 'page', 'pageparentdiv' );
 			remove_meta_box( 'pageparentdiv', 'page', 'side' );
-			remove_meta_box( 'revisionsdiv', 'page' );
-			remove_meta_box( 'commentsdiv', 'page' );
-			remove_meta_box( 'commentstatusdiv', 'page' );
-			remove_meta_box( 'slugdiv', 'page' );
-			remove_meta_box( 'authordiv', 'page' );
-			remove_meta_box( 'postcustom', 'page' );
+			remove_meta_box( 'revisionsdiv', 'page', 'normal' );
+			remove_meta_box( 'commentsdiv', 'page', 'normal' );
+			remove_meta_box( 'commentstatusdiv', 'page', 'normal' );
+			remove_meta_box( 'slugdiv', 'page', 'normal' );
+			remove_meta_box( 'authordiv', 'page', 'normal' );
+			remove_meta_box( 'postcustom', 'page', 'normal' );
 		}
 	}
 
