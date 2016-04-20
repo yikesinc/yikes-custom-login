@@ -257,10 +257,12 @@ class YIKES_Login_Settings {
 			array( $this, 'print_section_info' ), // Callback
 			'yikes-custom-login' // Page
 		);
+		// Check if a custom template is beign used
+		$custom_login_page_template = ( file_exists( get_template_directory() . '/yikes-custom-login/login-page-template.php') ) ? '<span class="yikes-custom-template-badge"><small>Custom Template</small></span>' : '';
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
-			__( 'Login Page', 'yikes-inc-custom-login' ), // Title
+			sprintf( __( 'Login Page %s', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -584,7 +586,12 @@ class YIKES_Login_Settings {
 			switch( $args['field'] ) {
 				default:
 				case 'login_page':
-					$option_description = '<p class="description">' . __( 'This is the page that users will be redirected to when logging in.', 'yikes-inc-custom-login' ) . '</p>';
+					$active_template = ( get_post_meta( $this->options['login_page'], '_full_width_page_template', true ) ) ? true : false;
+					// Check if the 'Full Width' page template is active
+					$customizer_link = ( $active_template ) ? '<a href="' . add_query_arg( array(
+						'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
+					), esc_url_raw( admin_url( 'customize.php' ) ) ) . '">' . __( 'Customize Login', 'yikes-inc-custom-login' ) . '</a>' : '';
+					$option_description = '<p class="description">' . sprintf( __( 'This is the page that users will be redirected to when logging in. %s', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
 					break;
 				case 'register_page':
 					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
@@ -611,9 +618,11 @@ class YIKES_Login_Settings {
 	 */
 	public function recaptcha_field_callback( $args ) {
 		$recaptcha_key = $this->options[ $args['field'] ];
+		$field_type = ( '' !== $recaptcha_key ) ? 'password' : 'text';
 		/* Field */
 		printf(
-			'<input type="text" id="' . esc_attr( $args['field'] ) . '" name="yikes_custom_login[' . esc_attr( $args['field'] ) . ']" value="%s" class="widefat" placeholder="%s">',
+			'<input type="%s" id="' . esc_attr( $args['field'] ) . '" name="yikes_custom_login[' . esc_attr( $args['field'] ) . ']" value="%s" class="widefat" placeholder="%s">',
+			esc_attr( $field_type ),
 			esc_attr( $recaptcha_key ),
 			esc_attr( ucwords( str_replace( 'recaptcha ', '', str_replace( '_', ' ', $args['field'] ) ) ) )
 		);

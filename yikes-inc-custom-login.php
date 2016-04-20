@@ -118,6 +118,12 @@ class YIKES_Custom_Login {
 
 		/* Hide the admin toolbar from all users who are not admins */
 		add_action( 'init', array( $this, 'yikes_custom_login_hide_admin_toolbar' ) );
+
+		/* Display an admin notice letting the user know pages were created */
+		add_action( 'admin_notices', array( $this, 'yikes_display_page_creation_notice' ) );
+
+		/* Custom 'Customize' row action link on the login page */
+		add_filter( 'page_row_actions', array( $this, 'cgc_ub_action_links' ), 10, 2 );
 	}
 
 	/**
@@ -238,6 +244,9 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public static function plugin_activated() {
+		// store static count
+		$page_created_count = 0;
+		$page_created_array = array();
 		// Information needed for creating the plugin's pages
 		$page_definitions = array(
 			apply_filters( 'yikes-custom-login-login-slug', 'member-login' ) => array(
@@ -280,6 +289,15 @@ class YIKES_Custom_Login {
 						'comment_status' => 'closed',
 					)
 				);
+				// if the page was created -- increment
+				if ( $page_id ) {
+					$page_created_count++;
+					$page_created_array[] = array(
+						'id' => $page_id,
+						'edit_link' => get_edit_post_link( $page_id ),
+						'page_title' => get_the_title( $page_id ),
+					);
+				}
 				// Update our option so we can use it on the options page & in our redirections
 				switch ( $slug ) {
 					case 'member-login':
@@ -306,6 +324,44 @@ class YIKES_Custom_Login {
 				update_post_meta( $page_id, '_full_width_page_template', 1 );
 			}
 		}
+		// Update our options
+		if ( 0 < $page_created_count ) {
+			// Store our options for later use
+			update_option( 'yikes_custom_login_pages_created_count', $page_created_count );
+			update_option( 'yikes_custom_login_pages_data_array', $page_created_array );
+		}
+	}
+
+	/**
+	 * Display a notice back to the user letting them know that some pages
+	 * were created, and add links back to those new pages
+	 * @return string HTML markup for our admin notice
+	 * @since 1.0
+	 */
+	public function yikes_display_page_creation_notice() {
+		$string = ''; // empty string
+		$pages_created = get_option( 'yikes_custom_login_pages_data_array', false );
+		$page_count = get_option( 'yikes_custom_login_pages_created_count', false );
+		// abort if no settings were found
+		if ( ! $pages_created || ! $page_count ) {
+			return;
+		}
+		$page_created_text = sprintf( _n( '%s page successfully created.', '%s pages successfully created.', $page_count, 'yikes-inc-custom-login' ), $page_count );
+		$end = count( $pages_created );
+		foreach ( $pages_created as $page_created_data ) {
+			$string .= '<a href="' . esc_url( $page_created_data['edit_link'] ) . '">' . esc_attr( $page_created_data['page_title'] ) . '</a>';
+			if (0 !== --$end) {
+				$string .= ' | ';
+			}
+		}
+		printf(
+			'<div class="notice notice-success"><p>%1$s</p><p>%2$s</p></div>',
+			$page_created_text,
+			$string
+		);
+		// Delete our options once they have been displayed to the user, so to not repeat this notice
+		delete_option( 'yikes_custom_login_pages_created_count' );
+		delete_option( 'yikes_custom_login_pages_data_array' );
 	}
 
 	/**
@@ -335,6 +391,24 @@ class YIKES_Custom_Login {
 		}
 	}
 
+	/**
+	 * Add custom post row link on the 'Login' page, linking to the customizer
+	 * @since 1.0
+	 */
+		public function cgc_ub_action_links( $actions, $post_object ) {
+			// Check if the 'Full Width' page template is active
+			$active_template = ( get_post_meta( $this->options['login_page'], '_full_width_page_template', true ) ) ? true : false;
+			// if the current post is not equal to the sign in page, abort
+			if ( ! $active_template || $post_object->ID != $this->options['login_page'] ) {
+				return $actions;
+			}
+			// build the customizer link
+			$customizer_link = add_query_arg( array(
+				'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
+			), esc_url_raw( admin_url( 'customize.php' ) ) );
+			$actions['yikes_login_customizer_link'] = '<a class="cgc_ub_edit_badge" href=" ' . esc_url( $customizer_link ) . '">' . __( 'Customize Login', 'yikes-custom-login' ) . '</a>';
+			return $actions;
+		}
 	/**
 	 * Redirect the user after authentication if there were any errors.
 	 *

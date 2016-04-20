@@ -30,6 +30,10 @@
  */
 	select.yikes-select2 + .select2 {
 		min-width: 100%;
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		-webkit-box-sizing:border-box;
+		-ms-box-sizing:border-box;
 	}
 /* End Admin Options Styles */
 
@@ -59,6 +63,30 @@
 	body.settings_page_yikes-custom-login .yikes-custom-login-settings-branding table:nth-child(6), /* Pages Section */
 	body.settings_page_yikes-custom-login .yikes-custom-login-settings-branding table:nth-child(7) /* reCAPTCHA Section */ {
 		display: none;
+	}
+
+	body.settings_page_yikes-custom-login input[type="password"].widefat {
+		width: 100% !important;
+	}
+
+	body.settings_page_yikes-custom-login span.yikes-custom-template-badge {
+		display: inherit;
+		padding: 3px 5px;
+		background: #1B95E0;
+		color: #fff;
+		border-radius: 3px;
+		position: absolute;
+		margin-top: 5px;
+		font-size: 11px;
+	}
+
+	@media screen and (max-width: 783px) {
+		body.settings_page_yikes-custom-login span.yikes-custom-template-badge {
+			display: inline;
+			position: relative;
+			margin-left: 5px;
+			margin-bottom: 5px;
+		}
 	}
 
 	/**
