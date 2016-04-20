@@ -5,11 +5,11 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
 -->
 
-### YIKES Inc. Custom Login
+## YIKES Inc. Custom Login
 
 A WordPress plugin that replaces the login flow with custom pages.
 
-#### Shortcodes:
+### Shortcodes:
 
 * `[custom-login-form]`
 * `[custom-register-form]`
@@ -17,11 +17,11 @@ A WordPress plugin that replaces the login flow with custom pages.
 * `[custom-password-reset-form]`
 * `[account-info]` <small>(in the works)</small>
 
-#### Custom Templates:
+### Custom Templates:
 
 Users can override the default templates by copying `wp-content/plugins/yikes-custom-login/templates/` into the theme root, and renaming the directory `/yikes-custom-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
 
-#### Additional Profile Fields
+### Additional Profile Fields
 
 Users can customize what fields are displayed and editable on the profile page using some of the built in filters.
 
@@ -55,7 +55,7 @@ function add_additional_profile_fields( $fields, $user_id ) {
 add_filter( 'yikes-login-profile-fields', 'add_additional_profile_fields', 10, 2 );
 ```
 
-#### Filters
+### Filters
 
 * `yikes-login-profile-fields`
 
@@ -191,31 +191,31 @@ function enable_admin_toolbar_for_editors( $capability ) {
 add_filter( 'yikes-login-admin-toolbar-cap', 'enable_admin_toolbar_for_editors' )
 ```
 
-#### Actions
+### Actions
 
-###### Login Form
+#### Login Form
 
 * `yikes-inc-custom-login-before-login-form`
 * `yikes-inc-custom-login-after-login-form`
 
 
-###### Password Lost form
+#### Password Lost form
 
 * `yikes-inc-custom-login-before-password-lost-form`
 * `yikes-inc-custom-login-after-password-lost-form`
 
-###### Password Reset form
+#### Password Reset form
 
 * `yikes-inc-custom-login-before-password-reset-form`
 * `yikes-inc-custom-login-after-password-reset-form`
 
-###### Register Form
+#### Register Form
 
 * `yikes-inc-custom-login-before-register-form`
 * `yikes-inc-custom-login-after-register-form`
 
 
-#### FAQs
+### FAQs
 
 * Can I move the logo from above the container, to inside the container - above the form?
 
@@ -246,3 +246,10 @@ Using the 'Custom Scripts' field on the login page customizer, you can add some 
 jQuery( '#user_login' ).attr( 'placeholder', 'Username/Email' );
 jQuery( '#user_pass' ).attr( 'placeholder', '********' );
 ```
+
+
+### About YIKES Inc.
+![](http://www.yikesinc.com/wp-content/uploads/2012/06/yikes175.png)
+![](https://cldup.com/4NlirSwXZQ.png)
+
+At YIKES, we build free and premium plugins for WordPress sites. We're located in the beautiful section of Fishtown, Philadelphia PA. To find out more about us, check out our website at [http://www.yikesinc.com]http://www.yikesinc.com), and some of our other plugins at [https://yikesplugins.com](https://yikesplugins.com).
