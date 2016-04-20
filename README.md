@@ -25,62 +25,43 @@ Users can override the default templates by copying `wp-content/plugins/yikes-cu
 
 Users can customize what fields are displayed and editable on the profile page using some of the built in filters.
 
-To get custom fields to display on the 'Update Profile' page, you need to assign a custom `user_meta` **with a value** to all the users you want to have access to the fields. If no data is assigned to the user, the field will not display. (You can assign a null or empty value, to get things to display).
+The profile fields are contained inside a single multi-dimensional array. To display new fields within the profile form, we simply need to push an array with some pre-defined values to our profile field array, using the filter `yikes-login-profile-fields`.
 
-Here is a simple example to create a `twitter` text input field, where users can enter their Twitter handle.
-
-**Example**
-```php
-/**
- * Assign 'twitter' meta data to all of your users, and thus have it appear on the profile form
- */
-function add_twitter_usermeta() {
-	$users = get_users();
-	foreach ( $users as $user ) {
-		update_user_meta( $user->ID, 'twitter', ' ' );
-	}
-}
-add_action( 'admin_init', 'add_twitter_usermeta' );
-```
-
-Additionally, if you no longer want a specific field to display on the field **and** don't need the data stored in the database anymore, you can use the same function as above, but swap `update_user_meta` to `delete_user_meta` and delete the third parameter. Deleting the user meta will also remove the field from the 'Profile' form.
-
-**Example**
-```php
-/**
- * Delete the 'twitter' meta data we created above, and thus remove it from the profile form
- */
-function delete_twitter_usermeta() {
-	$users = get_users();
-	foreach ( $users as $user ) {
-		delete_user_meta( $user->ID, 'twitter' );
-	}
-}
-add_action( 'admin_init', 'delete_twitter_usermeta' );
-```
-
-**Note:** The above two functions will run every time the dashboard is loaded, so you'll want to load the dashboard once or twice, and then remove this snippet from your **functions.php** file. Once run, you should see a text input field appear on the 'Profile' page. You may need to update the label <small>(see below)</small>.
-
-To update the new form field label you'll want to use the built in filter `yikes-custom-login-KEY-label`, where KEY is the field `meta_id` or 'twitter' (2nd parameter in `update_uesr_meta` above). So the filter we'll use for the 'twitter' field is `yikes-custom-login-twitter-label`.
+In the following example, we're going to define two new text input fields - "Twitter" and "Google+". You'll need to define three keys inside of the array:
+* `id` - which will be used as the 'name' attribute on your field. This is what the meta value will be saved as in the database.
+* `label` - The label text for this form. This will display above the input field.
+* `type` - This is the field type. Currently you have four options: `text`, `email`, `url`, and `textarea`. <small>(as this plugin grows, additional field types will be defined)</small>
 
 **Example Usage**
-
 ```php
 /**
- * Alter the Twitter 'Profile' form field label to 'Twitter Handle'
- * @param  string $label The initial label that we will be filtering.
- * @return string        The new field label to be used for the given key.
+ * Define additional fields to display on the user profile page
+ * @param  array  $fields   Array of the defualt user profile fields.
+ * @param integer $user_id  The current user ID.
  */
-function filter_profile_field_labels( $label ) {
-	// Twitter field label
-	if ( 'twitter' === $label ) {
-		return 'Twitter Handle';
-	}
+function add_additional_profile_fields( $fields, $user_id ) {
+	$fields[] = array(
+		'id' => 'twitter',
+		'label' => 'Twitter',
+		'type' => 'text',
+	);
+	$fields[] =	array(
+		'id' => 'google_plus',
+		'label' => 'Google +',
+		'type' => 'text',
+	);
+	return $fields;
 }
-add_filter( 'yikes-custom-login-twitter-label', 'filter_profile_field_labels' );
+add_filter( 'yikes-login-profile-fields', 'add_additional_profile_fields', 10, 2 );
 ```
 
 #### Filters
+
+* `yikes-login-profile-fields`
+
+Define and display custom fields on the profile field page.
+
+For usage, see above section "Additional Profile Fields".
 
 * `yikes-inc-custom-login-redirect`
 
@@ -192,6 +173,22 @@ function enable_posts_in_pages_dropdown( $post_types ) {
 	return $post_types;
 }
 add_filter( 'yikes-login-pages-query-post-type', 'enable_posts_in_pages_dropdown' );
+```
+
+* `yikes-login-admin-toolbar-cap`
+
+Alter who can see the admin toolbar when logged in. By default, only the admin will be able to see the admin toolbar. For all other users, it will be hidden. Using the above filter, you can easily set who can view the admin toolbar.
+
+**Example**
+```php
+/**
+ * Display the admin toolbar for editors
+ */
+function enable_admin_toolbar_for_editors( $capability ) {
+	$capability = 'delete_posts';
+	return $capability;
+}
+add_filter( 'yikes-login-admin-toolbar-cap', 'enable_admin_toolbar_for_editors' )
 ```
 
 #### Actions

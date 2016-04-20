@@ -25,7 +25,7 @@ class YIKES_Login_Settings {
 	public function add_plugin_page() {
 		// This page will be under "Settings"
 		add_options_page(
-			'Settings Admin',
+			__( 'Custom Login Settings', 'yikes-inc-custom-login' ),
 			__( 'Custom Login', 'yikes-inc-custom-login' ),
 			'manage_options',
 			'yikes-custom-login',
@@ -580,6 +580,29 @@ class YIKES_Login_Settings {
 				?>
 			</select>
 			<?php
+			/** Display a description for this dropdown */
+			switch( $args['field'] ) {
+				default:
+				case 'login_page':
+					$option_description = '<p class="description">' . __( 'This is the page that users will be redirected to when logging in.', 'yikes-inc-custom-login' ) . '</p>';
+					break;
+				case 'register_page':
+					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
+					break;
+				case 'account_info_page':
+					$option_description = '<p class="description">' . sprintf( __( 'This page enabled users to updaet their profile details from the frontend of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
+					break;
+				case 'password_lost_page':
+					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'yikes-inc-custom-login' ) . '</p>';
+					break;
+				case 'pick_new_password_page':
+					$option_description = '<p class="description">' . __( 'After the user clicks the "Password Reset" link sent to them by email, they will be presnted with this page - where they can enter a new password to use.', 'yikes-inc-custom-login' ) . '</p>';
+					break;
+				case 'register_page':
+					$option_description = '<p class="description">' . __( 'Any new users registering for your site will have to use the form on this page.', 'yikes-inc-custom-login' ) . '</p>';
+					break;
+			}
+			echo wp_kses_post( $option_description );
 		}
 	}
 

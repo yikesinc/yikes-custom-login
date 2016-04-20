@@ -115,6 +115,20 @@ class YIKES_Custom_Login {
 
 		/* Custom Login Sign In Button Text */
 		add_filter( 'gettext', array( $this, 'yikes_filter_sign_in_button_text' ), 10, 3 );
+
+		/* Hide the admin toolbar from all users who are not admins */
+		add_action( 'init', array( $this, 'yikes_custom_login_hide_admin_toolbar' ) );
+	}
+
+	/**
+	 * Hide the admin toolbar from all users who are NOT admins
+	 * @since 1.0
+	 */
+	public function yikes_custom_login_hide_admin_toolbar() {
+		/* Hide the admin bar on the frontend -- unless the user is an admin */
+		if ( ! current_user_can( apply_filters( 'yikes-login-admin-toolbar-cap', 'manage_options' ) ) ) {
+			add_filter( 'show_admin_bar', '__return_false' );
+		}
 	}
 
 	/**
@@ -198,6 +212,7 @@ class YIKES_Custom_Login {
 	 */
 	public static function get_yikes_custom_login_options() {
 		return get_option( 'yikes_custom_login', array(
+			'plugin_setup' => false,
 			'admin_redirect' => 1,
 			'restrict_dashboard_access' => 1,
 			'password_strength_meter' => 1,
@@ -213,6 +228,9 @@ class YIKES_Custom_Login {
 		) );
 	}
 
+	//
+	// REDIRECT FUNCTIONS
+	//
 	/**
 	 * Plugin activation hook.
 	 *
@@ -290,10 +308,6 @@ class YIKES_Custom_Login {
 		}
 	}
 
-	//
-	// REDIRECT FUNCTIONS
-	//
-
 	/**
 	 * Redirect the user to the custom login page instead of wp-login.php.
 	 * @since 1.0
@@ -368,21 +382,18 @@ class YIKES_Custom_Login {
 
 		// If admin_redirect is not set, abort
 		if ( 0 === $this->options['admin_redirect'] ) {
-			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
-			wp_redirect( $logged_in_redirect_url );
+			$logged_in_redirect_url = ( 0 === $this->options['account_info_page'] ) ? site_url() : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+			wp_redirect( apply_filters( 'yikes-custom-login-redirect', $logged_in_redirect_url ) );
 			return;
 		}
 
 		if ( user_can( $user, 'manage_options' ) ) {
 			// Use the redirect_to parameter if one is set, otherwise redirect to admin dashboard.
-			if ( '' === $requested_redirect_to ) {
-				$redirect_url = admin_url();
-			} else {
-				$redirect_url = $redirect_to;
-			}
+			$redirect_url = ( '' === $requested_redirect_to ) ? admin_url() : $redirect_to;
 		} else {
-			// Non-admin users always go to their account page after login
-			$redirect_url = esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+			// if the account info page has been disabled, do not redirec there
+			// but instead redirect to the homepage/custom URL
+			$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'logged_in' => 'true', ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 		}
 		return wp_validate_redirect( apply_filters( 'yikes-custom-login-redirect', $redirect_url ), home_url() );
 	}
@@ -413,7 +424,11 @@ class YIKES_Custom_Login {
 		}
 		// If the current request is equal to the login page, and the user is loged in
 		if ( url_to_postid( site_url() . $_SERVER['REQUEST_URI'] ) === (int) $this->options['login_page'] ) {
-			if ( is_user_logged_in() ) {
+			if ( is_user_logged_in() && ! current_user_can( 'manage_options' ) ) {
+				if ( 0 === $this->options['account_info_page'] ) {
+					wp_redirect( site_url() );
+					exit;
+				}
 				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
 				exit;
 			}
@@ -585,7 +600,11 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return sprintf( __( 'You are already signed in. %s', 'yikes-custom-login' ), '<a href="' . esc_url( get_the_permalink( $this->options['account_info_page'] ) ) . '">' . __( 'View Account', 'yikes-inc-custom-login' ) . '</a>' );
+			$view_account_btn = ( 0 === $this->options['account_info_page'] ) ? '' : '<a href="' . esc_url( get_the_permalink( $this->options['account_info_page'] ) ) . '">' . __( 'View Account', 'yikes-inc-custom-login' ) . '</a>';
+			return sprintf(
+				__( 'You are already signed in. %s', 'yikes-custom-login' ),
+				wp_kses_post( $view_account_btn )
+			);
 		} elseif ( ! get_option( 'users_can_register' ) ) {
 			return __( 'Registering new users is currently disabled.', 'yikes-custom-login' );
 		} else {
@@ -872,14 +891,21 @@ class YIKES_Custom_Login {
 			$user_data = array(
 				'ID' => $current_user->ID,
 			);
+			// User data array
+			$user_data_array = array(
+					'user_login',
+					'user_nicename',
+					'user_email',
+					'user_url',
+					'display_name',
+			);
 			// Loop over the remaining data, and update it!
 			foreach ( $_POST as $profile_data_key => $profile_data_value ) {
-				// If it's usermeta, update it, else push to our data array
-				if ( get_user_meta( $current_user->ID, $profile_data_key ) ) {
-					update_user_meta( $current_user->ID, $profile_data_key, trim( sanitize_text_field( $profile_data_value ) ) );
-				} else {
+				if ( in_array( $profile_data_value, $user_data_array ) ) {
 					// push our data to the array, and sanitize it
 					$user_data[ $profile_data_key ] = trim( sanitize_text_field( $profile_data_value ) );
+				} else {
+					update_user_meta( $current_user->ID, $profile_data_key, trim( sanitize_text_field( $profile_data_value ) ) );
 				}
 			}
 			// Now update the user
@@ -1089,6 +1115,10 @@ class YIKES_Custom_Login {
 				wp_redirect( admin_url() );
 			}
 		} else {
+			if ( 0 === $this->options['account_info_page'] ) {
+				wp_redirect( site_url() );
+				exit;
+			}
 			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
 			wp_redirect( $logged_in_redirect_url );
 		}
@@ -1171,14 +1201,13 @@ class YIKES_Custom_Login {
 	 * @since 1.0
 	 */
 	public function yikes_custom_login_profile_fields( $user_id ) {
-		// $registered_fields = $this->yikes_custom_login_get_profile_fields( $current_user->ID );
 		// Include our profile fields class
 		if ( ! class_exists( 'YIKES_Profile_Fields' ) ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/profile-fields.php' );
 			// Init the class
 			$yikes_profile_fields = new YIKES_Profile_Fields( $user_id, $this->options );
 			// Get our fields
-			return $yikes_profile_fields->yikes_custom_login_get_profile_fields( $user_id );
+			return $yikes_profile_fields->yikes_custom_login_profile_fields_array( $user_id );
 		}
 		return false;
 	}
@@ -1221,8 +1250,8 @@ class YIKES_Custom_Login {
 		if ( is_page( $this->options['pick_new_password_page'] ) ) {
 			// check if the user is logged in
 			if ( is_user_logged_in() ) {
-				// Redirect to account page with new password popup displayed
-				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) . '#new-password' ) );
+				$account_info_page_url = ( 0 === $this->options['account_info_page'] ) ? site_url() : esc_url( get_the_permalink( $this->options['account_info_page'] ) . '#new-password' );
+				wp_redirect( $account_info_page_url );
 				exit;
 			}
 			if ( get_post_meta( $this->options['pick_new_password_page'], '_full_width_page_template', true ) ) {
@@ -1233,8 +1262,9 @@ class YIKES_Custom_Login {
 		if ( is_page( $this->options['register_page'] ) ) {
 			// check if the user is logged in
 			if ( is_user_logged_in() ) {
+				$account_info_page_url = ( 0 === $this->options['account_info_page'] ) ? site_url() : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 				// Redirect to account page with new password popup displayed
-				wp_redirect( esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
+				wp_redirect( esc_url( get_the_permalink( $account_info_page_url ) ) );
 				exit;
 			}
 			if ( get_post_meta( $this->options['register_page'], '_full_width_page_template', true ) ) {

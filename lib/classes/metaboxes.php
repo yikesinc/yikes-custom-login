@@ -164,6 +164,11 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 		$page_name = $this->get_custom_login_page_name( $post->ID );
 		$active_template = ( get_post_meta( $post->ID, '_full_width_page_template', true ) ) ? true : false;
 		$page_ids = $this->get_full_width_page_ids();
+		$sign_in_active_template = ( get_post_meta( $page_ids[0], '_full_width_page_template', true ) ) ? true : false;
+		// Setup our customizer URL
+		$customizer_link = add_query_arg( array(
+			'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
+		), esc_url_raw( admin_url( 'customize.php' ) ) );
 		// Nonce field
 		wp_nonce_field( 'yikes_metabox_nonce_action', 'yikes_metabox_nonce' );
 		// Display code/markup goes here. Don't forget to include nonces!
@@ -173,11 +178,8 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 			<?php esc_attr_e( 'Use Full Width Template', 'yikes-inc-custom-login' ); ?>
 		</label>
 		<?php
+		// If this is the login page template, display a 'Customize Template' link
 		if ( $active_template && $page_ids[0] == $post->ID ) {
-			$login_page_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
-			$customizer_link = add_query_arg( array(
-				'url' => $login_page_url,
-			), esc_url_raw( admin_url( 'customize.php' ) ) );
 			printf(
 				wp_kses_post( '<p><a href="' . $customizer_link . '" class="button button-primary yikes-login-customize-link">%s</a></p>' ),
 				esc_attr__( 'Customize Page', 'yikes-inc-custom-login' )
@@ -188,6 +190,14 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 			'<strong>' . esc_attr( $page_name ) . '</strong>',
 			'<a href="' . esc_url( admin_url( 'options-general.php?page=yikes-custom-login&tab=pages' ) ) . '">' . esc_attr__( 'options page', 'yikes-inc-custom-login' ) . '</a>'
 		);
+		// If the sign in template page is active, this page template is active and the current page is NOT equal to the sign in page
+		if ( $sign_in_active_template && $active_template && $page_ids[0] != $post->ID ) {
+			printf(
+				wp_kses_post( '<p class="descipriton"><small>' . __( 'This template inherits the styles from the %s page. To adjust the styles, please customize the %s page.', 'yikes-inc-custom-login' ) . '</small></p>'),
+				'<strong>Sign In</strong>',
+				'<a href="' . $customizer_link . '">' . __( 'Sign In', 'yikes-inc-custom-login' ) . '</a>'
+			);
+		}
 	}
 
 	/**

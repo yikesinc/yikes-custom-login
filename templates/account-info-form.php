@@ -37,21 +37,21 @@ get_currentuserinfo();
 					$field_length = count( $available_meta_fields );
 
 					// Loop over the available fields
-					foreach ( $available_meta_fields as $field_key => $field_data ) {
+					foreach ( $available_meta_fields as $field_data ) {
 						// Add our row
 						if ( 1 === $field_count ) {
 							?><div class="section group"><?php
 						}
 						?>
 						<p class="form-field col span_1_of_2">
-							<label for="<?php echo esc_attr( $field_key ); ?>">
+							<label for="<?php echo esc_attr( $field_data['id'] ); ?>">
 								<?php echo esc_attr( $field_data['label'] ); ?>
 							</label>
 							<?php
-							// instantiate our profile fields class
-							$yikes_profile_fields = new YIKES_Profile_Fields( $current_user->ID, $this->options );
-							// Render our field based on the field type
-							$yikes_profile_fields->render_profile_field( $field_key, $current_user->ID, $field_data['type'], str_replace( 'user-', '', $field_key ) );
+								// instantiate our profile fields class
+								$yikes_profile_fields = new YIKES_Profile_Fields( $current_user->ID, $this->options );
+								// Render our field based on the field type
+								$yikes_profile_fields->render_profile_field( $field_data, $current_user->ID );
 							?>
 						</p>
 						<?php
