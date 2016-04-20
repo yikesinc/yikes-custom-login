@@ -193,9 +193,9 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 		// If the sign in template page is active, this page template is active and the current page is NOT equal to the sign in page
 		if ( $sign_in_active_template && $active_template && $page_ids[0] != $post->ID ) {
 			printf(
-				wp_kses_post( '<p class="descipriton"><small>' . __( 'This template inherits the styles from the %s page. To adjust the styles, please customize the %s page.', 'yikes-inc-custom-login' ) . '</small></p>'),
+				wp_kses_post( '<p class="descipriton"><small>' . __( 'This template inherits the styles from the %s page. To adjust the styles, please customize the %s page.', 'yikes-inc-custom-login' ) . '</small></p>' ),
 				'<strong>Sign In</strong>',
-				'<a href="' . $customizer_link . '">' . __( 'Sign In', 'yikes-inc-custom-login' ) . '</a>'
+				'<a href="' . $customizer_link . '">' . esc_attr__( 'Sign In', 'yikes-inc-custom-login' ) . '</a>'
 			);
 		}
 	}
