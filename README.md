@@ -250,6 +250,6 @@ jQuery( '#user_pass' ).attr( 'placeholder', '********' );
 
 ### About YIKES Inc.
 ![](http://www.yikesinc.com/wp-content/uploads/2012/06/yikes175.png)
-![](https://cldup.com/4NlirSwXZQ.png)
+![](https://cldup.com/6KY_W68Oma.png)
 
 At YIKES, we build free and premium plugins for WordPress sites. We're located in the beautiful section of Fishtown, Philadelphia PA. To find out more about us, check out our website at [http://www.yikesinc.com]http://www.yikesinc.com), and some of our other plugins at [https://yikesplugins.com](https://yikesplugins.com).
