@@ -178,6 +178,22 @@ function custom_login_preloader_image( $preloader_url ) {
 add_filter( 'yikes-custom-login-preloader', 'custom_login_preloader_image' );
 ```
 
+* `yikes-login-pages-query-post-type`
+
+Alter what post types are queried and displayed in the drop down on the 'Pages' option page.
+
+**Example Usage**
+```php
+/**
+ * Add 'post' post types to the drop down, to allow users to redirect there.
+ */
+function enable_posts_in_pages_dropdown( $post_types ) {
+	$post_types[] = 'post';
+	return $post_types;
+}
+add_filter( 'yikes-login-pages-query-post-type', 'enable_posts_in_pages_dropdown' );
+```
+
 #### Actions
 
 ###### Login Form

@@ -25,7 +25,6 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 		return array(
 			$this->options['login_page'],
 			$this->options['pick_new_password_page'],
-			$this->options['pick_new_password_page'],
 			$this->options['password_lost_page'],
 			$this->options['register_page'],
 		);

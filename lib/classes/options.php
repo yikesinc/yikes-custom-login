@@ -249,6 +249,7 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
+
 		/** Add Pages Settings Section **/
 		add_settings_section(
 			'yikes_custom_login_pages_section', // ID
@@ -256,7 +257,6 @@ class YIKES_Login_Settings {
 			array( $this, 'print_section_info' ), // Callback
 			'yikes-custom-login' // Page
 		);
-
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
@@ -547,7 +547,7 @@ class YIKES_Login_Settings {
 		if ( false === ( $pages_query = get_transient( 'yikes_custom_login_pages_query' ) ) ) {
 			/* Query all pages */
 			$pages_query = new WP_Query( array(
-				'post_type' => 'page',
+				'post_type' => apply_filters( 'yikes-login-pages-query-post-type', array( 'page' ) ),
 				'post_status' => 'publish',
 				'posts_per_page' => -1,
 			) );
@@ -559,6 +559,14 @@ class YIKES_Login_Settings {
 			?>
 			<select class="yikes-select2" name="yikes_custom_login[<?php echo esc_attr( $args['field'] ); ?>]">
 				<?php
+				if ( 'account_info_page' === $args['field'] ) {
+					printf(
+						'<option value="%s" %s>%s</option>',
+						'none',
+						esc_attr( selected( $this->options[ $args['field'] ], 'none' ) ),
+						esc_attr__( 'None', 'yikes-inc-custom-login' )
+					);
+				}
 				while ( $pages_query->have_posts() ) {
 					$pages_query->the_post();
 					// Loop over each page and create an option

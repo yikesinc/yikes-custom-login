@@ -114,7 +114,7 @@ class YIKES_Custom_Login {
 		add_action( 'wp_enqueue_scripts', array( $this, 'yikes_custom_login_generate_customizer_styles' ) );
 
 		/* Custom Login Sign In Button Text */
-		add_filter( 'gettext', array( $this, 'yikes_filter_sign_in_button_text' ), 10, 2 );
+		add_filter( 'gettext', array( $this, 'yikes_filter_sign_in_button_text' ), 10, 3 );
 	}
 
 	/**
@@ -123,14 +123,13 @@ class YIKES_Custom_Login {
 	 * @param  string $text        Text to look for.
 	 * @return string              The final altered string.
 	 */
-	public function yikes_filter_sign_in_button_text( $translation, $text ) {
+	public function yikes_filter_sign_in_button_text( $translation, $text, $domain ) {
 		// If we're admin side - abort
 		if ( is_admin() ) {
 			return $translation;
 		}
-		global $post;
 		// If we're not on the login page, abort
-		if ( $post->ID !== $this->options['login_page'] ) {
+		if ( ! is_page( $this->options['login_page'] ) ) {
 			return $translation;
 		}
 		// Alter 'Sign In' button text
@@ -1017,7 +1016,7 @@ class YIKES_Custom_Login {
 			'first_name'    => $first_name,
 			'last_name'     => $last_name,
 			'nickname'      => $first_name,
-			'role'					=> apply_filters( 'yikes-custom-login-new-user-role', 'subscriber' ),
+			'role'					=> apply_filters( 'yikes-custom-login-new-user-role', get_option( 'default_role' ) ),
 		);
 
 		$user_id = wp_insert_user( $user_data );
