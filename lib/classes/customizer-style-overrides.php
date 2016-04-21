@@ -95,7 +95,10 @@ class YIKES_Custom_Login_Customizer_Stlyes_Override {
 		// Full Width Sign In Button
 		if ( $login_container_full_width_sign_in_button ) {
 			$custom_css .= "
-				#yikes-custom-login-form input#wp-submit{
+				#yikes-custom-login-form input#wp-submit,
+				#yikes-lost-password-form input.lostpassword-button,
+				#yikes-register-form input.register-button,
+				#yikes-custom-user-registration-template #resetpass-button {
 					width: 100%;
 				}
 			";

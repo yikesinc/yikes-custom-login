@@ -5,6 +5,9 @@
  */
 global $current_user;
 get_currentuserinfo();
+// Include the form fields class
+include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/form-fields.php' );
+$yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 ?>
 
 <!-- Profile Edit Template -->
@@ -28,7 +31,8 @@ get_currentuserinfo();
 			<form id="yikes-account-info-form" method="post" class="section group" action="<?php the_permalink(); ?>">
 					<?php
 					// Store the available fields
-					$available_meta_fields = $this->yikes_custom_login_profile_fields( $current_user->ID );
+					$available_meta_fields = $yikes_form_fields->yikes_custom_login_profile_fields_array( $current_user->ID );
+
 					// Setup integer value to setup columns
 					$field_count = 1;
 					$total_count = 1;
@@ -48,10 +52,8 @@ get_currentuserinfo();
 								<?php echo esc_attr( $field_data['label'] ); ?>
 							</label>
 							<?php
-								// instantiate our profile fields class
-								$yikes_profile_fields = new YIKES_Profile_Fields( $current_user->ID, $this->options );
 								// Render our field based on the field type
-								$yikes_profile_fields->render_profile_field( $field_data, $current_user->ID );
+								$yikes_form_fields->render_form_field( $field_data, $current_user->ID );
 							?>
 						</p>
 						<?php

@@ -350,14 +350,14 @@ class YIKES_Custom_Login {
 		$end = count( $pages_created );
 		foreach ( $pages_created as $page_created_data ) {
 			$string .= '<a href="' . esc_url( $page_created_data['edit_link'] ) . '">' . esc_attr( $page_created_data['page_title'] ) . '</a>';
-			if (0 !== --$end) {
+			if ( 0 !== --$end ) {
 				$string .= ' | ';
 			}
 		}
 		printf(
 			'<div class="notice notice-success"><p>%1$s</p><p>%2$s</p></div>',
-			$page_created_text,
-			$string
+			esc_textarea( $page_created_text ),
+			esc_textarea( $string )
 		);
 		// Delete our options once they have been displayed to the user, so to not repeat this notice
 		delete_option( 'yikes_custom_login_pages_created_count' );
@@ -395,20 +395,20 @@ class YIKES_Custom_Login {
 	 * Add custom post row link on the 'Login' page, linking to the customizer
 	 * @since 1.0
 	 */
-		public function cgc_ub_action_links( $actions, $post_object ) {
-			// Check if the 'Full Width' page template is active
-			$active_template = ( get_post_meta( $this->options['login_page'], '_full_width_page_template', true ) ) ? true : false;
-			// if the current post is not equal to the sign in page, abort
-			if ( ! $active_template || $post_object->ID != $this->options['login_page'] ) {
-				return $actions;
-			}
-			// build the customizer link
-			$customizer_link = add_query_arg( array(
-				'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
-			), esc_url_raw( admin_url( 'customize.php' ) ) );
-			$actions['yikes_login_customizer_link'] = '<a class="cgc_ub_edit_badge" href=" ' . esc_url( $customizer_link ) . '">' . __( 'Customize Login', 'yikes-custom-login' ) . '</a>';
+	public function cgc_ub_action_links( $actions, $post_object ) {
+		// Check if the 'Full Width' page template is active
+		$active_template = ( get_post_meta( $this->options['login_page'], '_full_width_page_template', true ) ) ? true : false;
+		// if the current post is not equal to the sign in page, abort
+		if ( ! $active_template || $post_object->ID != $this->options['login_page'] ) {
 			return $actions;
 		}
+		// build the customizer link
+		$customizer_link = add_query_arg( array(
+			'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
+		), esc_url_raw( admin_url( 'customize.php' ) ) );
+		$actions['yikes_login_customizer_link'] = '<a class="cgc_ub_edit_badge" href=" ' . esc_url( $customizer_link ) . '">' . __( 'Customize Login', 'yikes-custom-login' ) . '</a>';
+		return $actions;
+	}
 	/**
 	 * Redirect the user after authentication if there were any errors.
 	 *
@@ -467,7 +467,7 @@ class YIKES_Custom_Login {
 		} else {
 			// if the account info page has been disabled, do not redirec there
 			// but instead redirect to the homepage/custom URL
-			$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'logged_in' => 'true', ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+			$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'logged_in' => 'true' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 		}
 		return wp_validate_redirect( apply_filters( 'yikes-custom-login-redirect', $redirect_url ), home_url() );
 	}
@@ -826,6 +826,16 @@ class YIKES_Custom_Login {
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$redirect_url = esc_url( get_the_permalink( $this->options['register_page'] ) );
 
+			// Verify our nonce
+			if ( ! isset( $_POST['yikes_custom_login_register'] ) || ! wp_verify_nonce( $_POST['yikes_custom_login_register'], 'yikes_custom_login_register' ) ) {
+				$redirect_url = add_query_arg( 'register-errors', 'nonce', $redirect_url );
+				wp_redirect( $redirect_url );
+				exit;
+			}
+
+			// unset the nonce values once validated
+			unset( $_POST['yikes_custom_login_register'], $_POST['_wp_http_referer'] );
+
 			if ( ! get_option( 'users_can_register' ) ) {
 				// Registration closed, display error
 				$redirect_url = add_query_arg( 'register-errors', 'closed', $redirect_url );
@@ -833,11 +843,12 @@ class YIKES_Custom_Login {
 				// Recaptcha check failed, display error
 				$redirect_url = add_query_arg( 'register-errors', 'captcha', $redirect_url );
 			} else {
-				$email = $_POST['email'];
+				$email = sanitize_email( $_POST['email'] );
 				$first_name = sanitize_text_field( $_POST['first_name'] );
 				$last_name = sanitize_text_field( $_POST['last_name'] );
+				unset( $_POST['email'], $_POST['first_name'], $_POST['last_name'] );
 
-				$result = $this->register_user( $email, $first_name, $last_name );
+				$result = $this->register_user( $email, $first_name, $last_name, $_POST );
 
 				if ( is_wp_error( $result ) ) {
 					// Parse errors into a string and append as parameter to redirect
@@ -959,8 +970,10 @@ class YIKES_Custom_Login {
 			}
 			// Setup our globals
 			global $current_user, $wp_roles;
+
 			// unset the nonce, so we can loop over each piece of data
 			unset( $_POST['_wpnonce'], $_POST['_wp_http_referer'], $_POST['action'], $_POST['updateuser'] );
+
 			// Setup a new array of data
 			$user_data = array(
 				'ID' => $current_user->ID,
@@ -1089,7 +1102,7 @@ class YIKES_Custom_Login {
 	 * @return int|WP_Error         The id of the user that was created, or error if failed.
 	 * @since 1.0
 	 */
-	private function register_user( $email, $first_name, $last_name ) {
+	private function register_user( $email, $first_name, $last_name, $additional_fields = array() ) {
 		global $wpdb;
 
 		$errors = new WP_Error();
@@ -1116,29 +1129,39 @@ class YIKES_Custom_Login {
 			'first_name'    => $first_name,
 			'last_name'     => $last_name,
 			'nickname'      => $first_name,
-			'role'					=> apply_filters( 'yikes-custom-login-new-user-role', get_option( 'default_role' ) ),
+			'role'      		=> apply_filters( 'yikes-custom-login-new-user-role', get_option( 'default_role' ) ),
 		);
 
 		$user_id = wp_insert_user( $user_data );
 
-		/** This action is documented in wp-login.php */
-		do_action( 'retrieve_password_key', $user_data->user_login, $key );
+		if ( $user_id ) {
+			/** This action is documented in wp-login.php */
+			do_action( 'retrieve_password_key', $user_data->user_login, $key );
 
-		// Now insert the key, hashed, into the DB.
-		if ( empty( $wp_hasher ) ) {
-			require_once ABSPATH . WPINC . '/class-phpass.php';
-			$wp_hasher = new PasswordHash( 8, true );
+			// If additional fields are set, loop over them and update the user
+			if ( ! empty( $additional_fields ) ) {
+				foreach ( $additional_fields as $field_id => $field_value ) {
+					update_user_meta( $user_id, $field_id, $field_value );
+				}
+			}
+
+			// Now insert the key, hashed, into the DB.
+			if ( empty( $wp_hasher ) ) {
+				require_once ABSPATH . WPINC . '/class-phpass.php';
+				$wp_hasher = new PasswordHash( 8, true );
+			}
+
+			$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
+			$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $email ) );
+
+			// Inclde our custom 'Welcome' email template
+			include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/email-templates.php' );
+			$email_class = new YIKES_Email_Templates( $this->options );
+			$email_class->send_new_user_notifications( $user_id, $key );
+
+			return $user_id;
 		}
-
-		$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
-		$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $email ) );
-
-		// Inclde our custom 'Welcome' email template
-		include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/email-templates.php' );
-		$email_class = new YIKES_Email_Templates( $this->options );
-		$email_class->send_new_user_notifications( $user_id, $key );
-
-		return $user_id;
+		return false;
 	}
 
 	/**
@@ -1268,22 +1291,6 @@ class YIKES_Custom_Login {
 		}
 
 		return __( 'An unknown error occurred. Please try again later.', 'yikes-custom-login' );
-	}
-
-	/**
-	 * Instantiate our profile fields class
-	 * @since 1.0
-	 */
-	public function yikes_custom_login_profile_fields( $user_id ) {
-		// Include our profile fields class
-		if ( ! class_exists( 'YIKES_Profile_Fields' ) ) {
-			include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/profile-fields.php' );
-			// Init the class
-			$yikes_profile_fields = new YIKES_Profile_Fields( $user_id, $this->options );
-			// Get our fields
-			return $yikes_profile_fields->yikes_custom_login_profile_fields_array( $user_id );
-		}
-		return false;
 	}
 
 	/**
