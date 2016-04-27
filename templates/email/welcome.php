@@ -315,7 +315,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                     </tr>
                                   </table>
 																	<!-- Site Logo, if set -->
-																	<?php if( '' !== $this->options['branding_logo'] ) { ?>
+																	<?php if( ! empty( $this->options['branding_logo'] ) ) { ?>
 	                                  <center data-parsed="" style="min-width:532px; width:100%" width="100%">
 																			<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" align="center" style="-ms-interpolation-mode:bicubic; clear:both; display:block; max-width:100%; outline:none; text-decoration:none; width:auto; float:none; margin:0 auto; text-align:center" width="auto">
 																		</center>
