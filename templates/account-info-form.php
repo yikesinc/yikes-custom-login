@@ -73,7 +73,9 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 					<!-- Submit button and nonces -->
 					<p class="form-submit span_2_of_2">
 						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'yikes-inc-custom-login' ); ?>" />
-						<a href="#new-password" class="button reset-pass"><?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?></a>
+						<a href="#new-password" class="button reset-pass">
+							<input type="submit" value="<?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?>" onclick="window.location.hash = '#new-password';return false;" />
+						</a>
 						<?php wp_nonce_field( 'update-user' ) ?>
 						<input name="action" type="hidden" id="action" value="update-user" />
 					</p><!-- .form-submit -->

@@ -44,7 +44,7 @@ class YIKES_Login_Settings {
 			'general' => __( 'General', 'yikes-inc-custom-login' ),
 			'pages' => __( 'Pages', 'yikes-inc-custom-login' ),
 			'recaptcha' => '<img class="recaptcha-icon" src="' . esc_url( plugin_dir_url( __FILE__ ) . '../images/recaptcha-icon.png' ) . '" /> reCAPTCHA',
-			'branding' => __( 'Branding', 'yikes-inc-custom-login' ),
+			'branding' => __( 'Emails', 'yikes-inc-custom-login' ),
 		) );
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';

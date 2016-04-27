@@ -46,7 +46,8 @@
 #yikes-custom-login-form p.login-username,
 #yikes-custom-login-form p.login-password,
 #yikes-custom-login-form p.login-remember,
-#yikes-custom-login-form p.login-submit {
+#yikes-custom-login-form p.login-submit,
+#new-password form p {
 	margin-bottom: .75em;
 }
 
@@ -112,6 +113,7 @@
 	#yikes-account-info-form a.button.reset-pass {
 		background: #D9EDF7;
 		color: #333;
+		display: inline-block;
 	}
 
 	#new-password form[name="resetpasswordform"] label,
@@ -219,7 +221,7 @@
 				border-radius: 4px;
 				border: none;
 				width: 33%;
-				max-width: 400px;
+				max-width: 550px;
 				min-width: 320px;
 				position: relative;
 				top: 0;
@@ -384,16 +386,18 @@
 	}
 	.popup .close {
 		position: absolute;
-		top: 20px;
-		right: 30px;
+		top: 10px;
+		right: 25px;
 		transition: all 200ms;
 		font-size: 30px;
 		font-weight: bold;
 		text-decoration: none;
+		border: none;
+		box-shadow: none;
 		color: #333;
 	}
 	.popup .close:hover {
-		color: #06D85F;
+		color: #FFBEBE;
 	}
 	.popup .content {
 		max-height: 30%;
