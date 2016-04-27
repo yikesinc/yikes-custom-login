@@ -16,7 +16,11 @@
 }
 
 #yikes-custom-login-form .login-username input[type="text"],
-#yikes-custom-login-form .login-password input[type="password"] {
+#yikes-custom-login-form .login-password input[type="password"],
+#yikes-lost-password-form input[type="text"],
+#yikes-register-form input[type="text"],
+#yikes-register-form input[type="email"],
+#yikes-register-form input[type="url"] {
 	padding: 5px;
 	color: #555;
 	font-size: 18px;
@@ -33,7 +37,8 @@
  }
 
  #yikes-lost-password-form input[type="text"] {
-	padding: 3px 5px;
+	padding: 5px;
+	font-size: 18px;
 	color: #555;
  }
 /** End Lost Password Form Styles **/
@@ -57,7 +62,8 @@
 
 #yikes-reset-password-form input[type="text"],
 #yikes-reset-password-form input[type="password"] {
-	padding: 3px 5px;
+	padding: 5px;
+	font-size: 18px;
 	color: #555;
 }
 /** End Reset Password Form **/
@@ -74,7 +80,8 @@
 
 	#yikes-register-form input[type="text"],
 	#yikes-register-form input[type="email"] {
-		padding: 3px 5px;
+		padding: 5px;
+		font-size: 18px;
 		color: #555;
 	}
 /** End Registration Form Styles */
@@ -93,7 +100,8 @@
 	#yikes-account-info-form input[type="text"],
 	#yikes-account-info-form input[type="email"],
 	#yikes-account-info-form input[type="url"] {
-		padding: 3px 5px;
+		padding: 5px;
+		font-size: 18px;
 		color: #555;
 	}
 
@@ -113,7 +121,8 @@
 	}
 
 	#new-password form[name="resetpasswordform"] input[type="password"] {
-		padding: 3px 5px;
+		padding: 5px;
+		font-size: 18px;
 	}
 
 	#new-password #wp-submit:disabled {
@@ -127,7 +136,7 @@
 			background-color: #eee;
 			border: 1px solid #ddd;
 			color: #23282d;
-			padding: 3px 5px;
+			padding: 5px;
 			margin-bottom: 5px;
 			text-align: center;
 			box-sizing: border-box;
