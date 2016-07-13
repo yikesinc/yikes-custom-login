@@ -51,15 +51,34 @@ foreach ( $theme_modification_array as $mod_name ) {
 /**
  * Delete our custom pages created during plugin activation
  */
+$plugin_options = get_option( 'yikes_custom_login', array(
+	'plugin_setup' => false,
+	'admin_redirect' => 1,
+	'restrict_dashboard_access' => 1,
+	'password_strength_meter' => 1,
+	'notice_animation' => 'yikes-fadeInDown',
+	'powered_by_yikes' => 1,
+	'register_page' => null,
+	'login_page' => null,
+	'account_info_page' => null,
+	'password_lost_page' => null,
+	'pick_new_password_page' => null,
+	'recaptcha_site_key' => false,
+	'recaptcha_secret_key' => false,
+) );
+
 $template_page_ids = array(
-	$this->options['login_page'],
-	$this->options['pick_new_password_page'],
-	$this->options['password_lost_page'],
-	$this->options['register_page'],
+	$plugin_options['login_page'],
+	$plugin_options['pick_new_password_page'],
+	$plugin_options['password_lost_page'],
+	$plugin_options['register_page'],
 );
 
 // Loop over and delete our pages
 foreach ( $template_page_ids as $page_id ) {
-	// Force delete, bypass trash
-	wp_delete_post( $page_id, true );
+	// Ensure we have a post ID to work with
+	if ( is_numeric( $post_id ) ) {
+		// Force delete, bypass trash
+		wp_delete_post( $page_id, true );
+	}
 }
