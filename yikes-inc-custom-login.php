@@ -148,10 +148,6 @@ class YIKES_Custom_Login {
 		if ( is_admin() ) {
 			return $translation;
 		}
-		// If we're not on the login page, abort
-		if ( ! is_page( $this->options['login_page'] ) ) {
-			return $translation;
-		}
 		// Alter 'Sign In' button text
 		if ( 'Sign In' === $text ) {
 			$signin_text = get_theme_mod( 'login_container_sign_in_button_text', false );
