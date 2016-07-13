@@ -356,8 +356,8 @@ class YIKES_Custom_Login {
 		}
 		printf(
 			'<div class="notice notice-success"><p>%1$s</p><p>%2$s</p></div>',
-			esc_attr( $page_created_text ),
-			esc_attr( $string )
+			$page_created_text,
+			$string
 		);
 		// Delete our options once they have been displayed to the user, so to not repeat this notice
 		delete_option( 'yikes_custom_login_pages_created_count' );
