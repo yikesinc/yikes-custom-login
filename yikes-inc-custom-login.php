@@ -625,7 +625,7 @@ class YIKES_Custom_Login {
 		$attributes['password_updated'] = ( isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'] );
 
 		// Store the username
-		$attributes['username_value'] = isset( $_POST['log'] ) ? esc_textarea $_POST['log'] : '';
+		$attributes['username_value'] = isset( $_POST['log'] ) ? $_POST['log'] : '';
 
 		// Render the login form using an external template
 		return $this->get_template_html( 'login-form', $attributes );
@@ -706,7 +706,12 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+				// If the user is logged in, redirect to the account page
+				if ( is_user_logged_in() ) {
+					$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'highlight' => 'reset_password' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+					wp_redirect( $redirect_url );
+					exit;
+				}
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
