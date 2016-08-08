@@ -4,6 +4,8 @@
  * The form displays in a popup, and will not update until there is a strong password entered.
  * @since 1.0
  */
+// Store user details, for use in the form.
+$user_details = wp_get_current_user();
 ?>
 <div id="new-password" class="overlay">
 	<div class="popup">
@@ -13,6 +15,12 @@
 		<div class="content">
 			<!-- Reset Form -->
 			<form name="resetpasswordform" action="<?php echo esc_url( site_url( 'wp-login.php?action=resetpass', 'login_post' ) ); ?>" method="post">
+
+				<!-- Hidden Fields -->
+				<input type="hidden" id="user_login" name="rp_login" value="<?php echo esc_attr( $user_details->user_login ); ?>" />
+				<input type="hidden" id="user_id" name="user_id" value="<?php echo esc_attr( $user_details->ID ); ?>" />
+				<input type="hidden" name="user_manual_reset" value="true" />
+
 				<p class="form-password">
 					<label for="pass1"><?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?></label>
 					<input class="text-input" name="pass1" type="password" id="pass1">

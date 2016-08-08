@@ -901,6 +901,19 @@ class YIKES_Custom_Login {
 			$rp_key = $_REQUEST['key'];
 			$rp_login = $_REQUEST['login'];
 
+			// Manual reset on the 'Account' page (user is logged in)
+			if ( is_user_logged_in() && isset( $_POST['user_manual_reset'] ) && 'true' === esc_textarea( $_POST['user_manual_reset'] ) ) {
+				// Store the user object
+				$user_obj = get_user_by( 'id', absint( $_POST['user_id'] ) );
+				// reset the password
+				reset_password( $user_obj, esc_textarea( $_POST['pass1'] ) );
+				// Redirect
+				wp_redirect( add_query_arg( array(
+					'password' => 'changed',
+				), esc_url( get_the_permalink( $this->options['login_page'] ) ) ) );
+				exit;
+			}
+
 			$user = check_password_reset_key( $rp_key, $rp_login );
 
 			if ( ! $user || is_wp_error( $user ) ) {
