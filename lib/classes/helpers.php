@@ -64,6 +64,10 @@ if ( ! function_exists( 'get_yikes_registration_page' ) ) {
  */
 if ( ! function_exists( 'generate_yikes_register_button' ) ) {
 	function generate_yikes_register_button() {
+		// If users can not register on the site, abort
+		if ( ! get_option( 'users_can_register' ) ) {
+			return;
+		}
 		// setup & filter the icon
 		$register_button_icon = apply_filters( 'yikes-custom-login-register-button-icon', '<i class="fa fa-users" aria-hidden="true"></i>' );
 		// Render the button
