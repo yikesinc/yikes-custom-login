@@ -23,6 +23,16 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 				esc_attr__( 'You must be logged in to edit your profile.', 'yikes-inc-custom-login' )
 			);
 
+			$register_page = ( get_option( 'users_can_register' ) ) ? '<a href="' . get_yikes_registration_page() . '" class="btn btn-info"><i class="fa fa-users" aria-hidden="true"></i> ' . __( 'Register', 'yikes-inc-custom-login' ) . '</a>&nbsp;&nbsp;' : '';
+
+			/* Login/Register Buttons */
+			printf(
+				'%s<a href="%s" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> %s</a>',
+				$register_page,
+				esc_url( '#' ),
+				esc_attr__( 'Sign in', 'yikes-inc-custom-login' )
+			);
+
 		} else { // If the user is logged in.
 			// display the errors if present
 			$this->yikes_custom_login_display_alerts( $attributes['errors'] );

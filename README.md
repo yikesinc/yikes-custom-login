@@ -63,7 +63,7 @@ Define and display custom fields on the profile field page.
 
 For usage, see above section "Additional Profile Fields".
 
-* `yikes-inc-custom-login-redirect`
+* `yikes-custom-login-login-redirect-url`
 
 Page to redirect non-admin users to when they successfully login. **Note:** This URL must be a URL of a page on this site. `wp_validate_redirect` is used, to confirm a valid URL before redirecting the user.
 
@@ -71,11 +71,68 @@ Default redirects to the Account Info ( 'member-account' ) page.
 
 **Example Usage:**
 ```php
-function yikes_custom_login_redirect_non_admins() {
-	// Redirect non-admins to page 8
-	return esc_url( get_the_permalink( 8 ) );
+/**
+ * Redirect logged in users to the /portal/ page if they logged in there
+ * @param  string 	$redirect_page   		URL to the /account-info/ page
+ * @param  int 			$login_page_id      ID of the current page the user is logging in on (or false if no referer is set).
+ * @return string                  			The final URL to redirect the user to.
+ */
+function yikes_custom_login_redirect_users( $redirect_page, $login_page_id ) {
+	// If users are logging in on the /portal/ page
+	if ( $login_page_id && 329 === $login_page_id ) {
+		// Redirect users back to the /portal/ page
+		return esc_url( get_the_permalink( 329 ) );
+	}
+	return $redirect_page;
 }
-add_filter( 'yikes-inc-custom-login-redirect', 'yikes_custom_login_redirect_non_admins' );
+add_filter( 'yikes-custom-login-login-redirect-url', 'yikes_custom_login_redirect_users', 10, 2 );
+```
+
+* `yikes-custom-login-logout-redirect-url`
+
+Page to redirect users to when they successfully logout.
+
+Default redirects to the Login Page ( 'member-login' ) page.
+
+**Example Usage:**
+```php
+function yikes_custom_login_redirect_after_logout() {
+	// Redirect users to the homepage after successful logout
+	return esc_url( site_url() );
+}
+add_filter( 'yikes-custom-login-logout-redirect-url', 'yikes_custom_login_redirect_after_logout' );
+```
+
+* `yikes-custom-login-recaptcha-language`
+
+Alter the recaptcha language. Defaults to 'en'.
+
+**Example Usage:**
+```php
+/**
+ * Set the language of the reCaptcha to French
+ * @return string The language to use for reCaptcha.
+ */
+function yikes_custom_login_french_recaptcha_language() {
+	return 'fr';
+}
+add_filter( 'yikes-custom-login-recaptcha-language', 'yikes_custom_login_french_recaptcha_language' );
+```
+
+* `yikes-custom-login-recaptcha-script-url`
+
+Alter the URL where the recaptcha script gets loaded from. This can be used to add additional query strings to the URL, or to alter the language tha recaptcha will display in.
+
+**Example Usage:**
+```php
+/**
+ * Set the language of the reCaptcha to Dutch, by altering query strings on the recaptcha script.
+ * @return string URL where the recaptcha lib will load from (with custom query strings)
+ */
+function yikes_custom_login_custom_recaptcha_script_url() {
+	return 'https://www.google.com/recaptcha/api.js?hl=de';
+}
+add_filter( 'yikes-custom-login-recaptcha-script-url', 'yikes_custom_login_custom_recaptcha_script_url' );
 ```
 
 * `yikes-custom-login-restrict-dashboard-capability`
