@@ -625,7 +625,7 @@ class YIKES_Custom_Login {
 		$attributes['password_updated'] = ( isset( $_REQUEST['password'] ) && 'changed' === $_REQUEST['password'] );
 
 		// Store the username
-		$attributes['username_value'] = isset( $_POST['log'] ) ? $_POST['log'] : '';
+		$attributes['username_value'] = isset( $_POST['log'] ) ? esc_textarea $_POST['log'] : '';
 
 		// Render the login form using an external template
 		return $this->get_template_html( 'login-form', $attributes );
