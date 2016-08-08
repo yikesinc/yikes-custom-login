@@ -40,7 +40,7 @@ if ( ! function_exists( 'get_yikes_login_page' ) ) {
 }
 
 /**
- * Get the account info page URL
+ * Get the register page URL
  *
  * @return string URL of the account info page, or home URL if not set
  */
@@ -53,6 +53,46 @@ if ( ! function_exists( 'get_yikes_registration_page' ) ) {
 		 * redirect to homepage to prevent redirect loop
 		 */
 		return ( 0 === $options['register_page'] ) ? false : esc_url( get_the_permalink( $options['register_page'] ) );
+	}
+}
+
+/**
+ * Generate a 'Register' button
+ *
+ * Note: Only displays when users are allowed to register on the site.
+ * @return mixed HTML markup for the 'Register' button
+ */
+if ( ! function_exists( 'generate_yikes_register_button' ) ) {
+	function generate_yikes_register_button() {
+		// setup & filter the icon
+		$register_button_icon = apply_filters( 'yikes-custom-login-register-button-icon', '<i class="fa fa-users" aria-hidden="true"></i>' );
+		// Render the button
+		echo wp_kses_post( sprintf(
+			'<a href="%s" class="btn btn-info">%s %s</a>&nbsp;&nbsp;',
+			get_yikes_registration_page(),
+			wp_kses_post( $register_button_icon ),
+			apply_filters( 'yikes-custom-login-register-button-text', esc_attr__( 'Register', 'yikes-inc-custom-login' ) )
+		) );
+	}
+}
+
+/**
+ * Generate a 'Log in' button
+ *
+ * Note: Only displays when users are allowed to register on the site.
+ * @return mixed HTML markup for the 'Register' button
+ */
+if ( ! function_exists( 'generate_yikes_login_button' ) ) {
+	function generate_yikes_login_button() {
+		// setup & filter the icon
+		$signin_button_icon = apply_filters( 'yikes-custom-login-sign-in-button-icon', '<i class="fa fa-sign-in" aria-hidden="true"></i>' );
+		// Render the button
+		echo wp_kses_post( sprintf(
+			'<a href="%s" class="btn btn-primary">%s %s</a>',
+			wp_login_url(),
+			wp_kses_post( $signin_button_icon ),
+			apply_filters( 'yikes-custom-login-sign-in-button-text', esc_attr__( 'Sign in', 'yikes-inc-custom-login' ) )
+		) );
 	}
 }
 
