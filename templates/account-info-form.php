@@ -29,7 +29,7 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 			printf(
 				'%s<a href="%s" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> %s</a>',
 				$register_page,
-				esc_url( '#' ),
+				wp_login_url(),
 				esc_attr__( 'Sign in', 'yikes-inc-custom-login' )
 			);
 
