@@ -706,12 +706,12 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-				// If the user is logged in, redirect to the account page
-				if ( is_user_logged_in() ) {
-					$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'highlight' => 'reset_password' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
-					wp_redirect( $redirect_url );
-					exit;
-				}
+			// If the user is logged in, redirect to the account page
+			if ( is_user_logged_in() ) {
+				$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'highlight' => 'reset_password' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+				wp_redirect( $redirect_url );
+				exit;
+			}
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -742,7 +742,12 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+			// If the user is logged in, redirect to the account page
+			if ( is_user_logged_in() ) {
+				$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'highlight' => 'reset_password' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
+				wp_redirect( $redirect_url );
+				exit;
+			}
 		} else {
 			if ( isset( $_REQUEST['login'] ) && isset( $_REQUEST['key'] ) ) {
 				$attributes['login'] = $_REQUEST['login'];
