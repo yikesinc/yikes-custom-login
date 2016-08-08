@@ -71,9 +71,16 @@
 		<?php apply_filters( 'yikes-custom-login-forgot-password-link-text', esc_attr_e( 'Forgot your password?', 'yikes-inc-custom-login' ) ); ?>
 	</a>
 
-	<a class="register-account pull-right" href="<?php echo esc_url( get_the_permalink( $this->options['register_page'] ) ); ?>">
-		<?php apply_filters( 'yikes-custom-login-register-link-text', esc_attr_e( 'Register', 'yikes-inc-custom-login' ) ); ?>
-	</a>
+	<?php
+	/**
+	 * Only display our 'Register' button when registeration is open to all users
+	 * @since 1.0
+	 */
+	if ( get_option( 'users_can_register' ) ) { ?>
+		<a class="register-account pull-right" href="<?php echo esc_url( get_the_permalink( $this->options['register_page'] ) ); ?>">
+			<?php apply_filters( 'yikes-custom-login-register-link-text', esc_attr_e( 'Register', 'yikes-inc-custom-login' ) ); ?>
+		</a>
+	<?php } ?>
 
 	<?php
 		/** Custom Action Hook - After Login Form */
