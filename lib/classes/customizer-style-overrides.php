@@ -19,7 +19,7 @@ class YIKES_Custom_Login_Customizer_Stlyes_Override {
 		$login_container_border_opacity = get_theme_mod( 'login_container_border_opacity', 0 );
 		$login_container_border_color_final = self::yikes_inc_convert_hex2rgba( $login_container_border_hex, $login_container_border_opacity );
 		$login_container_border_width = get_theme_mod( 'login_container_border_width', 0 );
-		$login_container_border_style = get_theme_mod( 'login_container_border_style', solid );
+		$login_container_border_style = get_theme_mod( 'login_container_border_style', 'solid' );
 		// Login container border radius
 		$login_container_border_radius = get_theme_mod( 'login_container_border_radius', 12 );
 		// Hide Password Link
@@ -114,7 +114,9 @@ class YIKES_Custom_Login_Customizer_Stlyes_Override {
 	 * @since 1.0
 	 */
 	public static function generate_customizer_scripts() {
-		return html_entity_decode( get_theme_mod( 'yikes_login_custom_scripts', false ), ENT_QUOTES | ENT_HTML5 );
+		// ENT_HTML5 constant was added in PHP v5.4 and later
+		$flags = ( defined( 'ENT_HTML5' ) ) ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+		return html_entity_decode( get_theme_mod( 'yikes_login_custom_scripts', false ), $flags );
 	}
 	/**
 	* Helper function to convert the HEX values into RGBA

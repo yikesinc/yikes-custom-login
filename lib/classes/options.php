@@ -430,7 +430,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Redirect admins to /wp-admin/ on login?', 'yikes-inc-custom-login' )
+			sprintf( esc_attr__( 'Redirect admins to %s on login?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
 		);
 	}
 
@@ -446,7 +446,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Restrict access to the dashboaord (/wp-admin/) from non-admins?', 'yikes-inc-custom-login' )
+			sprintf( esc_attr__( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
 		);
 		/* Display notice about who will be blocked */
 		printf(
@@ -597,13 +597,13 @@ class YIKES_Login_Settings {
 					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
 					break;
 				case 'account_info_page':
-					$option_description = '<p class="description">' . sprintf( __( 'This page enabled users to updaet their profile details from the frontend of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( __( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
 					break;
 				case 'password_lost_page':
 					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'yikes-inc-custom-login' ) . '</p>';
 					break;
 				case 'pick_new_password_page':
-					$option_description = '<p class="description">' . __( 'After the user clicks the "Password Reset" link sent to them by email, they will be presnted with this page - where they can enter a new password to use.', 'yikes-inc-custom-login' ) . '</p>';
+					$option_description = '<p class="description">' . __( 'After the user clicks the "Password Reset" link sent to them by email, they will be presented with this page - where they can enter a new password to use.', 'yikes-inc-custom-login' ) . '</p>';
 					break;
 				case 'register_page':
 					$option_description = '<p class="description">' . __( 'Any new users registering for your site will have to use the form on this page.', 'yikes-inc-custom-login' ) . '</p>';

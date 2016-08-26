@@ -213,13 +213,13 @@ class YIKES_Custom_Login {
 		if ( is_page( $this->options['login_page'] ) || is_page( $this->options['register_page'] ) ||
 		is_page( $this->options['password_lost_page'] ) || is_page( $this->options['pick_new_password_page'] ) || is_page( $this->options['account_info_page'] ) ) {
 			$site_locale = get_locale();
-			$lang = apply_filters( 'yikes-custom-login-recaptcha-language', 'en' );
+			$lang = 'en';
 			if ( $site_locale && explode( '_', $site_locale ) ) {
-				$split_locale = explode( '_', $site_lcale );
+				$split_locale = explode( '_', $site_locale );
 				$lang = $split_locale[0];
 			}
 			// enqueue recaptcha (if it's enabled)
-			wp_enqueue_script( 'recaptcha-api-js', apply_filters( 'yikes-custom-login-recaptcha-script-url', 'https://www.google.com/recaptcha/api.js?hl=' . $lang ), array(), 'all', true );
+			wp_enqueue_script( 'recaptcha-api-js', apply_filters( 'yikes-custom-login-recaptcha-script-url', 'https://www.google.com/recaptcha/api.js?hl=' . apply_filters( 'yikes-custom-login-recaptcha-language', $lang ) ), array(), 'all', true );
 		}
 	}
 
@@ -452,12 +452,12 @@ class YIKES_Custom_Login {
 	/**
 	 * Returns the URL to which the user should be redirected after the (successful) login.
 	 *
-	 * @param string           $redirect_to           The redirect destination URL.
-	 * @param string           $requested_redirect_to The requested redirect destination URL passed as a parameter.
-	 * @param WP_User|WP_Error $user                  WP_User object if login was successful, WP_Error object otherwise.
+	 * @param string           					$redirect_to           			The redirect destination URL.
+	 * @param string          						$requested_redirect_to   The requested redirect destination URL passed as a parameter.
+	 * @param  WP_User|WP_Error 	$user                  				WP_User object if login was successful, WP_Error object otherwise.
 	 *
 	 * @return string Redirect URL
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public function redirect_after_login( $redirect_to, $requested_redirect_to, $user ) {
 		$redirect_url = home_url();
@@ -478,7 +478,7 @@ class YIKES_Custom_Login {
 			// Use the redirect_to parameter if one is set, otherwise redirect to admin dashboard.
 			$redirect_url = ( '' === $requested_redirect_to ) ? admin_url() : $redirect_to;
 		} else {
-			// if the account info page has been disabled, do not redirec there
+			// if the account info page has been disabled, do not redirect there
 			// but instead redirect to the homepage/custom URL
 			$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'logged_in' => 'true' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 		}
