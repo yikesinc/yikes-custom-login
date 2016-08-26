@@ -370,21 +370,21 @@
 		visibility: visible;
 		opacity: 1;
 	}
-	.popup {
-		margin: 180px auto;
+	.yikes-custom-login-popup {
+		margin: 7% auto
 		padding: 20px;
 		background: #fff;
 		border-radius: 5px;
-		width: 30%;
+		width: 50%;
 		position: relative;
 		transition: all 5s ease-in-out;
 	}
-	.popup h2 {
+	.yikes-custom-login-popup h2 {
 		margin-top: 0;
 		color: #333;
 		font-family: Tahoma, Arial, sans-serif;
 	}
-	.popup .close {
+	.yikes-custom-login-popup .close {
 		position: absolute;
 		top: 10px;
 		right: 25px;
@@ -396,17 +396,18 @@
 		box-shadow: none;
 		color: #333;
 	}
-	.popup .close:hover {
+	.yikes-custom-login-popup .close:hover {
 		color: #FFBEBE;
 	}
-	.popup .content {
+	.yikes-custom-login-popup .content {
 		max-height: 30%;
 		overflow: auto;
 		}
 
-	@media screen and (max-width: 700px) {
-		.popup{
-		  width: 70%;
+	@media screen and (max-width: 768px) {
+		.yikes-custom-login-popup {
+		  width: 90%;
+			margin: 15% auto;
 		}
 	}
 	/** End Popups **/

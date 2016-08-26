@@ -4,8 +4,7 @@
  * Mainly used outside of the 'login' page set in the options
  * @since 1.0
  */
-global $current_user;
-get_currentuserinfo();
+$current_user = wp_get_current_user();
 ?>
 <div id="yikes-logged-in-user-details">
 	<strong><?php echo esc_attr( $current_user->user_login ); ?></strong>

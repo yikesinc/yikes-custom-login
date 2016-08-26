@@ -3,8 +3,7 @@
  *  Setup our current user global
  *  @since 1.0
  */
-global $current_user;
-get_currentuserinfo();
+$current_user = wp_get_current_user();
 // Include the form fields class
 include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/form-fields.php' );
 $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );

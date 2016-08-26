@@ -36,6 +36,11 @@
 		</p>
 	</form>
 
+	<!-- Preloader -->
+	<div class="preloader-container">
+		<img src="<?php echo apply_filters( 'yikes-custom-login-preloader', esc_url( admin_url( 'images/wpspin_light.gif' ) ) ); ?>" title="preloader" class="login-preloader" />
+	</div>
+
 	<?php
 		/** Custom Action Hook - After Password Lost Form */
 		do_action( 'yikes-custom-login-after-password-lost-form' );
