@@ -55,7 +55,7 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 	public function remove_full_width_template_page_fields() {
 		// setup page ids array
 		$page_ids = $this->get_full_width_page_ids();
-		$post_id = $_GET['post'] ? $_GET['post'] : false;
+		$post_id = ( isset( $_GET['post'] ) ) ? $_GET['post'] : false;
 		// if we're not on a post/page with an ID - abort
 		if ( ! $post_id ) {
 			return;
@@ -90,7 +90,7 @@ class YIKES_Custom_Login_Metaboxes extends YIKES_Custom_Login {
 		global $post, $pagenow;
 		// setup page ids array
 		$page_ids = $this->get_full_width_page_ids();
-		$post_id = $post->ID ? $post->ID : false;
+		$post_id = ( isset( $post->ID ) ) ? $post->ID : false;
 		// if were not on a new page / edit page screen - abort
 		if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
 			return;
