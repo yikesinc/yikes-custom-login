@@ -262,7 +262,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
-			sprintf( __( 'Login Page %s', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
+			sprintf( _x( 'Login Page %s', 'Custom template icon - indicating the user has set a custom page template.', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -430,7 +430,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Redirect admins to %s on login?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr_x( 'Redirect admins to %s on login?', 'Admin URL wrapped in <code> tags.', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
 		);
 	}
 
@@ -446,7 +446,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr_x( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), 'Admin URL wrapped in <code> tags.', '<code>' . admin_url() . '</code>' )
 		);
 		/* Display notice about who will be blocked */
 		printf(
@@ -521,7 +521,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
+			esc_html__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
 		);
 	}
 
@@ -537,7 +537,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
+			esc_html__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
 		);
 	}
 
@@ -566,7 +566,7 @@ class YIKES_Login_Settings {
 						'<option value="%s" %s>%s</option>',
 						'none',
 						esc_attr( selected( $this->options[ $args['field'] ], 'none' ) ),
-						esc_attr__( 'None', 'yikes-inc-custom-login' )
+						esc_html__( 'None', 'yikes-inc-custom-login' )
 					);
 				}
 				while ( $pages_query->have_posts() ) {
@@ -576,7 +576,7 @@ class YIKES_Login_Settings {
 						'<option value="%s" %s>%s</option>',
 						esc_attr( get_the_ID() ),
 						esc_attr( selected( $this->options[ $args['field'] ], get_the_ID() ) ),
-						esc_attr( get_the_title() )
+						esc_html( get_the_title() )
 					);
 				}
 				?>
@@ -591,13 +591,13 @@ class YIKES_Login_Settings {
 					$customizer_link = ( $active_template ) ? '<a href="' . add_query_arg( array(
 						'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
 					), esc_url_raw( admin_url( 'customize.php' ) ) ) . '">' . __( 'Customize Login', 'yikes-inc-custom-login' ) . '</a>' : '';
-					$option_description = '<p class="description">' . sprintf( __( 'This is the page that users will be redirected to when logging in. %s', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( _x( 'This is the page that users will be redirected to when logging in. %s', 'Link tot he customizer for this page', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
 					break;
 				case 'register_page':
 					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
 					break;
 				case 'account_info_page':
-					$option_description = '<p class="description">' . sprintf( __( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( _x( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'The word "None" wrapped in <strong> tags.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
 					break;
 				case 'password_lost_page':
 					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'yikes-inc-custom-login' ) . '</p>';
@@ -629,7 +629,7 @@ class YIKES_Login_Settings {
 		/* Descriptions */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
+			sprintf( esc_html_x( 'Enter your %s in the field above.', 'The field name wrapped in <strong> tags.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
 		);
 	}
 

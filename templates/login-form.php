@@ -34,7 +34,7 @@
 		<p class="login-info yikes-custom-login-alert yikes-custom-login-alert-success yikes-animated <?php echo esc_attr( $this->options['notice_animation'] ); ?>">
 			<?php
 				printf(
-					wp_kses_post( 'You have successfully registered to <strong>%s</strong>. Your password has been emailed to %s.', 'yikes-inc-custom-login' ),
+					wp_kses_post( _x( 'You have successfully registered to <strong>%s</strong>. Your password has been emailed to %s.', 'First: The WordPress Site Name. Second: Registered User Email Address.', 'yikes-inc-custom-login' ) ),
 					esc_attr( get_bloginfo( 'name' ) ),
 					sanitize_email( $_GET['registered'] )
 				);

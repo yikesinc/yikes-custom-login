@@ -56,15 +56,15 @@ class YIKES_Email_Templates {
 		$user_login = stripslashes( $user->user_login );
 		$user_email = stripslashes( $user->user_email );
 
-		$message  = sprintf( __( 'New user registration on your blog %s:', 'yikes-inc-custom-login' ), get_option( 'blogname' ) ) . "\r\n\r\n";
-		$message .= sprintf( __( 'Username: %s', 'yikes-inc-custom-login' ), $user_login ) . "\r\n\r\n";
-		$message .= sprintf( __( 'E-mail: %s', 'yikes-inc-custom-login' ), $user_email ) . "\r\n";
+		$message  = sprintf( _x( 'New user registration on your site %s:', 'WordPress Site Name', 'yikes-inc-custom-login' ), get_option( 'blogname' ) ) . "\r\n\r\n";
+		$message .= sprintf( _x( 'Username: %s', 'Newly Registered User Username', 'yikes-inc-custom-login' ), $user_login ) . "\r\n\r\n";
+		$message .= sprintf( _x( 'E-mail: %s', 'Newly Registered User Email Address', 'yikes-inc-custom-login' ), $user_email ) . "\r\n";
 
 		// Mail a notification to the admin
 		wp_mail(
 			get_option( 'admin_email' ),
 			sprintf(
-				__( '[%s] New User Registration', 'yikes-inc-custom-login' ),
+				_x( '[%s] New User Registration', 'WordPress Site Name', 'yikes-inc-custom-login' ),
 				get_option( 'blogname' )
 			),
 			$message
@@ -87,7 +87,7 @@ class YIKES_Email_Templates {
 		wp_mail(
 			$user_email,
 			sprintf(
-				__( '[%s] Your username and password', 'yikes-inc-custom-url' ),
+				_x( '[%s] Your username and password', 'WordPress Site Name', 'yikes-inc-custom-url' ),
 				get_option( 'blogname' )
 			),
 			$message

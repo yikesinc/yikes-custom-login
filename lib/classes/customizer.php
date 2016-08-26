@@ -480,7 +480,7 @@ function yikes_custom_login_customizer_register( $wp_customize ) {
 			'section' => 'custom_scripts_and_styles',
 			'label' => __( 'Custom Scripts', 'yikes-inc-custom-login' ),
 			'description' => sprintf(
-				__( 'Enter custom scripts in this field. Anything entered here will be wrapped wrapped in %s.', 'yikes-inc-custom-login' ),
+				_x( 'Enter custom scripts in this field. Anything entered here will be wrapped wrapped in %s.', 'Sample JavaScript code snippet.', 'yikes-inc-custom-login' ),
 				'<code>jQuery( document ).ready( function() { /* Code will go here */ })</code>'
 			),
 	) );

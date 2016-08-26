@@ -73,7 +73,7 @@ $yikes_form_fields = new YIKES_Form_Fields( '', $this->options );
 			<em>
 				<?php
 					printf(
-						esc_attr__( '%s: Your password will be generated automatically and emailed to the address you entered above.', 'yikes-inc-custom-login' ),
+						esc_attr_x( '%s: Your password will be generated automatically and emailed to the address you entered above.', 'The word "Note" wrapped in <strong> tags.', 'yikes-inc-custom-login' ),
 						'<strong>' . esc_attr__( 'Note', 'yikes-inc-custom-login' ) . '</strong>'
 					); ?>
 			</em>

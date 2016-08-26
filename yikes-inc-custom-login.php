@@ -262,23 +262,23 @@ class YIKES_Custom_Login {
 		// Information needed for creating the plugin's pages
 		$page_definitions = array(
 			apply_filters( 'yikes-custom-login-login-slug', 'member-login' ) => array(
-				'title' => __( 'Sign In', 'yikes-custom-login' ),
+				'title' => __( 'Sign In', 'yikes-inc-custom-login' ),
 				'content' => '[custom-login-form]',
 			),
 			apply_filters( 'yikes-custom-login-account-slug', 'member-account' ) => array(
-				'title' => __( 'Your Account', 'yikes-custom-login' ),
+				'title' => __( 'Your Account', 'yikes-inc-custom-login' ),
 				'content' => '[account-info]',
 			),
 			apply_filters( 'yikes-custom-login-register-slug', 'member-register' ) => array(
-				'title' => __( 'Registration', 'yikes-custom-login' ),
+				'title' => __( 'Registration', 'yikes-inc-custom-login' ),
 				'content' => '[custom-register-form]',
 			),
 			apply_filters( 'yikes-custom-login-password-lost-slug', 'member-password-lost' ) => array(
-				'title' => __( 'Forgot Your Password?', 'yikes-custom-login' ),
+				'title' => __( 'Forgot Your Password?', 'yikes-inc-custom-login' ),
 				'content' => '[custom-password-lost-form]',
 			),
 			apply_filters( 'yikes-custom-login-password-reset-slug', 'member-password-reset' ) => array(
-				'title' => __( 'Pick a New Password', 'yikes-custom-login' ),
+				'title' => __( 'Pick a New Password', 'yikes-inc-custom-login' ),
 				'content' => '[custom-password-reset-form]',
 			),
 		);
@@ -418,7 +418,7 @@ class YIKES_Custom_Login {
 		$customizer_link = add_query_arg( array(
 			'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
 		), esc_url_raw( admin_url( 'customize.php' ) ) );
-		$actions['yikes_login_customizer_link'] = '<a class="cgc_ub_edit_badge" href=" ' . esc_url( $customizer_link ) . '">' . __( 'Customize Login', 'yikes-custom-login' ) . '</a>';
+		$actions['yikes_login_customizer_link'] = '<a class="cgc_ub_edit_badge" href=" ' . esc_url( $customizer_link ) . '">' . __( 'Customize Login', 'yikes-inc-custom-login' ) . '</a>';
 		return $actions;
 	}
 	/**
@@ -684,11 +684,11 @@ class YIKES_Custom_Login {
 		if ( is_user_logged_in() ) {
 			$view_account_btn = ( 0 === $this->options['account_info_page'] ) ? '' : '<a href="' . esc_url( get_the_permalink( $this->options['account_info_page'] ) ) . '">' . __( 'View Account', 'yikes-inc-custom-login' ) . '</a>';
 			return sprintf(
-				'<p>' . esc_html__( 'You are already signed in. %s', 'yikes-custom-login' ) . '<p>',
+				'<p>' . esc_html_x( 'You are already signed in. %s', 'The "Account Info" page link.', 'yikes-inc-custom-login' ) . '<p>',
 				wp_kses_post( $view_account_btn )
 			);
 		} elseif ( ! get_option( 'users_can_register' ) ) {
-			return '<p>' . esc_html__( 'Registering new users is currently disabled.', 'yikes-custom-login' ) . '</p>';
+			return '<p>' . esc_html__( 'Registering new users is currently disabled.', 'yikes-inc-custom-login' ) . '</p>';
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -718,7 +718,7 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
 		} else {
 			// Retrieve possible errors from request parameters
 			$attributes['errors'] = array();
@@ -749,7 +749,7 @@ class YIKES_Custom_Login {
 		$attributes = shortcode_atts( $default_attributes, $attributes );
 
 		if ( is_user_logged_in() ) {
-			return __( 'You are already signed in.', 'yikes-custom-login' );
+			return __( 'You are already signed in.', 'yikes-inc-custom-login' );
 		} else {
 			if ( isset( $_REQUEST['login'] ) && isset( $_REQUEST['key'] ) ) {
 				$attributes['login'] = $_REQUEST['login'];
@@ -768,7 +768,7 @@ class YIKES_Custom_Login {
 
 				return $this->get_template_html( 'password-reset-form', $attributes );
 			} else {
-				return __( 'Invalid password reset link.', 'yikes-custom-login' );
+				return __( 'Invalid password reset link.', 'yikes-inc-custom-login' );
 			}
 		}
 	}
@@ -1043,15 +1043,15 @@ class YIKES_Custom_Login {
 				default:
 				case 'error':
 					$alert_class = 'yikes-custom-login-alert-danger';
-					$message = sprintf( __( '%s An error occured, please try again.', 'yikes-inc-custom-login' ), '&#10007;' );
+					$message = sprintf( _x( '%s An error occured, please try again.', 'Unicode value for "X".', 'yikes-inc-custom-login' ), '&#10007;' );
 					break;
 				case 'nonce_error':
 					$alert_class = 'yikes-custom-login-alert-danger';
-					$message = sprintf( __( '%s The security check did not pass. Please refresh the page and try again.', 'yikes-inc-custom-login' ), '&#10007;' );
+					$message = sprintf( _x( '%s The security check did not pass. Please refresh the page and try again.', 'Unicode value for "X".', 'yikes-inc-custom-login' ), '&#10007;' );
 					break;
 				case 'success':
 					$alert_class = 'yikes-custom-login-alert-success';
-					$message = sprintf( __( '%s Profile successfully updated.', 'yikes-inc-custom-login' ), '&#10003;' );
+					$message = sprintf( _x( '%s Profile successfully updated.', 'yikes-inc-custom-login' ), 'Unicode value for a checkmark.', '&#10003;' );
 					break;
 			}
 			printf(
@@ -1059,7 +1059,7 @@ class YIKES_Custom_Login {
 				'yikes-custom-login-alert yikes-animated',
 				esc_attr( $alert_class ),
 				esc_attr( $this->options['notice_animation'] ),
-				esc_attr( $message )
+				esc_html( $message )
 			);
 		}
 	}
@@ -1245,64 +1245,65 @@ class YIKES_Custom_Login {
 			// Login errors
 
 			case 'empty_username':
-				return __( 'You do have an email address, right?', 'yikes-custom-login' );
+				return __( 'You do have an email address, right?', 'yikes-inc-custom-login' );
 
 			case 'empty_password':
-				return __( 'You need to enter a password to login.', 'yikes-custom-login' );
+				return __( 'You need to enter a password to login.', 'yikes-inc-custom-login' );
 
 			case 'invalid_username':
 				return __(
 					"We don't have any users with that email address. Maybe you used a different one when signing up?",
-					'yikes-custom-login'
+					'yikes-inc-custom-login'
 				);
 
 			case 'incorrect_password':
-				$err = __(
+				$err = _x(
 					"The password you entered wasn't quite right. <a href='%s'>Did you forget your password</a>?",
-					'yikes-custom-login'
+					'The WordPress lost password URL.',
+					'yikes-inc-custom-login'
 				);
 				return sprintf( $err, wp_lostpassword_url() );
 
 			// Registration errors
 
 			case 'email':
-				return __( 'The email address you entered is not valid.', 'yikes-custom-login' );
+				return __( 'The email address you entered is not valid.', 'yikes-inc-custom-login' );
 
 			case 'email_exists':
-				return __( 'An account exists with this email address.', 'yikes-custom-login' );
+				return __( 'An account exists with this email address.', 'yikes-inc-custom-login' );
 
 			case 'closed':
-				return __( 'Registering new users is currently not allowed.', 'yikes-custom-login' );
+				return __( 'Registering new users is currently not allowed.', 'yikes-inc-custom-login' );
 
 			case 'captcha':
-				return __( 'The Google reCAPTCHA check failed. Are you a robot?', 'yikes-custom-login' );
+				return __( 'The Google reCAPTCHA check failed. Are you a robot?', 'yikes-inc-custom-login' );
 
 			// Lost password
 
 			case 'empty_username':
-				return __( 'You need to enter your email address to continue.', 'yikes-custom-login' );
+				return __( 'You need to enter your email address to continue.', 'yikes-inc-custom-login' );
 
 			case 'invalid_email':
 			case 'invalidcombo':
-				return __( 'There are no users registered with this email address.', 'yikes-custom-login' );
+				return __( 'There are no users registered with this email address.', 'yikes-inc-custom-login' );
 
 			// Reset password
 
 			case 'expiredkey':
 			case 'invalidkey':
-				return __( 'The password reset link you used is not valid anymore.', 'yikes-custom-login' );
+				return __( 'The password reset link you used is not valid anymore.', 'yikes-inc-custom-login' );
 
 			case 'password_reset_mismatch':
-				return __( "The two passwords you entered don't match.", 'yikes-custom-login' );
+				return __( "The two passwords you entered don't match.", 'yikes-inc-custom-login' );
 
 			case 'password_reset_empty':
-				return __( "Sorry, we don't accept empty passwords.", 'yikes-custom-login' );
+				return __( "Sorry, we don't accept empty passwords.", 'yikes-inc-custom-login' );
 
 			default:
 				break;
 		}
 
-		return __( 'An unknown error occurred. Please try again later.', 'yikes-custom-login' );
+		return __( 'An unknown error occurred. Please try again later.', 'yikes-inc-custom-login' );
 	}
 
 	/**
@@ -1401,7 +1402,7 @@ class YIKES_Custom_Login {
 		<div class="powered-by-yikes">
 			<?php
 			printf(
-				esc_attr__( '%s Powered by %s.', 'yikes-inc-custom-login' ),
+				esc_attr_x( '%s Powered by %s.', 'First: Unicode for lightning bolt. Second: Anchor tag linking back to yikesplugins.com', 'yikes-inc-custom-login' ),
 				esc_attr( '⚡' ),
 				wp_kses_post( '<a href="https://yikesplugins.com/" target="_blank">YIKES Plugins</a>' )
 			);
@@ -1437,7 +1438,7 @@ class YIKES_Custom_Login {
 	 */
 	public function yikes_custom_login_append_already_a_member_text() {
 		$sign_in_url = esc_url( get_the_permalink( $this->options['login_page'] ) );
-		echo wp_kses_post( '<small class="yikes-already-a-member"><em>' . sprintf( __( 'Already a member? %s', 'yikes-inc-custom-login' ), '<a href="' . $sign_in_url . '">' . __( 'Sign In', 'yikes-inc-custom-login' ) . '</a>' ) . '</em></small>' );
+		echo wp_kses_post( '<small class="yikes-already-a-member"><em>' . sprintf( _x( 'Already a member? %s', 'The Login page URL. <a> tag.', 'yikes-inc-custom-login' ), '<a href="' . $sign_in_url . '">' . __( 'Sign In', 'yikes-inc-custom-login' ) . '</a>' ) . '</em></small>' );
 	}
 
 	/**

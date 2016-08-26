@@ -298,7 +298,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:16px" align="left">
 																	<!-- Welcome Header -->
 																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:30px" align="center">
-																		<?php printf( esc_attr__( 'Welcome to %s', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
+																		<?php printf( esc_html_x( 'Welcome to %s', 'The WordPress Site Name', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
 																	</h1>
 
 																	<!-- site tagline -->

@@ -311,7 +311,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
 																		<em><?php esc_attr_e( "Don't worry, it happens!", 'yikes-inc-custom-login' ); ?></em>
 																	</p>
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:center; font-size:18px; margin-bottom:10px" align="center">
-																		<?php esc_attr_e( "If this was a mistake, or you didn't ask for a password reset, please disregard this email. If you did request a password reset - please click the link below.", 'yikes-custom-login' ); ?>
+																		<?php esc_attr_e( "If this was a mistake, or you didn't ask for a password reset, please disregard this email. If you did request a password reset - please click the link below.", 'yikes-inc-custom-login' ); ?>
 																	</p>
                                   <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:15px 0; width:100%" align="left" valign="top" width="100%">
                                     <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
@@ -334,7 +334,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                   <hr style="border-bottom:1px solid #cacaca; border-left:0; border-right:0; border-top:0; clear:both; height:0; margin:20px auto; max-width:580px" height="0">
                                   <p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
 																		<small style="color:#cacaca; font-size:80%">
-																			<?php printf( esc_attr__( "You're getting this email because you requested to reset your password at %s.", 'yikes-inc-custom-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
+																			<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'yikes-inc-custom-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
 																		</small>
 																	</p>
                                 </th>
