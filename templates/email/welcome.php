@@ -297,66 +297,70 @@ table.button.alert:hover table a {border:0 solid #e23317}
                               <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:16px" align="left">
 																	<!-- Welcome Header -->
-																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:30px" align="center">
-																		<?php printf( esc_html_x( 'Welcome to %s', 'The WordPress Site Name', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
+																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:30px;margin: 1em 0;" align="center">
+																		<?php printf( esc_attr__( 'Welcome to %s', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
 																	</h1>
 
 																	<!-- site tagline -->
 																	<h4 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; margin-bottom:5px; word-wrap:normal; font-size:20px; text-align: center; font-style: italic;" align="center"><?php echo get_bloginfo( 'description' ); ?></h4>
 
 																	<!-- Site Logo, if set -->
-																	<?php if( ! empty( $this->options['branding_logo'] ) ) { ?>
-	                                  <center data-parsed="" style="min-width:532px; width:100%" width="100%">
+																	<?php if( isset( $this->options['branding_logo'] ) && ! empty( $this->options['branding_logo'] ) ) { ?>
+																		<center data-parsed="" style="min-width:532px; width:100%;margin: 1em 0;" width="100%">
 																			<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" align="center" style="-ms-interpolation-mode:bicubic; clear:both; display:block; max-width:100%; outline:none; text-decoration:none; width:auto; float:none; margin:0 auto; margin-bottom: 5px; text-align:center" width="auto">
 																		</center>
 																	<?php } ?>
 																	<!-- End Site Logo -->
 
-																	<!-- Custom User defined Text here -->
-																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:15px" align="left">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque culpa vel architecto, perspiciatis eius cum autem quidem, sunt consequuntur, impedit dolor vitae illum nobis sint nihil aliquid? Assumenda, amet, officia.
-																	</p>
+																	<!-- Welcome Email Content Logo, if set -->
+																	<?php if( isset( $this->options['welcome_email_body_text'] ) ) { ?>
+																		<!-- Custom User defined Text here -->
+																		<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:15px" align="left">
+																			<?php wp_kses_post( $this->options['welcome_email_body_text'] ); ?>
+																		</p>
+																	<?php } ?>
+																	<!-- End Site Logo -->
 
-																	<!-- Reset Pass and Login Link -->
-																	<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:0 0 16px 0; width:100%" align="left" valign="top" width="100%">
-                                    <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
-                                      <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
-                                        <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
-                                          <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
-                                            <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse; width:auto" align="left" valign="top" width="auto">
-																							<center data-parsed="" style="min-width:0; width:100%" width="100%">
-																								<a href="<?php echo esc_url( $new_user_login_url ); ?>" align="center" style="color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:bold; line-height:1.3; margin:0; padding:10px 20px 10px 20px; text-align:center; text-decoration:none; width:calc(100% - 20px); border:0 solid #2199e8; border-radius:3px; display:inline-block; font-size:20px" width="calc(100% - 20px)">
-																									<?php esc_attr_e( 'Set Password and Login', 'yikes-inc-custom-login' ); ?>
-																								</a>
-																							</center>
-                                            </td>
-                                            <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; visibility:hidden; width:auto; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse" align="left" valign="top" width="auto"></td>
-                                          </tr>
-                                        </table>
-                                      </td>
-                                    </tr>
-                                  </table>
-																	<!-- End reset pass and login link -->
+									<!-- Reset Pass and Login Link -->
+									<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:0 0 16px 0; width:100%" align="left" valign="top" width="100%">
+										<tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+										  <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
+											<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
+											  <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+												<td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse; width:auto" align="left" valign="top" width="auto">
+																								<center data-parsed="" style="min-width:0; width:100%" width="100%">
+																									<a href="<?php echo esc_url( $new_user_login_url ); ?>" align="center" style="color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:bold; line-height:1.3; margin:0; padding:10px 20px 10px 20px; text-align:center; text-decoration:none; width:calc(100% - 20px); border:0 solid #2199e8; border-radius:3px; display:inline-block; font-size:20px" width="calc(100% - 20px)">
+																										<?php esc_attr_e( 'Set Password and Login', 'yikes-inc-custom-login' ); ?>
+																									</a>
+																								</center>
+												</td>
+												<td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; visibility:hidden; width:auto; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse" align="left" valign="top" width="auto"></td>
+											  </tr>
+											</table>
+										  </td>
+										</tr>
+									  </table>
+									<!-- End reset pass and login link -->
 
-																	<!-- email footer -->
-																	<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
-                                    <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
-                                      <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
-                                        <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
-                                          <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
-                                            <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">krakenacademy.com</a></th>
-                                            <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">Facebook</a></th>
-                                            <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">Twitter</a></th>
-                                            <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">(408)-555-0123</a></th>
-                                          </tr>
-                                        </table>
-                                      </td>
-                                    </tr>
+									<!-- email footer
+									<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
+										<tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+										  <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; border-collapse:collapse" align="left" valign="top">
+											<table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
+											  <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
+												<th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">krakenacademy.com</a></th>
+												<th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">Facebook</a></th>
+												<th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">Twitter</a></th>
+												<th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0 auto; padding:10px; text-align:center; font-size:16px; float:none; padding-right:10px" align="center"><a href="#" style="color:#2199e8; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:left; text-decoration:none" align="left">(408)-555-0123</a></th>
+											  </tr>
+											</table>
+										  </td>
+										</tr>
                                   </table>
-																	<!-- end footer -->
+								end footer -->
 
                                 </th>
-                                <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:16px; visibility:hidden; width:0" align="left" width="0"></th>
+                                <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:16px; visibility:hidden; width:0;margin-top:1em;" align="left" width="0"></th>
                               </tr>
                             </table>
                           </th>

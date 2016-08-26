@@ -1148,7 +1148,7 @@ class YIKES_Custom_Login {
 
 		if ( $user_id ) {
 			/** This action is documented in wp-login.php */
-			do_action( 'retrieve_password_key', $user_data->user_login, $key );
+			do_action( 'retrieve_password_key', $email, $key );
 
 			// If additional fields are set, loop over them and update the user
 			if ( ! empty( $additional_fields ) ) {

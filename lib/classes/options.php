@@ -262,7 +262,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
-			sprintf( _x( 'Login Page %s', 'Custom template icon - indicating the user has set a custom page template.', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
+			sprintf( __( 'Login Page %s', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -368,6 +368,15 @@ class YIKES_Login_Settings {
 			'yikes_custom_login_branding_section' // Section
 		);
 
+		/* Welcome Email Body Text */
+		add_settings_field(
+			'welcome_email_body_text', // ID
+			__( 'Welcome Email Text', 'yikes-inc-custom-login' ), // Title
+			array( $this, 'welcome_email_body_text_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_branding_section' // Section
+		);
+
 		// Custom action hook to add additional settings sections/fields
 		do_action( 'yikes-custom-login-add-settings' );
 	}
@@ -404,9 +413,11 @@ class YIKES_Login_Settings {
 		// Recaptcha Secret
 		$new_input['recaptcha_secret_key'] = ( isset( $input['recaptcha_secret_key'] ) ) ? sanitize_text_field( $input['recaptcha_secret_key'] ) : false;
 		// Branidng Logo
-		$new_input['branding_logo'] = ( isset( $input['branding_logo'] ) ) ? sanitize_url( $input['branding_logo'] ) : '';
+		$new_input['branding_logo'] = ( isset( $input['branding_logo'] ) ) ? esc_url_raw( $input['branding_logo'] ) : '';
 		// Branding Logo ID (hidden field)
 		$new_input['branding_logo_id'] = ( isset( $input['branding_logo'] ) && '' !== $input['branding_logo'] ) ? (int) $input['branding_logo_id'] : '';
+		// Welcome/New User Registration email body text
+		$new_input['welcome_email_body_text'] = ( isset( $input['welcome_email_body_text'] ) ) ? $input['welcome_email_body_text'] : '';
 		// Return the saved data (filter to allow for additional settings to be saved)
 		return apply_filters( 'yikes-custom-login-sanitize-settings', $new_input, $input );
 	}
@@ -430,7 +441,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr_x( 'Redirect admins to %s on login?', 'Admin URL wrapped in <code> tags.', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr__( 'Redirect admins to %s on login?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
 		);
 	}
 
@@ -446,7 +457,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr_x( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), 'Admin URL wrapped in <code> tags.', '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr__( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
 		);
 		/* Display notice about who will be blocked */
 		printf(
@@ -521,7 +532,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_html__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
+			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
 		);
 	}
 
@@ -537,7 +548,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_html__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
+			esc_attr__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
 		);
 	}
 
@@ -566,7 +577,7 @@ class YIKES_Login_Settings {
 						'<option value="%s" %s>%s</option>',
 						'none',
 						esc_attr( selected( $this->options[ $args['field'] ], 'none' ) ),
-						esc_html__( 'None', 'yikes-inc-custom-login' )
+						esc_attr__( 'None', 'yikes-inc-custom-login' )
 					);
 				}
 				while ( $pages_query->have_posts() ) {
@@ -576,7 +587,7 @@ class YIKES_Login_Settings {
 						'<option value="%s" %s>%s</option>',
 						esc_attr( get_the_ID() ),
 						esc_attr( selected( $this->options[ $args['field'] ], get_the_ID() ) ),
-						esc_html( get_the_title() )
+						esc_attr( get_the_title() )
 					);
 				}
 				?>
@@ -591,13 +602,13 @@ class YIKES_Login_Settings {
 					$customizer_link = ( $active_template ) ? '<a href="' . add_query_arg( array(
 						'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
 					), esc_url_raw( admin_url( 'customize.php' ) ) ) . '">' . __( 'Customize Login', 'yikes-inc-custom-login' ) . '</a>' : '';
-					$option_description = '<p class="description">' . sprintf( _x( 'This is the page that users will be redirected to when logging in. %s', 'Link tot he customizer for this page', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( __( 'This is the page that users will be redirected to when logging in. %s', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
 					break;
 				case 'register_page':
 					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
 					break;
 				case 'account_info_page':
-					$option_description = '<p class="description">' . sprintf( _x( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'The word "None" wrapped in <strong> tags.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( __( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
 					break;
 				case 'password_lost_page':
 					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'yikes-inc-custom-login' ) . '</p>';
@@ -629,7 +640,7 @@ class YIKES_Login_Settings {
 		/* Descriptions */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_html_x( 'Enter your %s in the field above.', 'The field name wrapped in <strong> tags.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
+			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
 		);
 	}
 
@@ -657,6 +668,25 @@ class YIKES_Login_Settings {
 			wp_kses_post( '<img src="' . $this->options['branding_logo'] . '" />' )
 		);
 	}
+
+	/**
+	 * Render the welcome email body text callback
+	 *	@since 1.0.0
+	 */
+	public function welcome_email_body_text_callback() {
+		$default_welcome_email_body = 'Hi There,' . "\r\n\r\n";
+		$default_welcome_email_body .= sprintf( _x( 'Welcome to %s and thanks for signing up for our site! Click the link below to set your password and login to the site.', 'WordPress Site Name', 'yikes-inc-custom-login' ), bloginfo( 'name' ) ) . "\r\n\r\n";
+		$default_welcome_email_body .= __( 'Thanks so much!', 'yikes-inc-custom-login' );
+		$editor_value = ( isset( $this->options['welcome_email_body_text'] ) ) ? $this->options['welcome_email_body_text'] : $default_welcome_email_body;
+		wp_editor(
+			$editor_value,
+			true,
+			array(
+				'textarea_name' => 'yikes_custom_login[welcome_email_body_text]'
+			)
+		);
+	}
+
 	/**
 	 * Enqueue our styles properly on the admin side options page
 	 * @since 1.0.0

@@ -295,24 +295,30 @@ table.button.alert:hover table a {border:0 solid #e23317}
                             <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; width:100%" align="left" valign="top" width="100%">
                               <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:18px" align="left">
+
 																	<!-- Site Logo, if set -->
-																	<?php if( ! empty( $this->options['branding_logo'] ) ) { ?>
+																	<?php if( isset( $this->options['branding_logo'] ) && ! empty( $this->options['branding_logo'] ) ) { ?>
 	                                  <center data-parsed="" style="min-width:532px; width:100%" width="100%">
 																			<img src="<?php echo esc_url( $this->options['branding_logo'] ); ?>" align="center" style="-ms-interpolation-mode:bicubic; clear:both; display:block; max-width:100%; outline:none; text-decoration:none; width:auto; float:none; margin:0 auto; text-align:center; margin-bottom: 1em; margin-top: 1em;" width="auto">
 																		</center>
 																	<?php } ?>
 																	<!-- End Site Logo -->
+
+
 																	<!-- Site title -->
 																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:15px; word-wrap:normal; font-size:30px" align="center">
 																		<?php esc_attr_e( 'Forgot Your Password?', 'yikes-inc-custom-login' ); ?>
 																	</h1>
 																	<!-- End Site title -->
+
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:center; font-size:18px; margin-bottom:10px" align="center">
 																		<em><?php esc_attr_e( "Don't worry, it happens!", 'yikes-inc-custom-login' ); ?></em>
 																	</p>
+
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:center; font-size:18px; margin-bottom:10px" align="center">
 																		<?php esc_attr_e( "If this was a mistake, or you didn't ask for a password reset, please disregard this email. If you did request a password reset - please click the link below.", 'yikes-inc-custom-login' ); ?>
 																	</p>
+
                                   <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:15px 0; width:100%" align="left" valign="top" width="100%">
                                     <tr style="padding:0; text-align:left; vertical-align:top" align="left" valign="top">
                                       <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:18px; border-collapse:collapse" align="left" valign="top">
@@ -331,12 +337,15 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                       </td>
                                     </tr>
                                   </table>
+
                                   <hr style="border-bottom:1px solid #cacaca; border-left:0; border-right:0; border-top:0; clear:both; height:0; margin:20px auto; max-width:580px" height="0">
-                                  <p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
+
+																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
 																		<small style="color:#cacaca; font-size:80%">
 																			<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'yikes-inc-custom-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
 																		</small>
 																	</p>
+
                                 </th>
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:18px; visibility:hidden; width:0" align="left" width="0"></th>
                               </tr>
