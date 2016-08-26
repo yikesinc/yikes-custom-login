@@ -512,13 +512,15 @@ class YIKES_Custom_Login {
 		$request_page_id = url_to_postid( site_url() . $_SERVER['REQUEST_URI'] );
 		// If the current request is equal to the login page, and the user is loged in
 		if ( $request_page_id === (int) $this->options['login_page'] ) {
-			if ( is_user_logged_in() && ! current_user_can( 'manage_options' ) ) {
-				$account_info_page = get_yikes_account_info_page();
-				wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page, $request_page_id ) );
+			if ( is_user_logged_in() ) {
+				if ( ! current_user_can( 'manage_options' ) ) {
+					$account_info_page = get_yikes_account_info_page();
+					wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page, $request_page_id ) );
+					exit;
+				}
+				wp_redirect( admin_url() );
 				exit;
 			}
-			wp_redirect( admin_url() );
-			exit;
 		}
 		return;
 	}
