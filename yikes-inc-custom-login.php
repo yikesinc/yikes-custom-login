@@ -517,6 +517,8 @@ class YIKES_Custom_Login {
 				wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page, $request_page_id ) );
 				exit;
 			}
+			wp_redirect( admin_url() );
+			exit;
 		}
 		return;
 	}
@@ -600,12 +602,6 @@ class YIKES_Custom_Login {
 		// Parse shortcode attributes
 		$default_attributes = array( 'show_title' => false );
 		$attributes = shortcode_atts( $default_attributes, $attributes );
-
-		// if the customizer is not active and the user is already logged in
-		if ( ! is_customize_preview() && is_user_logged_in() ) {
-			wp_redirect( get_yikes_account_info_page() );
-			exit;
-		}
 
 		// Pass the redirect parameter to the WordPress login functionality: by default,
 		// don't specify a redirect, but if a valid redirect URL has been passed as

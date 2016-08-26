@@ -18,7 +18,7 @@ if ( ! function_exists( 'get_yikes_account_info_page' ) ) {
 		 * if the account info page is set to the same as the member login page,
 		 * redirect to homepage to prevent redirect loop
 		 */
-		return ( 0 === $options['account_info_page'] || ( $options['account_info_page'] === $options['member_login_page']  ) ) ? site_url() : esc_url( get_the_permalink( $options['account_info_page'] ) );
+		return ( 0 === $options['account_info_page'] || ( $options['account_info_page'] === $options['login_page']  ) ) ? site_url() : esc_url( get_the_permalink( $options['account_info_page'] ) );
 	}
 }
 
