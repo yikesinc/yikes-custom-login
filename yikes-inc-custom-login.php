@@ -310,31 +310,35 @@ class YIKES_Custom_Login {
 						'page_title' => get_the_title( $page_id ),
 					);
 				}
-				// Update our option so we can use it on the options page & in our redirections
-				switch ( $slug ) {
-					case 'member-login':
-						$plugin_options['login_page'] = $page_id;
-						break;
-					case 'member-account':
-						$plugin_options['account_info_page'] = $page_id;
-						break;
-					case 'member-register':
-						$plugin_options['register_page'] = $page_id;
-						break;
-					case 'member-password-lost':
-						$plugin_options['password_lost_page'] = $page_id;
-						break;
-					case 'member-password-reset':
-						$plugin_options['pick_new_password_page'] = $page_id;
-						break;
-					default:
-						break;
-				}
-				// Update our options with the new page ID values
-				update_option( 'yikes_custom_login', $plugin_options );
-				// Update the post meta to utilize full width page templates out of the box
-				update_post_meta( $page_id, '_full_width_page_template', 1 );
+			} else {
+				// Page IDs existed, update the ID values
+				$page_obj = get_page_by_path( $slug, OBJECT, 'page' );
+				$page_id = ( $page_obj && isset( $page_obj->ID ) ) ? $page_obj->ID : 1;
 			}
+			// Update our option so we can use it on the options page & in our redirections
+			switch ( $slug ) {
+				case 'member-login':
+					$plugin_options['login_page'] = $page_id;
+					break;
+				case 'member-account':
+					$plugin_options['account_info_page'] = $page_id;
+					break;
+				case 'member-register':
+					$plugin_options['register_page'] = $page_id;
+					break;
+				case 'member-password-lost':
+					$plugin_options['password_lost_page'] = $page_id;
+					break;
+				case 'member-password-reset':
+					$plugin_options['pick_new_password_page'] = $page_id;
+					break;
+				default:
+					break;
+			}
+			// Update our options with the new page ID values
+			update_option( 'yikes_custom_login', $plugin_options );
+			// Update the post meta to utilize full width page templates out of the box
+			update_post_meta( $page_id, '_full_width_page_template', 1 );
 		}
 		// Update our options
 		if ( 0 < $page_created_count ) {
@@ -1468,11 +1472,8 @@ class YIKES_Custom_Login {
 	}
 }
 
-//
 // PLUGIN SETUP
-//
-//
-// Initialize the plugin
+// Initialize the plugin and options
 $yikes_custom_login = new YIKES_Custom_Login();
 
 // Create the custom pages at plugin activation
