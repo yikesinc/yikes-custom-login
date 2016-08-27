@@ -1,7 +1,13 @@
 <?php
 /**
  * Custom Login Form Template
+ * @since 1.0.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <div class="login-form-container section group">
 

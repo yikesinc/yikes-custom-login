@@ -3,6 +3,11 @@
  * Welcome/New User Registration Email Template
  * @since 1.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" style="background:#f3f3f3; min-height:100%">

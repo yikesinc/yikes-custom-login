@@ -1,3 +1,15 @@
+<?php
+/**
+ * Lost Password Form Template
+ * @since 1.0.0
+ */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+
 <div id="password-lost-form" class="widecolumn">
 	<?php
 		/** Custom Action Hook - Before Password Lost Form */

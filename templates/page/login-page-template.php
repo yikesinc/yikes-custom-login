@@ -3,6 +3,12 @@
  * Custom Login Page - Full Width Page Template
  * @since 1.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 wp_head();
 ?>
 

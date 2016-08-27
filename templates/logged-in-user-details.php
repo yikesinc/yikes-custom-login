@@ -4,6 +4,12 @@
  * Mainly used outside of the 'login' page set in the options
  * @since 1.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $current_user = wp_get_current_user();
 ?>
 <div id="yikes-logged-in-user-details">

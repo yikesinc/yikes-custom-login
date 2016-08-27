@@ -1,3 +1,15 @@
+<?php
+/**
+ * Password Reset Form Template
+ * @since 1.0.0
+ */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+
 <div id="password-reset-form" class="widecolumn">
 
 	<?php

@@ -4,6 +4,12 @@
  * The form displays in a popup, and will not update until there is a strong password entered.
  * @since 1.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // Store user details, for use in the form.
 $user_details = wp_get_current_user();
 ?>

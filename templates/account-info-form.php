@@ -3,6 +3,12 @@
  *  Setup our current user global
  *  @since 1.0
  */
+
+// If accessed directly, abort
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $current_user = wp_get_current_user();
 // Include the form fields class
 include_once( YIKES_CUSTOM_LOGIN_PATH . 'lib/classes/form-fields.php' );
