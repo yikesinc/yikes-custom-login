@@ -145,7 +145,7 @@ function yikes_custom_login_customizer_register( $wp_customize ) {
   $wp_customize->add_control( 'login_container_border_style', array(
 		'default' => 'solid',
 		'settings' => 'login_container_border_style',
-		'label'   => __( 'Background Style:', 'yikes-inc-custom-login' ),
+		'label'   => __( 'Login Container Border Style:', 'yikes-inc-custom-login' ),
 		'section' => 'login_container',
 		'type'    => 'select',
 		'choices'    => array(

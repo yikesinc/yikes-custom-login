@@ -161,13 +161,13 @@ class YIKES_Login_Settings {
 									<h2><?php esc_attr_e( 'Support & Documentation', 'yikes-inc-custom-login' ); ?></h2>
 									<p class="support-and-docs-text description">
 										<?php esc_attr_e(
-											'YIKES Inc. proudly supports and stands behind all of our products. If you run into any issues, please reach out to our support staff and we can help get any issues sorted - or answer any questions you may have.',
+											'If you have any questions or issues, please reach out to our support staff and will be happy to help you.',
 											'yikes-inc-custom-login'
 										); ?>
 									</p>
-									<a href="#" class="button button-secondary doc-link wp-bg"><?php esc_attr_e( 'WordPress.org', 'yikes-inc-custom-login' ); ?></a>
-									<a href="#" class="button button-secondary doc-link github-bg"><?php esc_attr_e( 'Github.com', 'yikes-inc-custom-login' ); ?></a>
-									<a href="#" class="button button-secondary doc-link docs-bg"><?php esc_attr_e( 'Documentation', 'yikes-inc-custom-login' ); ?></a>
+									<!--a href="#" class="button button-secondary doc-link wp-bg"><?php esc_attr_e( 'WordPress.org', 'yikes-inc-custom-login' ); ?></a -->
+									<a href="https://github.com/yikesinc/yikes-inc-custom-login/issues" class="button button-secondary doc-link github-bg"><?php esc_attr_e( 'Github.com', 'yikes-inc-custom-login' ); ?></a>
+									<!--a href="#" class="button button-secondary doc-link docs-bg"><?php esc_attr_e( 'Documentation', 'yikes-inc-custom-login' ); ?></a -->
 								</div>
 								<!-- .inside -->
 							</div>
@@ -625,7 +625,7 @@ class YIKES_Login_Settings {
 	}
 
 	/**
-	 * Render our recaptcah site and secret key fields
+	 * Render our recaptcha site and secret key fields
 	 */
 	public function recaptcha_field_callback( $args ) {
 		$recaptcha_key = $this->options[ $args['field'] ];
@@ -674,9 +674,9 @@ class YIKES_Login_Settings {
 	 *	@since 1.0.0
 	 */
 	public function welcome_email_body_text_callback() {
-		$default_welcome_email_body = 'Hi There,' . "\r\n\r\n";
-		$default_welcome_email_body .= sprintf( _x( 'Welcome to %s and thanks for signing up for our site! Click the link below to set your password and login to the site.', 'WordPress Site Name', 'yikes-inc-custom-login' ), bloginfo( 'name' ) ) . "\r\n\r\n";
-		$default_welcome_email_body .= __( 'Thanks so much!', 'yikes-inc-custom-login' );
+		$default_welcome_email_body = 'Greetings,' . "\r\n\r\n";
+		$default_welcome_email_body .= sprintf( _x( 'Thank you for signing up for our site! Please click the link below to set your password and login to the site.', 'WordPress Site Name', 'yikes-inc-custom-login' ), bloginfo( 'name' ) ) . "\r\n\r\n";
+		$default_welcome_email_body .= __( 'Thanks you so much!', 'yikes-inc-custom-login' );
 		$editor_value = ( isset( $this->options['welcome_email_body_text'] ) ) ? $this->options['welcome_email_body_text'] : $default_welcome_email_body;
 		wp_editor(
 			$editor_value,
