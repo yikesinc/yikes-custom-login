@@ -5,7 +5,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yikesinc/yikes-inc-custom-login/?branch=master)
 -->
 
-## YIKES Inc. Custom Login
+## Custom WP Login
 
 A WordPress plugin that replaces the login flow with custom pages.
 
@@ -19,7 +19,7 @@ A WordPress plugin that replaces the login flow with custom pages.
 
 ### Custom Templates:
 
-Users can override the default templates by copying `wp-content/plugins/yikes-custom-login/templates/` into the theme root, and renaming the directory `/yikes-custom-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
+Users can override the default templates by copying `wp-content/plugins/custom-wp-login/templates/` into the theme root, and renaming the directory `/custom-wp-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
 
 ### Additional Profile Fields
 
@@ -63,7 +63,7 @@ Define and display custom fields on the profile field page.
 
 For usage, see above section "Additional Profile Fields".
 
-* `yikes-custom-login-login-redirect-url`
+* `custom-wp-login-login-redirect-url`
 
 Page to redirect non-admin users to when they successfully login. **Note:** This URL must be a URL of a page on this site. `wp_validate_redirect` is used, to confirm a valid URL before redirecting the user.
 
@@ -85,10 +85,10 @@ function yikes_custom_login_redirect_users( $redirect_page, $login_page_id ) {
 	}
 	return $redirect_page;
 }
-add_filter( 'yikes-custom-login-login-redirect-url', 'yikes_custom_login_redirect_users', 10, 2 );
+add_filter( 'custom-wp-login-login-redirect-url', 'yikes_custom_login_redirect_users', 10, 2 );
 ```
 
-* `yikes-custom-login-logout-redirect-url`
+* `custom-wp-login-logout-redirect-url`
 
 Page to redirect users to when they successfully logout.
 
@@ -100,10 +100,10 @@ function yikes_custom_login_redirect_after_logout() {
 	// Redirect users to the homepage after successful logout
 	return esc_url( site_url() );
 }
-add_filter( 'yikes-custom-login-logout-redirect-url', 'yikes_custom_login_redirect_after_logout' );
+add_filter( 'custom-wp-login-logout-redirect-url', 'yikes_custom_login_redirect_after_logout' );
 ```
 
-* `yikes-custom-login-recaptcha-language`
+* `custom-wp-login-recaptcha-language`
 
 Alter the recaptcha language. Defaults to 'en'.
 
@@ -116,10 +116,10 @@ Alter the recaptcha language. Defaults to 'en'.
 function yikes_custom_login_french_recaptcha_language() {
 	return 'fr';
 }
-add_filter( 'yikes-custom-login-recaptcha-language', 'yikes_custom_login_french_recaptcha_language' );
+add_filter( 'custom-wp-login-recaptcha-language', 'yikes_custom_login_french_recaptcha_language' );
 ```
 
-* `yikes-custom-login-recaptcha-script-url`
+* `custom-wp-login-recaptcha-script-url`
 
 Alter the URL where the recaptcha script gets loaded from. This can be used to add additional query strings to the URL, or to alter the language tha recaptcha will display in.
 
@@ -132,10 +132,10 @@ Alter the URL where the recaptcha script gets loaded from. This can be used to a
 function yikes_custom_login_custom_recaptcha_script_url() {
 	return 'https://www.google.com/recaptcha/api.js?hl=de';
 }
-add_filter( 'yikes-custom-login-recaptcha-script-url', 'yikes_custom_login_custom_recaptcha_script_url' );
+add_filter( 'custom-wp-login-recaptcha-script-url', 'yikes_custom_login_custom_recaptcha_script_url' );
 ```
 
-* `yikes-custom-login-restrict-dashboard-capability`
+* `custom-wp-login-restrict-dashboard-capability`
 
 Filter who can access the dashboard when 'Restrict Dashboard Access' is enabled. The dashboard is limited by user capability, and defaults to 'manage_options'. This means that anyone who does **not** have the 'manage_options' capability will not be able to access the dashboard (ie: all users who are not admins).
 
@@ -153,10 +153,10 @@ function yikes_custom_login_custom_restrictions( $user_cap ) {
 	 */
 	return 'publish_posts';
 }
-add_filter( 'yikes-custom-login-restrict-dashboard-capability', 'yikes_custom_login_custom_restrictions' );
+add_filter( 'custom-wp-login-restrict-dashboard-capability', 'yikes_custom_login_custom_restrictions' );
 ```
 
-* `yikes-custom-login-profile-fields`
+* `custom-wp-login-profile-fields`
 
 Filter the profile fields however you need. Alter the form field labels, field type and the data associated with the field. This can also be used to rearrange the profile form fields how you need.
 
@@ -178,10 +178,10 @@ function yikes_rearrange_profile_fields( $fields, $user_id ) {
 	/* Return the fields */
 	return $fields;
 }
-add_filter( 'yikes-custom-login-profile-fields', 'yikes_rearrange_profile_fields' );
+add_filter( 'custom-wp-login-profile-fields', 'yikes_rearrange_profile_fields' );
 ```
 
-* `yikes-custom-login-twitter-label`
+* `custom-wp-login-twitter-label`
 
 Filter a profile field label. Helpful when you have added custom form fields to your profile page, and want to alter the field label.
 
@@ -196,10 +196,10 @@ function filter_profile_field_labels( $label ) {
 		return 'Twitter Handle';
 	}
 }
-add_filter( 'yikes-custom-login-twitter-label', 'filter_profile_field_labels' );
+add_filter( 'custom-wp-login-twitter-label', 'filter_profile_field_labels' );
 ```
 
-* `yikes-custom-login-preloader`
+* `custom-wp-login-preloader`
 
 Use a custom preloader image for all full width page templates (Login, Password Lost/Reset, New User Registration).
 
@@ -213,7 +213,7 @@ function custom_login_preloader_image( $preloader_url ) {
 	// Return a new URL to use as the preloader
 	return esc_url( 'https://media.giphy.com/media/4Lg39ddcSzBIY/giphy.gif' );
 }
-add_filter( 'yikes-custom-login-preloader', 'custom_login_preloader_image' );
+add_filter( 'custom-wp-login-preloader', 'custom_login_preloader_image' );
 ```
 
 * `yikes-login-pages-query-post-type`
@@ -248,7 +248,7 @@ function enable_admin_toolbar_for_editors( $capability ) {
 add_filter( 'yikes-login-admin-toolbar-cap', 'enable_admin_toolbar_for_editors' );
 ```
 
-* `yikes-custom-login-sign-in-button-text`
+* `custom-wp-login-sign-in-button-text`
 
 Alter the text displayed on the 'Sign in' button, generated by this plugin.
 
@@ -261,10 +261,10 @@ function alter_sign_in_button_text( $button_text ) {
 	$button_text = 'Log In';
 	return $button_text;
 }
-add_filter( 'yikes-custom-login-sign-in-button-text', 'alter_sign_in_button_text' );
+add_filter( 'custom-wp-login-sign-in-button-text', 'alter_sign_in_button_text' );
 ```
 
-* `yikes-custom-login-sign-in-button-icon`
+* `custom-wp-login-sign-in-button-icon`
 
 Alter the icon associated with the sign in button. You can also remove the icon altogether, by returning an empty value.
 
@@ -277,10 +277,10 @@ function alter_sign_in_button_icon( $button_icon ) {
 	$button_icon = '<i class="fa fa-key" aria-hidden="true"></i>';
 	return $button_icon;
 }
-add_filter( 'yikes-custom-login-sign-in-button-icon', 'alter_sign_in_button_icon' );
+add_filter( 'custom-wp-login-sign-in-button-icon', 'alter_sign_in_button_icon' );
 ```
 
-* `yikes-custom-login-register-button-text`
+* `custom-wp-login-register-button-text`
 
 Alter the text displayed on the 'Sign in' button, generated by this plugin.
 
@@ -293,10 +293,10 @@ function alter_register_button_text( $button_text ) {
 	$button_text = 'Sign Up!';
 	return $button_text;
 }
-add_filter( 'yikes-custom-login-register-button-text', 'alter_register_button_text' );
+add_filter( 'custom-wp-login-register-button-text', 'alter_register_button_text' );
 ```
 
-* `yikes-custom-login-register-button-icon`
+* `custom-wp-login-register-button-icon`
 
 Alter the icon associated with the register button. You can also remove the icon altogether, by returning an empty value.
 
@@ -309,7 +309,7 @@ function alter_register_button_icon( $button_icon ) {
 	$button_icon = '<i class="fa fa-pencil" aria-hidden="true"></i>';
 	return $button_icon;
 }
-add_filter( 'yikes-custom-login-register-button-icon', 'alter_register_button_icon' );
+add_filter( 'custom-wp-login-register-button-icon', 'alter_register_button_icon' );
 ```
 
 ### Actions
@@ -340,7 +340,7 @@ add_filter( 'yikes-custom-login-register-button-icon', 'alter_register_button_ic
 
 * Can I move the logo from above the container, to inside the container - above the form?
 
-Yes! First you'll want to remove the action from the location it currently hooks into (`yikes-custom-login-branding`). After we unhook it from the default location, we'll just re-hook it into the new location where we want it to appear (`yikes-custom-login-login-page-before-form`).
+Yes! First you'll want to remove the action from the location it currently hooks into (`custom-wp-login-branding`). After we unhook it from the default location, we'll just re-hook it into the new location where we want it to appear (`custom-wp-login-login-page-before-form`).
 
 The function that generates the logo above the login, password reset, set new password and registration forms is `yikes_custom_login_generate_branding_logo()`.
 
@@ -352,9 +352,9 @@ The function that generates the logo above the login, password reset, set new pa
  */
 global $yikes_custom_login;
 // remove the action
-remove_action( 'yikes-custom-login-branding', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
+remove_action( 'custom-wp-login-branding', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
 // re-hook the function into a new location
-add_action( 'yikes-custom-login-login-page-before-form', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
+add_action( 'custom-wp-login-login-page-before-form', array( $yikes_custom_login, 'yikes_custom_login_generate_branding_logo' ) );
 ```
 
 * How do I add placeholder values to the email and/or passowrd fields on the login form?

@@ -1,4 +1,4 @@
-=== Custom WP Login by YIKES, Inc ===
+=== Custom WP Login ===
 Contributors: yikesinc, eherman24, liljimmi
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
@@ -10,7 +10,7 @@ Quickly generate custom, front-end login, register, password reset and account p
 
 == Description ==
 
-Custom WP Logi replaces the WordPress login flow with custom pages. It allows you have a complete user registration and login experience on the public-facing pages of your WordPress site. This is useful for sites who want to use WordPress' built-in users functionality, but only want to keep users on the front-end of the site and not in the WordPress dashboard.
+Custom WP Login replaces the WordPress login flow with custom pages. It allows you have a complete user registration and login experience on the public-facing pages of your WordPress site. This is useful for sites who want to use WordPress' built-in users functionality, but only want to keep users on the front-end of the site and not in the WordPress dashboard.
 
 **Features**
 
@@ -37,5 +37,5 @@ Shortcodes:
 
 == Changelog ==
 
-= Custom WP Login by YIKES, Inc 1.0.0 =
+= Custom WP Login 1.0.0 =
 * Initial Release
