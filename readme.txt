@@ -6,7 +6,7 @@ Tested up to: 4.4.2
 Stable tag: 1.0
 License: GPLv2 or later
 
-Quickly generate custom, front-end login, register, password reset and account profile forms for a WordPress site. 
+Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site. 
 
 == Description ==
 
