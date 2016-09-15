@@ -4,7 +4,7 @@
  * Plugin URI:        https://yikesplugins.com/
  * Description:       A plugin that replaces the WordPress login flow with custom pages.
  * Version:           1.0.0
- * Author:            YIKES, Evan Herman, Tracy Levesque
+ * Author:            YIKES, Evan Herman, Tracy Levesque, Kevin Utz
  * Author URI:        http://www.yikesinc.com
  * License:           GPL-2.0+
  * Text Domain:       yikes-custom-login
