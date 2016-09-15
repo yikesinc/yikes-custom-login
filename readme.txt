@@ -37,12 +37,12 @@ Shortcodes:
 
 == Screenshots ==
 
-1. Customize your login screen using WordPress's Customizer
-2. Customize your login screen using WordPress's Customizer
-3. Add a logo
-4. Add a background image
-5. Add both!
-6. Activating the plugin will automatically create 5 new WordPress pages!
+1. Customize your login screen using the WordPress Customizer
+2. Customizer: Change login form background color
+3. Customizer: Add an image above the form
+4. Customizer: Add a background image
+5. Customizer: Form with background image and form image
+6. Activating the plugin will automatically create 5 new WordPress pages
 7. The settings page
 8. Change which WordPress pages correspond to the default Login / Account / Registration / Reset Password / Select New Password screens
 9. You can create and choose your own page to act as the login screen 
