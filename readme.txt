@@ -37,8 +37,15 @@ Shortcodes:
 
 == Screenshots ==
 
-1. This is the description that goes beneath screenshot-1.png
-2. This is the description that goes beneath screenshot-2.png
+1. Customize your login screen using WordPress's Customizer
+2. Customize your login screen using WordPress's Customizer
+3. Add a logo
+4. Add a background image
+5. Add both!
+6. Activating the plugin will automatically create 5 new WordPress pages!
+7. The settings page
+8. Change which WordPress pages correspond to the default Login / Account / Registration / Reset Password / Select New Password screens
+9. You can create and choose your own page to act as the login screen 
 
 == Changelog ==
 
