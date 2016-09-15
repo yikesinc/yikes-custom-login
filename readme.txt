@@ -1,5 +1,5 @@
 === Custom WP Login ===
-Contributors: yikesinc, eherman24, liljimmi
+Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
 Tested up to: 4.4.2
@@ -10,7 +10,7 @@ Quickly generate custom front-end login, register, password reset and account pr
 
 == Description ==
 
-Custom WP Login replaces the WordPress login flow with custom pages. It allows you have a complete user registration and login experience on the public-facing pages of your WordPress site. This is useful for sites who want to use WordPress' built-in users functionality, but only want to keep users on the front-end of the site and not in the WordPress dashboard.
+Custom WP Login replaces the WordPress login flow with custom pages. It allows you to have a complete user registration and login experience on the public-facing pages of your WordPress site. This is useful for sites who want to use WordPress' built-in users functionality, but only want to keep users on the front-end of the site and not in the WordPress dashboard.
 
 **Features**
 
@@ -34,6 +34,11 @@ Shortcodes:
 3. On the following screen, click the "Upload Plugin" button.
 4. Browse your computer to where you downloaded the plugin .zip file, select it and click the "Install Now" button.
 5. After the plugin has successfully installed, click "Activate Plugin" and enjoy!
+
+== Screenshots ==
+
+1. This is the description that goes beneath screenshot-1.png
+2. This is the description that goes beneath screenshot-2.png
 
 == Changelog ==
 
