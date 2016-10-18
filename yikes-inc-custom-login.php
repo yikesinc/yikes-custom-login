@@ -7,7 +7,8 @@
  * Author:            YIKES, Evan Herman, Tracy Levesque, Kevin Utz
  * Author URI:        http://www.yikesinc.com
  * License:           GPL-2.0+
- * Text Domain:       yikes-custom-login
+ * Text Domain:       yikes-inc-custom-login
+ * Domain Path:		  /languages
  */
 
 class YIKES_Custom_Login {
