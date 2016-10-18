@@ -51,3 +51,6 @@ Shortcodes:
 
 = Custom WP Login 1.0.0 =
 * Initial Release
+
+= Custom WP Login 1.1.0 =
+* Enabled i18n/l10n
