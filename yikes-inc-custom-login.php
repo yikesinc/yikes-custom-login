@@ -3,7 +3,7 @@
  * Plugin Name:       YIKES Custom Login
  * Plugin URI:        https://yikesplugins.com/
  * Description:       A plugin that replaces the WordPress login flow with custom pages.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            YIKES, Evan Herman, Tracy Levesque, Kevin Utz
  * Author URI:        http://www.yikesinc.com
  * License:           GPL-2.0+
@@ -47,6 +47,12 @@ class YIKES_Custom_Login {
 
 		// Include our customizer class
 		include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/customizer.php' );
+
+		// Include our i18n class
+		include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/i18n.php' );
+
+		// Set localization
+		$this->set_locale();
 
 		// Restrict admin dashboard access to only admins ('manage_options' capability)
 		add_action( 'admin_init', array( $this, 'yikes_restrict_admin_dashboard' ) );
@@ -129,6 +135,17 @@ class YIKES_Custom_Login {
 
 		/* Custom 'Customize' row action link on the login page */
 		add_filter( 'page_row_actions', array( $this, 'yikes_login_page_action_links' ), 10, 2 );
+	}
+
+	/**
+	 * Define the locale for this plugin for internationalization.
+	 * @since    1.2
+	 */
+	private function set_locale() {
+
+		$plugin_i18n = new YIKES_Custom_Login_i18n();
+
+		add_action( 'plugins_loaded', array( $plugin_i18n, 'load_plugin_textdomain' ) );
 	}
 
 	/**
