@@ -19,7 +19,7 @@ class YIKES_Custom_Login_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'yikes-inc-custom-login',
+			'custom-wp-login',
 			false,
 			YIKES_CUSTOM_LOGIN_PATH . 'languages/'
 		);

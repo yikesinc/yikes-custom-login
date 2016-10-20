@@ -303,7 +303,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:16px" align="left">
 																	<!-- Welcome Header -->
 																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:10px; word-wrap:normal; font-size:30px;margin: 1em 0;" align="center">
-																		<?php printf( esc_attr__( 'Welcome to %s', 'yikes-inc-custom-login' ), get_bloginfo( 'name' ) ); ?>
+																		<?php printf( esc_attr__( 'Welcome to %s', 'custom-wp-login' ), get_bloginfo( 'name' ) ); ?>
 																	</h1>
 
 																	<!-- site tagline -->
@@ -335,7 +335,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
 												<td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:16px; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse; width:auto" align="left" valign="top" width="auto">
 																								<center data-parsed="" style="min-width:0; width:100%" width="100%">
 																									<a href="<?php echo esc_url( $new_user_login_url ); ?>" align="center" style="color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:bold; line-height:1.3; margin:0; padding:10px 20px 10px 20px; text-align:center; text-decoration:none; width:calc(100% - 20px); border:0 solid #2199e8; border-radius:3px; display:inline-block; font-size:20px" width="calc(100% - 20px)">
-																										<?php esc_attr_e( 'Set Password and Login', 'yikes-inc-custom-login' ); ?>
+																										<?php esc_attr_e( 'Set Password and Login', 'custom-wp-login' ); ?>
 																									</a>
 																								</center>
 												</td>

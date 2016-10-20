@@ -34,32 +34,32 @@ class YIKES_Form_Fields {
 		$default_profile_fields = array(
 			array(
 				'id' => 'nickname',
-				'label' => __( 'Nickname', 'yikes-inc-custom-login' ),
+				'label' => __( 'Nickname', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'first_name',
-				'label' => __( 'First Name', 'yikes-inc-custom-login' ),
+				'label' => __( 'First Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'last_name',
-				'label' => __( 'Last Name', 'yikes-inc-custom-login' ),
+				'label' => __( 'Last Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'user_email',
-				'label' => __( 'Email Address', 'yikes-inc-custom-login' ),
+				'label' => __( 'Email Address', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'user_url',
-				'label' => __( 'Website', 'yikes-inc-custom-login' ),
+				'label' => __( 'Website', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'description',
-				'label' => __( 'Biography', 'yikes-inc-custom-login' ),
+				'label' => __( 'Biography', 'custom-wp-login' ),
 				'type' => 'textarea',
 			),
 		);
@@ -76,7 +76,7 @@ class YIKES_Form_Fields {
 		$default_registration_fields = array(
 			array(
 				'id' => 'email',
-				'label' => __( 'Email', 'yikes-inc-custom-login' ),
+				'label' => __( 'Email', 'custom-wp-login' ),
 				'type' => 'email',
 				'atts' => array(
 					'required' => 'required',
@@ -84,12 +84,12 @@ class YIKES_Form_Fields {
 			),
 			array(
 				'id' => 'first_name',
-				'label' => __( 'First Name', 'yikes-inc-custom-login' ),
+				'label' => __( 'First Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 			array(
 				'id' => 'last_name',
-				'label' => __( 'Last Name', 'yikes-inc-custom-login' ),
+				'label' => __( 'Last Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
 		);

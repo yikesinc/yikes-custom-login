@@ -25,7 +25,7 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 
 			printf(
 				'<p class="warning">%s</p>',
-				esc_attr__( 'You must be logged in to edit your profile.', 'yikes-inc-custom-login' )
+				esc_attr__( 'You must be logged in to edit your profile.', 'custom-wp-login' )
 			);
 
 			// Generate the register/login buttons
@@ -81,9 +81,9 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 					<br />
 					<!-- Submit button and nonces -->
 					<p class="form-submit span_2_of_2">
-						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'yikes-inc-custom-login' ); ?>" />
+						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'custom-wp-login' ); ?>" />
 						<a href="#new-password" class="button reset-pass">
-							<input type="submit" value="<?php esc_attr_e( 'New Password', 'yikes-inc-custom-login' ); ?>" onclick="window.location.hash = '#new-password';return false;" />
+							<input type="submit" value="<?php esc_attr_e( 'New Password', 'custom-wp-login' ); ?>" onclick="window.location.hash = '#new-password';return false;" />
 						</a>
 						<?php wp_nonce_field( 'update-user' ) ?>
 						<input name="action" type="hidden" id="action" value="update-user" />

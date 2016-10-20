@@ -12,10 +12,10 @@ class YIKES_Custom_Login_Widget extends WP_Widget {
 			'wpb_widget',
 
 			// Widget name will appear in UI
-			__( 'YIKES Custom Login Widget', 'yikes-inc-custom-login' ),
+			__( 'YIKES Custom Login Widget', 'custom-wp-login' ),
 
 			// Widget description
-			array( 'description' => __( 'Display a login form or account details if the user is logged in.', 'yikes-inc-custom-login' ), )
+			array( 'description' => __( 'Display a login form or account details if the user is logged in.', 'custom-wp-login' ), )
 		);
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
 	}
@@ -42,9 +42,9 @@ class YIKES_Custom_Login_Widget extends WP_Widget {
 	// Widget Backend
 	public function form( $instance ) {
 		// not logged in user widget title
-		$non_logged_in_title = ( isset( $instance[ 'non_logged_in_title' ] ) ) ? $instance[ 'non_logged_in_title' ] : __( 'Login', 'yikes-inc-custom-login' );
+		$non_logged_in_title = ( isset( $instance[ 'non_logged_in_title' ] ) ) ? $instance[ 'non_logged_in_title' ] : __( 'Login', 'custom-wp-login' );
 		// logged in user widget title
-		$logged_in_title = ( isset( $instance[ 'logged_in_title' ] ) ) ? $instance[ 'logged_in_title' ] : __( 'Account Details', 'yikes-inc-custom-login' );
+		$logged_in_title = ( isset( $instance[ 'logged_in_title' ] ) ) ? $instance[ 'logged_in_title' ] : __( 'Account Details', 'custom-wp-login' );
 		// Widget admin form
 		?>
 		<p>

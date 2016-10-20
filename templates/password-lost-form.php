@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
-		<h3><?php esc_attr_e( 'Reset Your Password', 'yikes-inc-custom-login' ); ?></h3>
+		<h3><?php esc_attr_e( 'Reset Your Password', 'custom-wp-login' ); ?></h3>
 	<?php endif; ?>
 
 	<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
@@ -32,19 +32,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 			esc_attr_e(
 				'Enter your email address and click Reset Password to send yourself a link to choose a new password.',
-				'yikes-inc-custom-login'
+				'custom-wp-login'
 			);
 		?>
 	</p>
 
 	<form id="yikes-lost-password-form" action="<?php echo esc_url( wp_lostpassword_url() ); ?>" method="post">
 		<p class="form-row">
-			<label for="user_login"><?php esc_attr_e( 'Email', 'yikes-inc-custom-login' ); ?>
+			<label for="user_login"><?php esc_attr_e( 'Email', 'custom-wp-login' ); ?>
 			<input type="text" name="user_login" id="user_login">
 		</p>
 
 		<p class="lostpassword-submit">
-			<input type="submit" name="lostpassword-submit" class="lostpassword-button" value="<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>"/>
+			<input type="submit" name="lostpassword-submit" class="lostpassword-button" value="<?php esc_attr_e( 'Reset Password', 'custom-wp-login' ); ?>"/>
 		</p>
 	</form>
 

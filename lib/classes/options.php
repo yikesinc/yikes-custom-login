@@ -25,8 +25,8 @@ class YIKES_Login_Settings {
 	public function add_plugin_page() {
 		// This page will be under "Settings"
 		add_options_page(
-			__( 'Custom Login Settings', 'yikes-inc-custom-login' ),
-			__( 'Custom Login', 'yikes-inc-custom-login' ),
+			__( 'Custom Login Settings', 'custom-wp-login' ),
+			__( 'Custom Login', 'custom-wp-login' ),
 			'manage_options',
 			'yikes-custom-login',
 			array( $this, 'create_admin_page' )
@@ -41,10 +41,10 @@ class YIKES_Login_Settings {
 	public function yikes_admin_tabs( $current = 'general' ) {
 		// Filter the tabs to allow for add-ons
 		$tabs = apply_filters( 'yikes-custom-login-settings-tabs', array(
-			'general' => __( 'General', 'yikes-inc-custom-login' ),
-			'pages' => __( 'Pages', 'yikes-inc-custom-login' ),
+			'general' => __( 'General', 'custom-wp-login' ),
+			'pages' => __( 'Pages', 'custom-wp-login' ),
 			'recaptcha' => '<img class="recaptcha-icon" src="' . esc_url( plugin_dir_url( __FILE__ ) . '../images/recaptcha-icon.png' ) . '" /> reCAPTCHA',
-			'branding' => __( 'Emails', 'yikes-inc-custom-login' ),
+			'branding' => __( 'Emails', 'custom-wp-login' ),
 		) );
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
@@ -68,9 +68,9 @@ class YIKES_Login_Settings {
 
 			<div id="icon-options-general" class="icon32"></div>
 
-			<h1><?php esc_attr_e( 'Custom Login Settings', 'yikes-inc-custom-login' ); ?></h1>
+			<h1><?php esc_attr_e( 'Custom Login Settings', 'custom-wp-login' ); ?></h1>
 
-			<p class="description"><?php esc_attr_e( 'Adjust the settings for the custom login plugin below.', 'yikes-inc-custom-login' ); ?></p>
+			<p class="description"><?php esc_attr_e( 'Adjust the settings for the custom login plugin below.', 'custom-wp-login' ); ?></p>
 
 			<?php
 			// Store our tab
@@ -122,7 +122,7 @@ class YIKES_Login_Settings {
 							<div class="postbox">
 								<div class="inside">
 									<a href="https://yikesplugins.com/" title="YIKES Plugins" target="_blank" class="yikes-plugins-logo-link">
-										<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . '../images/yikes-plugins-logo.png' ); ?>" class="yikes-plugins-logo" alt="<?php esc_attr_e( 'Yikes Plugins', 'yikes-inc-custom-login' ); ?>" />
+										<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . '../images/yikes-plugins-logo.png' ); ?>" class="yikes-plugins-logo" alt="<?php esc_attr_e( 'Yikes Plugins', 'custom-wp-login' ); ?>" />
 									</a>
 								</div>
 								<!-- .inside -->
@@ -132,7 +132,7 @@ class YIKES_Login_Settings {
 							<!-- Rate & Review Box -->
 							<div class="postbox">
 								<div class="inside rate-and-review-container">
-									<h2><?php esc_attr_e( 'Loving This Plugin?', 'yikes-inc-custom-login' ); ?></h2>
+									<h2><?php esc_attr_e( 'Loving This Plugin?', 'custom-wp-login' ); ?></h2>
 									<div class="rate-and-review">
 										<a href="#" target="_blank">
 											<span class="dashicons dashicons-star-filled"></span>
@@ -142,14 +142,14 @@ class YIKES_Login_Settings {
 											<span class="dashicons dashicons-star-filled"></span>
 										</a>
 										<p class="description rate-and-review-text">
-											<a href="#" title="<?php esc_attr_e( 'Rate this plugin!', 'yikes-inc-custom-login' ); ?>" target="_blank">
-												<?php esc_attr_e( 'Rate this plugin!', 'yikes-inc-custom-login' ); ?>
+											<a href="#" title="<?php esc_attr_e( 'Rate this plugin!', 'custom-wp-login' ); ?>" target="_blank">
+												<?php esc_attr_e( 'Rate this plugin!', 'custom-wp-login' ); ?>
 											</a>
 										</p>
 									</div>
 									<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://#" data-text="I'm using the Custom Login plugin by @yikesinc - wow, it's powerful!" data-via="yikesinc">Tweet</a>
 									<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-									<p class="description tweet-experience-text"><?php esc_attr_e( 'Tweet Your Experience', 'yikes-inc-custom-login' ); ?></p>
+									<p class="description tweet-experience-text"><?php esc_attr_e( 'Tweet Your Experience', 'custom-wp-login' ); ?></p>
 								</div>
 								<!-- .inside -->
 							</div>
@@ -158,16 +158,16 @@ class YIKES_Login_Settings {
 							<!-- Documentation -->
 							<div class="postbox">
 								<div class="inside support-and-docs-container">
-									<h2><?php esc_attr_e( 'Support & Documentation', 'yikes-inc-custom-login' ); ?></h2>
+									<h2><?php esc_attr_e( 'Support & Documentation', 'custom-wp-login' ); ?></h2>
 									<p class="support-and-docs-text description">
 										<?php esc_attr_e(
 											'If you have any questions or issues, please reach out to our support staff and will be happy to help you.',
-											'yikes-inc-custom-login'
+											'custom-wp-login'
 										); ?>
 									</p>
-									<!--a href="#" class="button button-secondary doc-link wp-bg"><?php esc_attr_e( 'WordPress.org', 'yikes-inc-custom-login' ); ?></a -->
-									<a href="https://github.com/yikesinc/yikes-inc-custom-login/issues" class="button button-secondary doc-link github-bg"><?php esc_attr_e( 'Github.com', 'yikes-inc-custom-login' ); ?></a>
-									<!--a href="#" class="button button-secondary doc-link docs-bg"><?php esc_attr_e( 'Documentation', 'yikes-inc-custom-login' ); ?></a -->
+									<!--a href="#" class="button button-secondary doc-link wp-bg"><?php esc_attr_e( 'WordPress.org', 'custom-wp-login' ); ?></a -->
+									<a href="https://github.com/yikesinc/yikes-inc-custom-login/issues" class="button button-secondary doc-link github-bg"><?php esc_attr_e( 'Github.com', 'custom-wp-login' ); ?></a>
+									<!--a href="#" class="button button-secondary doc-link docs-bg"><?php esc_attr_e( 'Documentation', 'custom-wp-login' ); ?></a -->
 								</div>
 								<!-- .inside -->
 							</div>
@@ -212,7 +212,7 @@ class YIKES_Login_Settings {
 		// Admin Redirection Setting
 		add_settings_field(
 			'admin_redirect', // ID
-			__( 'Admin Redirect', 'yikes-inc-custom-login' ), // Title
+			__( 'Admin Redirect', 'custom-wp-login' ), // Title
 			array( $this, 'admin_redirect_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -220,7 +220,7 @@ class YIKES_Login_Settings {
 		// Admin Redirection Setting
 		add_settings_field(
 			'restrict_dashboard_access', // ID
-			__( 'Restrict Dashboard Access', 'yikes-inc-custom-login' ), // Title
+			__( 'Restrict Dashboard Access', 'custom-wp-login' ), // Title
 			array( $this, 'restrict_dashboard_access_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -228,7 +228,7 @@ class YIKES_Login_Settings {
 		// Admin Redirection Setting
 		add_settings_field(
 			'password_strength_meter', // ID
-			__( 'Password Strength Meter', 'yikes-inc-custom-login' ), // Title
+			__( 'Password Strength Meter', 'custom-wp-login' ), // Title
 			array( $this, 'password_strength_meter_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -236,7 +236,7 @@ class YIKES_Login_Settings {
 		/* Notice Animations */
 		add_settings_field(
 			'notice_anmation', // ID
-			__( 'Notice Animation', 'yikes-inc-custom-login' ), // Title
+			__( 'Notice Animation', 'custom-wp-login' ), // Title
 			array( $this, 'notice_anmation_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -244,7 +244,7 @@ class YIKES_Login_Settings {
 		// Admin Redirection Setting
 		add_settings_field(
 			'powered_by_yikes', // ID
-			__( 'Display "Powered by YIKES Plugins"', 'yikes-inc-custom-login' ), // Title
+			__( 'Display "Powered by YIKES Plugins"', 'custom-wp-login' ), // Title
 			array( $this, 'powered_by_yikes_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
@@ -262,7 +262,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'login_page', // ID
-			sprintf( __( 'Login Page %s', 'yikes-inc-custom-login' ), $custom_login_page_template ), // Title
+			sprintf( __( 'Login Page %s', 'custom-wp-login' ), $custom_login_page_template ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -274,7 +274,7 @@ class YIKES_Login_Settings {
 		/* Account Info Page Option */
 		add_settings_field(
 			'account_info_page', // ID
-			__( 'Account Page', 'yikes-inc-custom-login' ), // Title
+			__( 'Account Page', 'custom-wp-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -286,7 +286,7 @@ class YIKES_Login_Settings {
 		/* Registration PAge Option */
 		add_settings_field(
 			'register_page', // ID
-			__( 'Registration Page', 'yikes-inc-custom-login' ), // Title
+			__( 'Registration Page', 'custom-wp-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -298,7 +298,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'password_lost_page', // ID
-			__( 'Reset Password Page', 'yikes-inc-custom-login' ), // Title
+			__( 'Reset Password Page', 'custom-wp-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -310,7 +310,7 @@ class YIKES_Login_Settings {
 		/* Login Page Option */
 		add_settings_field(
 			'pick_new_password_page', // ID
-			__( 'Select New Password Page', 'yikes-inc-custom-login' ), // Title
+			__( 'Select New Password Page', 'custom-wp-login' ), // Title
 			array( $this, 'page_select_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_pages_section', // Section
@@ -330,7 +330,7 @@ class YIKES_Login_Settings {
 		/* reCAPTCHA Site Key Option */
 		add_settings_field(
 			'recaptcha_site_key', // ID
-			__( 'Site Key', 'yikes-inc-custom-login' ), // Title
+			__( 'Site Key', 'custom-wp-login' ), // Title
 			array( $this, 'recaptcha_field_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_recaptcha_section', // Section
@@ -342,7 +342,7 @@ class YIKES_Login_Settings {
 		/* reCAPTCHA Secret Key Option */
 		add_settings_field(
 			'recaptcha_secret_key', // ID
-			__( 'Secret Key', 'yikes-inc-custom-login' ), // Title
+			__( 'Secret Key', 'custom-wp-login' ), // Title
 			array( $this, 'recaptcha_field_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_recaptcha_section', // Section
@@ -362,7 +362,7 @@ class YIKES_Login_Settings {
 		/* Test Branding Option */
 		add_settings_field(
 			'branding_logo', // ID
-			__( 'Site Logo', 'yikes-inc-custom-login' ), // Title
+			__( 'Site Logo', 'custom-wp-login' ), // Title
 			array( $this, 'logo_field_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_branding_section' // Section
@@ -371,7 +371,7 @@ class YIKES_Login_Settings {
 		/* Welcome Email Body Text */
 		add_settings_field(
 			'welcome_email_body_text', // ID
-			__( 'Welcome Email Text', 'yikes-inc-custom-login' ), // Title
+			__( 'Welcome Email Text', 'custom-wp-login' ), // Title
 			array( $this, 'welcome_email_body_text_callback' ), // Callback
 			'yikes-custom-login', // Page
 			'yikes_custom_login_branding_section' // Section
@@ -441,7 +441,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Redirect admins to %s on login?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr__( 'Redirect admins to %s on login?', 'custom-wp-login' ), '<code>' . admin_url() . '</code>' )
 		);
 	}
 
@@ -457,12 +457,12 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Restrict access to the dashboaord (%s) from non-admins?', 'yikes-inc-custom-login' ), '<code>' . admin_url() . '</code>' )
+			sprintf( esc_attr__( 'Restrict access to the dashboaord (%s) from non-admins?', 'custom-wp-login' ), '<code>' . admin_url() . '</code>' )
 		);
 		/* Display notice about who will be blocked */
 		printf(
 			'<p class="description">%s %s</p>',
-			esc_attr__( 'The following users will not have access to the dashboard:', 'yikes-inc-custom-login' ),
+			esc_attr__( 'The following users will not have access to the dashboard:', 'custom-wp-login' ),
 			wp_kses_post( self::get_restricted_users() )
 		);
 	}
@@ -479,7 +479,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Display the WordPress strength meter and encforce strong passwords?', 'yikes-inc-custom-login' )
+			esc_attr__( 'Display the WordPress strength meter and encforce strong passwords?', 'custom-wp-login' )
 		);
 	}
 	/**
@@ -509,9 +509,9 @@ class YIKES_Login_Settings {
 	public function notice_anmation_callback() {
 		/* Create our possible animations array */
 		$animations = apply_filters( 'yikes-custom-login-notice-animations', array(
-			'none' => __( 'No Animation', 'yikes-inc-custom-login' ),
-			'yikes-fadeIn' => __( 'Fade In', 'yikes-inc-custom-login' ),
-			'yikes-fadeInDown' => __( 'Fade In Down', 'yikes-inc-custom-login' ),
+			'none' => __( 'No Animation', 'custom-wp-login' ),
+			'yikes-fadeIn' => __( 'Fade In', 'custom-wp-login' ),
+			'yikes-fadeInDown' => __( 'Fade In Down', 'custom-wp-login' ),
 		) );
 		?>
 			<select id="notice_animation" name="yikes_custom_login[notice_animation]">
@@ -532,7 +532,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'yikes-inc-custom-login' )
+			esc_attr__( 'Why type of animation should be used when displaying notices to the user?', 'custom-wp-login' )
 		);
 	}
 
@@ -548,7 +548,7 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Display small text on the full width page templates linking back to YIKES?', 'yikes-inc-custom-login' )
+			esc_attr__( 'Display small text on the full width page templates linking back to YIKES?', 'custom-wp-login' )
 		);
 	}
 
@@ -577,7 +577,7 @@ class YIKES_Login_Settings {
 						'<option value="%s" %s>%s</option>',
 						'none',
 						esc_attr( selected( $this->options[ $args['field'] ], 'none' ) ),
-						esc_attr__( 'None', 'yikes-inc-custom-login' )
+						esc_attr__( 'None', 'custom-wp-login' )
 					);
 				}
 				while ( $pages_query->have_posts() ) {
@@ -601,23 +601,23 @@ class YIKES_Login_Settings {
 					// Check if the 'Full Width' page template is active
 					$customizer_link = ( $active_template ) ? '<a href="' . add_query_arg( array(
 						'url' => esc_url( get_the_permalink( $this->options['login_page'] ) ),
-					), esc_url_raw( admin_url( 'customize.php' ) ) ) . '">' . __( 'Customize Login', 'yikes-inc-custom-login' ) . '</a>' : '';
-					$option_description = '<p class="description">' . sprintf( __( 'This is the page that users will be redirected to when logging in. %s', 'yikes-inc-custom-login' ), $customizer_link ) . '</p>';
+					), esc_url_raw( admin_url( 'customize.php' ) ) ) . '">' . __( 'Customize Login', 'custom-wp-login' ) . '</a>' : '';
+					$option_description = '<p class="description">' . sprintf( __( 'This is the page that users will be redirected to when logging in. %s', 'custom-wp-login' ), $customizer_link ) . '</p>';
 					break;
 				case 'register_page':
-					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'yikes-inc-custom-login' ) . '</p>';
+					$option_description = '<p class="description">' . __( 'When a new user registers for your site, they will be redirected to this page.', 'custom-wp-login' ) . '</p>';
 					break;
 				case 'account_info_page':
-					$option_description = '<p class="description">' . sprintf( __( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'yikes-inc-custom-login' ), '<strong>' . __( 'None', 'yikes-inc-custom-login' ) . '</strong>' ) . '</p>';
+					$option_description = '<p class="description">' . sprintf( __( 'This page allows users to update their profile details from the front end of the site. Set this to "%s" to disable front end user profiles.', 'custom-wp-login' ), '<strong>' . __( 'None', 'custom-wp-login' ) . '</strong>' ) . '</p>';
 					break;
 				case 'password_lost_page':
-					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'yikes-inc-custom-login' ) . '</p>';
+					$option_description = '<p class="description">' . __( 'Users will be directed to this page when they click "Reset Password", on the login form/login page.', 'custom-wp-login' ) . '</p>';
 					break;
 				case 'pick_new_password_page':
-					$option_description = '<p class="description">' . __( 'After the user clicks the "Password Reset" link sent to them by email, they will be presented with this page - where they can enter a new password to use.', 'yikes-inc-custom-login' ) . '</p>';
+					$option_description = '<p class="description">' . __( 'After the user clicks the "Password Reset" link sent to them by email, they will be presented with this page - where they can enter a new password to use.', 'custom-wp-login' ) . '</p>';
 					break;
 				case 'register_page':
-					$option_description = '<p class="description">' . __( 'Any new users registering for your site will have to use the form on this page.', 'yikes-inc-custom-login' ) . '</p>';
+					$option_description = '<p class="description">' . __( 'Any new users registering for your site will have to use the form on this page.', 'custom-wp-login' ) . '</p>';
 					break;
 			}
 			echo wp_kses_post( $option_description );
@@ -640,7 +640,7 @@ class YIKES_Login_Settings {
 		/* Descriptions */
 		printf(
 			'<p class="description">%s</p>',
-			sprintf( esc_attr__( 'Enter your %s in the field above.', 'yikes-inc-custom-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
+			sprintf( esc_attr__( 'Enter your %s in the field above.', 'custom-wp-login' ), '<strong>' . esc_attr( str_replace( '_', ' ', $args['field'] ) ) . '</strong>' )
 		);
 	}
 
@@ -652,7 +652,7 @@ class YIKES_Login_Settings {
 		printf(
 			'<input type="text" id="branding_logo" name="yikes_custom_login[branding_logo]" value="%s" class="widefat" placeholder="%s">',
 			esc_attr( $this->options['branding_logo'] ),
-			esc_attr__( 'Site Logo', 'yikes-inc-custom-login' )
+			esc_attr__( 'Site Logo', 'custom-wp-login' )
 		);
 		// Branding Logo ID
 		printf(
@@ -675,8 +675,8 @@ class YIKES_Login_Settings {
 	 */
 	public function welcome_email_body_text_callback() {
 		$default_welcome_email_body = 'Greetings,' . "\r\n\r\n";
-		$default_welcome_email_body .= sprintf( _x( 'Thank you for signing up for our site! Please click the link below to set your password and login to the site.', 'WordPress Site Name', 'yikes-inc-custom-login' ), bloginfo( 'name' ) ) . "\r\n\r\n";
-		$default_welcome_email_body .= __( 'Thanks you so much!', 'yikes-inc-custom-login' );
+		$default_welcome_email_body .= sprintf( _x( 'Thank you for signing up for our site! Please click the link below to set your password and login to the site.', 'WordPress Site Name', 'custom-wp-login' ), bloginfo( 'name' ) ) . "\r\n\r\n";
+		$default_welcome_email_body .= __( 'Thanks you so much!', 'custom-wp-login' );
 		$editor_value = ( isset( $this->options['welcome_email_body_text'] ) ) ? $this->options['welcome_email_body_text'] : $default_welcome_email_body;
 		wp_editor(
 			$editor_value,

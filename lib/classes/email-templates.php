@@ -60,15 +60,15 @@ class YIKES_Email_Templates {
 		$user_login = stripslashes( $user->user_login );
 		$user_email = stripslashes( $user->user_email );
 
-		$message  = sprintf( _x( 'New user registration on your site %s:', 'WordPress Site Name', 'yikes-inc-custom-login' ), get_option( 'blogname' ) ) . "\r\n\r\n";
-		$message .= sprintf( _x( 'Username: %s', 'Newly Registered User Username', 'yikes-inc-custom-login' ), $user_login ) . "\r\n\r\n";
-		$message .= sprintf( _x( 'E-mail: %s', 'Newly Registered User Email Address', 'yikes-inc-custom-login' ), $user_email ) . "\r\n";
+		$message  = sprintf( _x( 'New user registration on your site %s:', 'WordPress Site Name', 'custom-wp-login' ), get_option( 'blogname' ) ) . "\r\n\r\n";
+		$message .= sprintf( _x( 'Username: %s', 'Newly Registered User Username', 'custom-wp-login' ), $user_login ) . "\r\n\r\n";
+		$message .= sprintf( _x( 'E-mail: %s', 'Newly Registered User Email Address', 'custom-wp-login' ), $user_email ) . "\r\n";
 
 		// Mail a notification to the admin
 		wp_mail(
 			get_option( 'admin_email' ),
 			sprintf(
-				_x( '[%s] New User Registration', 'WordPress Site Name', 'yikes-inc-custom-login' ),
+				_x( '[%s] New User Registration', 'WordPress Site Name', 'custom-wp-login' ),
 				get_option( 'blogname' )
 			),
 			$message

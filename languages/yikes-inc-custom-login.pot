@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yikes-inc-custom-login 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-18 16:22+0000\n"
+"POT-Creation-Date: 2016-10-20 13:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -553,7 +553,7 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: lib/classes/options.php:604 yikes-inc-custom-login.php:425
+#: lib/classes/options.php:604 yikes-inc-custom-login.php:443
 msgid "Customize Login"
 msgstr ""
 
@@ -662,7 +662,7 @@ msgstr ""
 msgid "Note: After you change your password, you will need to login again."
 msgstr ""
 
-#: templates/email/password-reset.php:315 yikes-inc-custom-login.php:277
+#: templates/email/password-reset.php:315 yikes-inc-custom-login.php:295
 msgid "Forgot Your Password?"
 msgstr ""
 
@@ -707,7 +707,7 @@ msgid "Log Out"
 msgstr ""
 
 #: templates/login-form.php:20 templates/login-form.php:68
-#: yikes-inc-custom-login.php:265 yikes-inc-custom-login.php:1445
+#: yikes-inc-custom-login.php:283 yikes-inc-custom-login.php:1463
 msgid "Sign In"
 msgstr ""
 
@@ -750,7 +750,7 @@ msgid ""
 "choose a new password."
 msgstr ""
 
-#: templates/password-reset-form.php:21 yikes-inc-custom-login.php:281
+#: templates/password-reset-form.php:21 yikes-inc-custom-login.php:299
 msgid "Pick a New Password"
 msgstr ""
 
@@ -778,77 +778,77 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: yikes-inc-custom-login.php:269
+#: yikes-inc-custom-login.php:287
 msgid "Your Account"
 msgstr ""
 
-#: yikes-inc-custom-login.php:273
+#: yikes-inc-custom-login.php:291
 msgid "Registration"
 msgstr ""
 
-#: yikes-inc-custom-login.php:365
+#: yikes-inc-custom-login.php:383
 #, php-format
 msgid "%s page successfully created."
 msgid_plural "%s pages successfully created."
 msgstr[0] ""
 msgstr[1] ""
 
-#: yikes-inc-custom-login.php:689
+#: yikes-inc-custom-login.php:707
 msgid "View Account"
 msgstr ""
 
-#: yikes-inc-custom-login.php:691
+#: yikes-inc-custom-login.php:709
 #, php-format
 msgctxt "The \"Account Info\" page link."
 msgid "You are already signed in. %s"
 msgstr ""
 
-#: yikes-inc-custom-login.php:695
+#: yikes-inc-custom-login.php:713
 msgid "Registering new users is currently disabled."
 msgstr ""
 
-#: yikes-inc-custom-login.php:725 yikes-inc-custom-login.php:756
+#: yikes-inc-custom-login.php:743 yikes-inc-custom-login.php:774
 msgid "You are already signed in."
 msgstr ""
 
-#: yikes-inc-custom-login.php:775
+#: yikes-inc-custom-login.php:793
 msgid "Invalid password reset link."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1050
+#: yikes-inc-custom-login.php:1068
 #, php-format
 msgctxt "Unicode value for \"X\"."
 msgid "%s An error occured, please try again."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1054
+#: yikes-inc-custom-login.php:1072
 #, php-format
 msgctxt "Unicode value for \"X\"."
 msgid ""
 "%s The security check did not pass. Please refresh the page and try again."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1058
+#: yikes-inc-custom-login.php:1076
 #, php-format
-msgctxt "yikes-inc-custom-login"
+msgctxt "custom-wp-login"
 msgid "%s Profile successfully updated."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1252
+#: yikes-inc-custom-login.php:1270
 msgid "You do have an email address, right?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1255
+#: yikes-inc-custom-login.php:1273
 msgid "You need to enter a password to login."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1259
+#: yikes-inc-custom-login.php:1277
 msgid ""
 "We don't have any users with that email address. Maybe you used a different "
 "one when signing up?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1265
+#: yikes-inc-custom-login.php:1283
 #, php-format
 msgctxt "The WordPress lost password URL."
 msgid ""
@@ -856,47 +856,47 @@ msgid ""
 "your password</a>?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1274
+#: yikes-inc-custom-login.php:1292
 msgid "The email address you entered is not valid."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1277
+#: yikes-inc-custom-login.php:1295
 msgid "An account exists with this email address."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1280
+#: yikes-inc-custom-login.php:1298
 msgid "Registering new users is currently not allowed."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1283
+#: yikes-inc-custom-login.php:1301
 msgid "The Google reCAPTCHA check failed. Are you a robot?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1288
+#: yikes-inc-custom-login.php:1306
 msgid "You need to enter your email address to continue."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1292
+#: yikes-inc-custom-login.php:1310
 msgid "There are no users registered with this email address."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1298
+#: yikes-inc-custom-login.php:1316
 msgid "The password reset link you used is not valid anymore."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1301
+#: yikes-inc-custom-login.php:1319
 msgid "The two passwords you entered don't match."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1304
+#: yikes-inc-custom-login.php:1322
 msgid "Sorry, we don't accept empty passwords."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1310
+#: yikes-inc-custom-login.php:1328
 msgid "An unknown error occurred. Please try again later."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1409
+#: yikes-inc-custom-login.php:1427
 #, php-format
 msgctxt ""
 "First: Unicode for lightning bolt. Second: Anchor tag linking back to "
@@ -904,7 +904,7 @@ msgctxt ""
 msgid "%s Powered by %s."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1445
+#: yikes-inc-custom-login.php:1463
 #, php-format
 msgctxt "The Login page URL. <a> tag."
 msgid "Already a member? %s"

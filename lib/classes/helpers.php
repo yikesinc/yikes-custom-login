@@ -75,7 +75,7 @@ if ( ! function_exists( 'generate_yikes_register_button' ) ) {
 			'<a href="%s" class="btn btn-info">%s %s</a>&nbsp;&nbsp;',
 			get_yikes_registration_page(),
 			wp_kses_post( $register_button_icon ),
-			apply_filters( 'yikes-custom-login-register-button-text', esc_attr__( 'Register', 'yikes-inc-custom-login' ) )
+			apply_filters( 'yikes-custom-login-register-button-text', esc_attr__( 'Register', 'custom-wp-login' ) )
 		) );
 	}
 }
@@ -95,7 +95,7 @@ if ( ! function_exists( 'generate_yikes_login_button' ) ) {
 			'<a href="%s" class="btn btn-primary">%s %s</a>',
 			wp_login_url(),
 			wp_kses_post( $signin_button_icon ),
-			apply_filters( 'yikes-custom-login-sign-in-button-text', esc_attr__( 'Sign in', 'yikes-inc-custom-login' ) )
+			apply_filters( 'yikes-custom-login-sign-in-button-text', esc_attr__( 'Sign in', 'custom-wp-login' ) )
 		) );
 	}
 }

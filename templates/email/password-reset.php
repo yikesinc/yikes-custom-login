@@ -312,16 +312,16 @@ table.button.alert:hover table a {border:0 solid #e23317}
 
 																	<!-- Site title -->
 																	<h1 style="color:inherit; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:1.3; margin:0; padding:0; text-align:center; margin-bottom:15px; word-wrap:normal; font-size:30px" align="center">
-																		<?php esc_attr_e( 'Forgot Your Password?', 'yikes-inc-custom-login' ); ?>
+																		<?php esc_attr_e( 'Forgot Your Password?', 'custom-wp-login' ); ?>
 																	</h1>
 																	<!-- End Site title -->
 
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:center; font-size:18px; margin-bottom:10px" align="center">
-																		<em><?php esc_attr_e( "Don't worry, it happens!", 'yikes-inc-custom-login' ); ?></em>
+																		<em><?php esc_attr_e( "Don't worry, it happens!", 'custom-wp-login' ); ?></em>
 																	</p>
 
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:center; font-size:18px; margin-bottom:10px" align="center">
-																		<?php esc_attr_e( "If this was a mistake, or you didn't ask for a password reset, please disregard this email. If you did request a password reset - please click the link below.", 'yikes-inc-custom-login' ); ?>
+																		<?php esc_attr_e( "If this was a mistake, or you didn't ask for a password reset, please disregard this email. If you did request a password reset - please click the link below.", 'custom-wp-login' ); ?>
 																	</p>
 
                                   <table style="border-collapse:collapse; border-spacing:0; padding:0; text-align:left; vertical-align:top; margin:15px 0; width:100%" align="left" valign="top" width="100%">
@@ -332,7 +332,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                             <td style="-moz-hyphens:auto; -webkit-hyphens:auto; hyphens:auto; word-wrap:break-word; padding:0; text-align:left; vertical-align:top; color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; font-size:18px; background:#2199e8; border:2px solid #2199e8; border-collapse:collapse; width:auto" align="left" valign="top" width="auto">
                                               <center data-parsed="" style="min-width:0; width:100%" width="100%">
 																								<a href="<?php echo esc_url( $reset_pass_url ); ?>" align="center" style="color:#fefefe; font-family:Helvetica, Arial, sans-serif; font-weight:bold; line-height:1.3; margin:0; padding:10px 20px 10px 20px; text-align:center; text-decoration:none; width:calc(100% - 20px); border:0 solid #2199e8; border-radius:3px; display:inline-block; font-size:20px" width="calc(100% - 20px)">
-																									<?php esc_attr_e( 'Reset Password', 'yikes-inc-custom-login' ); ?>
+																									<?php esc_attr_e( 'Reset Password', 'custom-wp-login' ); ?>
 																								</a>
 																							</center>
                                             </td>
@@ -347,7 +347,7 @@ table.button.alert:hover table a {border:0 solid #e23317}
 
 																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
 																		<small style="color:#cacaca; font-size:80%">
-																			<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'yikes-inc-custom-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
+																			<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'custom-wp-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
 																		</small>
 																	</p>
 

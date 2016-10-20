@@ -21,7 +21,7 @@ $yikes_form_fields = new YIKES_Form_Fields( '', $this->options );
 	?>
 
 	<?php if ( $attributes['show_title'] ) : ?>
-		<h3><?php esc_attr_e( 'Register', 'yikes-inc-custom-login' ); ?></h3>
+		<h3><?php esc_attr_e( 'Register', 'custom-wp-login' ); ?></h3>
 	<?php endif; ?>
 
 	<?php if ( count( $attributes['errors'] ) > 0 ) : ?>
@@ -79,8 +79,8 @@ $yikes_form_fields = new YIKES_Form_Fields( '', $this->options );
 			<em>
 				<?php
 					printf(
-						esc_attr_x( '%s: Your password will be generated automatically and emailed to the address you entered above.', 'The word "Note" wrapped in <strong> tags.', 'yikes-inc-custom-login' ),
-						'<strong>' . esc_attr__( 'Note', 'yikes-inc-custom-login' ) . '</strong>'
+						esc_attr_x( '%s: Your password will be generated automatically and emailed to the address you entered above.', 'The word "Note" wrapped in <strong> tags.', 'custom-wp-login' ),
+						'<strong>' . esc_attr__( 'Note', 'custom-wp-login' ) . '</strong>'
 					); ?>
 			</em>
 		</p>
@@ -94,7 +94,7 @@ $yikes_form_fields = new YIKES_Form_Fields( '', $this->options );
 		<p></p>
 
 		<p class="signup-submit span_2_of_2">
-			<input type="submit" name="submit-new-user" class="register-button" value="<?php esc_attr_e( 'Register', 'yikes-inc-custom-login' ); ?>"/>
+			<input type="submit" name="submit-new-user" class="register-button" value="<?php esc_attr_e( 'Register', 'custom-wp-login' ); ?>"/>
 		</p>
 	</form>
 
