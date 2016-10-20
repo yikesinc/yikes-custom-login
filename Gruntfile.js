@@ -112,7 +112,7 @@ module.exports = function( grunt ) {
 		// generates POT file
 		pot: {
 			options: {
-				text_domain: 'yikes-inc-custom-login',
+				text_domain: 'custom-wp-login',
 				dest: 'languages/', //directory to place the pot file
 		        keywords: [ //WordPress localisation functions
 		        	'__:1',
