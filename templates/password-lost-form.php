@@ -30,10 +30,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<p>
 		<?php
-			esc_attr_e(
-				'Enter your email address and click Reset Password to send yourself a link to choose a new password.',
-				'custom-wp-login'
-			);
+			$default_pw_reset_text = __( 'Enter your email address and click Reset Password to send yourself a link to choose a new password.', 'custom-wp-login' );
+			echo apply_filters( 'yikes-custom-login-password-reset-instructions', $default_pw_reset_text );
 		?>
 	</p>
 

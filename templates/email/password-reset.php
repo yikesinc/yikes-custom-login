@@ -343,13 +343,15 @@ table.button.alert:hover table a {border:0 solid #e23317}
                                     </tr>
                                   </table>
 
+                                  <?php do_action( 'yikes-custom-login-email-above-disclaimer' ); ?>
+
                                   <hr style="border-bottom:1px solid #cacaca; border-left:0; border-right:0; border-top:0; clear:both; height:0; margin:20px auto; max-width:580px" height="0">
 
-																	<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
-																		<small style="color:#cacaca; font-size:80%">
-																			<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'custom-wp-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
-																		</small>
-																	</p>
+									<p style="margin:0; color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; padding:0; text-align:left; font-size:18px; margin-bottom:10px" align="left">
+										<small style="color:#cacaca; font-size:80%">
+											<?php printf( esc_html_x( "You're getting this email because you requested to reset your password at %s.", '<a> tag, linking back to the site to reset the password.', 'custom-wp-login' ), '<a href="' . get_bloginfo( 'url' ) . '">' . get_bloginfo( 'name' ) . '</a>' ); ?>
+										</small>
+									</p>
 
                                 </th>
                                 <th style="color:#0a0a0a; font-family:Helvetica, Arial, sans-serif; font-weight:normal; line-height:22px; margin:0; padding:0; text-align:left; font-size:18px; visibility:hidden; width:0" align="left" width="0"></th>

@@ -2,8 +2,8 @@
 Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
-Tested up to: 4.7
-Stable tag: 1.2.1
+Tested up to: 4.9.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 
 Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site. 
@@ -49,11 +49,19 @@ Shortcodes:
 
 == Changelog ==
 
-= Custom WP Login 1.0.0 =
-* Initial Release
+= 1.2.2 - December 5th, 2017 =
+* Added an option to set the minimum password strength required for a user to change their password.
+* Added a filter to allow changes to the placement of the password reset button (`yikes-custom-login-password-reset-above-form`).
+* Added a filter to allow changes to the reset password text (`yikes-custom-login-password-reset-text`).
+* Added a filter to allow changes to the default password reset text instructions (`yikes-custom-login-password-reset-instructions`).
+* Added an action hook to the password reset email (`yikes-custom-login-email-above-disclaimer`).
+* Added action hooks to the backend when updating a user's profile (`yikes-custom-login-before-profile-update`, `yikes-custom-login-before-profile-update`).
 
-= Custom WP Login 1.1.0 =
+= 1.2.0, 1.2.1 =
+* Enabled i18n/l10n (fully)
+
+= 1.1.0 =
 * Enabled i18n/l10n (partially)
 
-= Custom WP Login 1.2.0, 1.2.1 =
-* Enabled i18n/l10n (fully)
+= 1.0.0 =
+* Initial Release

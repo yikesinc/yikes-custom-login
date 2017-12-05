@@ -32,32 +32,32 @@ class YIKES_Form_Fields {
 		}
 		// Default profile fields out of the box
 		$default_profile_fields = array(
-			array(
+			'nickname' => array(
 				'id' => 'nickname',
 				'label' => __( 'Nickname', 'custom-wp-login' ),
 				'type' => 'text',
 			),
-			array(
+			'first_name' => array(
 				'id' => 'first_name',
 				'label' => __( 'First Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
-			array(
+			'last_name' => array(
 				'id' => 'last_name',
 				'label' => __( 'Last Name', 'custom-wp-login' ),
 				'type' => 'text',
 			),
-			array(
+			'user_email' => array(
 				'id' => 'user_email',
 				'label' => __( 'Email Address', 'custom-wp-login' ),
 				'type' => 'text',
 			),
-			array(
+			'user_url' => array(
 				'id' => 'user_url',
 				'label' => __( 'Website', 'custom-wp-login' ),
 				'type' => 'text',
 			),
-			array(
+			'description' => array(
 				'id' => 'description',
 				'label' => __( 'Biography', 'custom-wp-login' ),
 				'type' => 'textarea',

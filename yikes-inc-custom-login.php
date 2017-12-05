@@ -3,8 +3,8 @@
  * Plugin Name:       YIKES Custom Login
  * Plugin URI:        https://yikesplugins.com/
  * Description:       A plugin that replaces the WordPress login flow with custom pages.
- * Version:           1.2.1
- * Author:            YIKES, Evan Herman, Tracy Levesque, Kevin Utz
+ * Version:           1.2.2
+ * Author:            YIKES, Inc.
  * Author URI:        http://www.yikesinc.com
  * License:           GPL-2.0+
  * Text Domain:       custom-wp-login
@@ -26,7 +26,7 @@ class YIKES_Custom_Login {
 
 		// Define constants
 		if ( ! defined( 'YIKES_CUSTOM_LOGIN_VERSION' ) ) {
-			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.0' );
+			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.2.2' );
 		}
 		if ( ! defined( 'YIKES_CUSTOM_LOGIN_PATH' ) ) {
 			define( 'YIKES_CUSTOM_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
@@ -252,6 +252,7 @@ class YIKES_Custom_Login {
 			'admin_redirect' => 1,
 			'restrict_dashboard_access' => 1,
 			'password_strength_meter' => 1,
+			'minimum_password_strength' => 'strong',
 			'notice_animation' => 'yikes-fadeInDown',
 			'powered_by_yikes' => 1,
 			'register_page' => null,
@@ -504,7 +505,9 @@ class YIKES_Custom_Login {
 			// but instead redirect to the homepage/custom URL
 			$redirect_url = ( 0 === $this->options['account_info_page'] ) ? add_query_arg( array( 'logged_in' => 'true' ), site_url() ) : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
 		}
-		return wp_validate_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $redirect_url, $login_page_id ), home_url() );
+		
+		wp_safe_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $redirect_url, $login_page_id, $user ) );
+		exit;
 	}
 
 	/**
@@ -537,7 +540,7 @@ class YIKES_Custom_Login {
 			if ( is_user_logged_in() ) {
 				if ( ! current_user_can( 'manage_options' ) ) {
 					$account_info_page = get_yikes_account_info_page();
-					wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page, $request_page_id ) );
+					wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page, $request_page_id, wp_get_current_user() ) );
 					exit;
 				}
 				wp_redirect( admin_url() );
@@ -1014,21 +1017,27 @@ class YIKES_Custom_Login {
 			);
 			// User data array
 			$user_data_array = array(
-					'user_login',
-					'user_nicename',
-					'user_email',
-					'user_url',
-					'display_name',
+				'user_login',
+				'user_nicename',
+				'user_email',
+				'user_url',
+				'display_name',
+				'first_name',
+				'last_name',
 			);
+
+			do_action( 'yikes-custom-login-before-profile-update', $current_user->ID );
+
 			// Loop over the remaining data, and update it!
 			foreach ( $_POST as $profile_data_key => $profile_data_value ) {
-				if ( in_array( $profile_data_value, $user_data_array ) ) {
+				if ( in_array( $profile_data_key, $user_data_array ) ) {
 					// push our data to the array, and sanitize it
 					$user_data[ $profile_data_key ] = trim( sanitize_text_field( $profile_data_value ) );
 				} else {
 					update_user_meta( $current_user->ID, $profile_data_key, trim( sanitize_text_field( $profile_data_value ) ) );
 				}
 			}
+			
 			// Now update the user
 			$update_user = wp_update_user( $user_data );
 			if ( is_wp_error( $update_user ) ) {
@@ -1037,6 +1046,9 @@ class YIKES_Custom_Login {
 				), esc_url( wp_get_referer() ) ) );
 				exit;
 			}
+
+			do_action( 'yikes-custom-login-successful-profile-update', $current_user->ID );
+
 			// Success
 			wp_redirect( add_query_arg( array(
 				'update' => 'success',
@@ -1065,7 +1077,7 @@ class YIKES_Custom_Login {
 				default:
 				case 'error':
 					$alert_class = 'yikes-custom-login-alert-danger';
-					$message = sprintf( _x( '%s An error occured, please try again.', 'Unicode value for "X".', 'custom-wp-login' ), '&#10007;' );
+					$message = sprintf( _x( '%s An error occured. Please try again.', 'Unicode value for "X".', 'custom-wp-login' ), '&#10007;' );
 					break;
 				case 'nonce_error':
 					$alert_class = 'yikes-custom-login-alert-danger';
@@ -1073,7 +1085,7 @@ class YIKES_Custom_Login {
 					break;
 				case 'success':
 					$alert_class = 'yikes-custom-login-alert-success';
-					$message = sprintf( _x( '%s Profile successfully updated.', 'custom-wp-login' ), 'Unicode value for a checkmark.', '&#10003;' );
+					$message = sprintf( _x( '%s Profile successfully updated.', 'custom-wp-login' ), '&#10003;' );
 					break;
 			}
 			printf(
@@ -1252,6 +1264,7 @@ class YIKES_Custom_Login {
 			}
 			$logged_in_redirect_url = apply_filters( 'yikes-custom-login-redirect', esc_url( get_the_permalink( $this->options['account_info_page'] ) ) );
 			wp_redirect( $logged_in_redirect_url );
+			exit;
 		}
 	}
 
@@ -1477,7 +1490,7 @@ class YIKES_Custom_Login {
 			$this->options['password_lost_page'],
 			$this->options['register_page'],
 		);
-		if ( in_array( $post->ID, $page_ids ) ) {
+		if ( is_object( $post ) && in_array( $post->ID, $page_ids ) ) {
 			// Login Container border Color
 			include_once( plugin_dir_path( __FILE__ ) . 'lib/classes/customizer-style-overrides.php' );
 			$customizer_class = new YIKES_Custom_Login_Customizer_Stlyes_Override();

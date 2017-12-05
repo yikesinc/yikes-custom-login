@@ -35,6 +35,33 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 		} else { // If the user is logged in.
 			// display the errors if present
 			$this->yikes_custom_login_display_alerts( $attributes['errors'] );
+
+			/**
+			*	'yikes-custom-login-password-reset-above-form'
+			*
+			*	Control whether the password reset button is above the form or below the form.
+			*
+			*	Return true to place the button above the form. 
+			*	Return false to place the button below the form.
+			*/
+			$password_reset_above_form = apply_filters( 'yikes-custom-login-password-reset-above-form', false );
+			
+			/**
+			*	'yikes-custom-login-password-reset-text'
+			*
+			*	Control the button text for the password reset button. Default is "New Password"
+			*/
+			$default_password_reset_text = __( 'New Password', 'yikes-inc-custom-login' );
+			$password_reset_text = apply_filters( 'yikes-custom-login-password-reset-text', $default_password_reset_text );
+
+			if ( $password_reset_above_form === true ) {
+				?>
+					<a href="#new-password" class="button reset-pass">
+						<input type="submit" value="<?php echo esc_attr( $password_reset_text ); ?>" onclick="window.location.hash = '#new-password';return false;" />
+					</a>
+				<?php
+			}
+
 			?>
 			<!-- YIKES Inc. Custom Account Info Form -->
 			<form id="yikes-account-info-form" method="post" class="section group" action="<?php the_permalink(); ?>">
@@ -82,9 +109,13 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 					<!-- Submit button and nonces -->
 					<p class="form-submit span_2_of_2">
 						<input name="updateuser" type="submit" id="updateuser" class="submit button" value="<?php esc_attr_e( 'Update Profile', 'custom-wp-login' ); ?>" />
-						<a href="#new-password" class="button reset-pass">
-							<input type="submit" value="<?php esc_attr_e( 'New Password', 'custom-wp-login' ); ?>" onclick="window.location.hash = '#new-password';return false;" />
-						</a>
+
+						<?php if ( $password_reset_above_form === false ): ?>
+							<a href="#new-password" class="button reset-pass">
+								<input type="submit" value="<?php echo esc_attr( $password_reset_text ); ?>" onclick="window.location.hash = '#new-password';return false;" />
+							</a>
+						<?php endif; ?>
+
 						<?php wp_nonce_field( 'update-user' ) ?>
 						<input name="action" type="hidden" id="action" value="update-user" />
 					</p><!-- .form-submit -->
@@ -92,7 +123,9 @@ $yikes_form_fields = new YIKES_Form_Fields( $current_user->ID, $this->options );
 			</form><!-- #adduser -->
 
 			<!-- Testing Pure CSS Popups -->
-			<?php echo $this->get_template_html( 'account-password-reset-popup', null ); ?>
+			<?php 
+				echo $this->get_template_html( 'account-password-reset-popup', null );
+			?>
 
 
 		<?php } /* End Else */ ?>

@@ -10,13 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$password_strength_turned_on = $this->options['password_strength_meter'] === 1 ? true : false;
+
 // Store user details, for use in the form.
 $user_details = wp_get_current_user();
 ?>
 <div id="new-password" class="overlay">
 	<div class="yikes-custom-login-popup">
 		<h2><?php esc_attr_e( 'New Password', 'custom-wp-login' ); ?></h2>
-		<p><?php esc_attr_e( 'Enter your new password in the fields below. You must enter a strong password before you can update it.', 'custom-wp-login' ); ?></p>
+		<p><?php esc_attr_e( 'Enter your new password in the fields below.', 'custom-wp-login' ); ?></p>
+		<?php if ( $password_strength_turned_on === true ): ?>
+			<p><?php printf( __( 'Your new password strength must be %s or higher before it can be saved.', 'custom-wp-login' ), $this->options['minimum_password_strength'] ); ?></p>
+		<?php endif; ?>
 		<a class="close" href="#">&times;</a>
 		<div class="content">
 			<!-- Reset Form -->
@@ -37,10 +42,15 @@ $user_details = wp_get_current_user();
 				</p>
 				<!-- Display the password strength meter, if enabled -->
 				<?php
-				if ( 1 === $this->options['password_strength_meter'] ) {
+				if ( $password_strength_turned_on === true ) {
 					// enqueue our strength meter scripts
 					wp_enqueue_script( 'password-strength-meter' );
-					wp_enqueue_script( 'yikes-password-strength-meter', plugin_dir_url( __FILE__ ) . '../lib/js/yikes-password-strength-meter.js', array( 'password-strength-meter' ) );
+					wp_register_script( 'yikes-password-strength-meter', plugin_dir_url( __FILE__ ) . '../lib/js/yikes-password-strength-meter.js', array( 'password-strength-meter' ) );
+					wp_localize_script( 'yikes-password-strength-meter', 'password_strength_meter', array(
+							'strength' => $this->options['minimum_password_strength']
+						)
+					);
+					wp_enqueue_script( 'yikes-password-strength-meter' );
 					printf( '<span id="pass-strength-result" aria-live="polite"></span>' );
 				}
 				?>

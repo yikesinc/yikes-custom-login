@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: yikes-inc-custom-login 1.2.2\n"
+"Project-Id-Version: yikes-inc-custom-login 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-05 15:46+0000\n"
+"POT-Creation-Date: 2016-10-18 16:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -292,7 +292,7 @@ msgstr ""
 msgid "Biography"
 msgstr ""
 
-#: lib/classes/form-fields.php:79 templates/password-lost-form.php:40
+#: lib/classes/form-fields.php:79 templates/password-lost-form.php:42
 msgid "Email"
 msgstr ""
 
@@ -354,15 +354,15 @@ msgstr ""
 msgid "settings page"
 msgstr ""
 
-#: lib/classes/metaboxes.php:140 lib/classes/options.php:296
+#: lib/classes/metaboxes.php:140 lib/classes/options.php:289
 msgid "Registration Page"
 msgstr ""
 
-#: lib/classes/metaboxes.php:143 lib/classes/options.php:308
+#: lib/classes/metaboxes.php:143 lib/classes/options.php:301
 msgid "Reset Password Page"
 msgstr ""
 
-#: lib/classes/metaboxes.php:146 lib/classes/options.php:320
+#: lib/classes/metaboxes.php:146 lib/classes/options.php:313
 msgid "Select New Password Page"
 msgstr ""
 
@@ -476,150 +476,137 @@ msgstr ""
 msgid "Password Strength Meter"
 msgstr ""
 
-#: lib/classes/options.php:238
-msgid "Minimum Allowed Password Strength"
-msgstr ""
-
-#: lib/classes/options.php:246
+#: lib/classes/options.php:239
 msgid "Notice Animation"
 msgstr ""
 
-#: lib/classes/options.php:254
+#: lib/classes/options.php:247
 msgid "Display \"Powered by YIKES Plugins\""
 msgstr ""
 
-#: lib/classes/options.php:272
+#: lib/classes/options.php:265
 #, php-format
 msgid "Login Page %s"
 msgstr ""
 
-#: lib/classes/options.php:284
+#: lib/classes/options.php:277
 msgid "Account Page"
 msgstr ""
 
-#: lib/classes/options.php:340
+#: lib/classes/options.php:333
 msgid "Site Key"
 msgstr ""
 
-#: lib/classes/options.php:352
+#: lib/classes/options.php:345
 msgid "Secret Key"
 msgstr ""
 
-#: lib/classes/options.php:372 lib/classes/options.php:694
+#: lib/classes/options.php:365 lib/classes/options.php:655
 msgid "Site Logo"
 msgstr ""
 
-#: lib/classes/options.php:381
+#: lib/classes/options.php:374
 msgid "Welcome Email Text"
 msgstr ""
 
-#: lib/classes/options.php:453
+#: lib/classes/options.php:444
 #, php-format
 msgid "Redirect admins to %s on login?"
 msgstr ""
 
-#: lib/classes/options.php:469
+#: lib/classes/options.php:460
 #, php-format
 msgid "Restrict access to the dashboaord (%s) from non-admins?"
 msgstr ""
 
-#: lib/classes/options.php:474
+#: lib/classes/options.php:465
 msgid "The following users will not have access to the dashboard:"
 msgstr ""
 
-#: lib/classes/options.php:491
-msgid "Display the WordPress strength meter and enforce password strengths?"
+#: lib/classes/options.php:482
+msgid "Display the WordPress strength meter and encforce strong passwords?"
 msgstr ""
 
-#: lib/classes/options.php:515
-msgid "Choose the minimum strength to enforce"
-msgstr ""
-
-#: lib/classes/options.php:521
-msgid ""
-"Enable the password strength meter to set the minimum password strength."
-msgstr ""
-
-#: lib/classes/options.php:551
+#: lib/classes/options.php:512
 msgid "No Animation"
 msgstr ""
 
-#: lib/classes/options.php:552
+#: lib/classes/options.php:513
 msgid "Fade In"
 msgstr ""
 
-#: lib/classes/options.php:553
+#: lib/classes/options.php:514
 msgid "Fade In Down"
 msgstr ""
 
-#: lib/classes/options.php:574
+#: lib/classes/options.php:535
 msgid ""
 "Why type of animation should be used when displaying notices to the user?"
 msgstr ""
 
-#: lib/classes/options.php:590
+#: lib/classes/options.php:551
 msgid ""
 "Display small text on the full width page templates linking back to YIKES?"
 msgstr ""
 
-#: lib/classes/options.php:619 lib/classes/options.php:650
+#: lib/classes/options.php:580 lib/classes/options.php:611
 msgid "None"
 msgstr ""
 
-#: lib/classes/options.php:643 yikes-inc-custom-login.php:444
+#: lib/classes/options.php:604 yikes-inc-custom-login.php:425
 msgid "Customize Login"
 msgstr ""
 
-#: lib/classes/options.php:644
+#: lib/classes/options.php:605
 #, php-format
 msgid "This is the page that users will be redirected to when logging in. %s"
 msgstr ""
 
-#: lib/classes/options.php:647
+#: lib/classes/options.php:608
 msgid ""
 "When a new user registers for your site, they will be redirected to this "
 "page."
 msgstr ""
 
-#: lib/classes/options.php:650
+#: lib/classes/options.php:611
 #, php-format
 msgid ""
 "This page allows users to update their profile details from the front end of "
 "the site. Set this to \"%s\" to disable front end user profiles."
 msgstr ""
 
-#: lib/classes/options.php:653
+#: lib/classes/options.php:614
 msgid ""
 "Users will be directed to this page when they click \"Reset Password\", on "
 "the login form/login page."
 msgstr ""
 
-#: lib/classes/options.php:656
+#: lib/classes/options.php:617
 msgid ""
 "After the user clicks the \"Password Reset\" link sent to them by email, "
 "they will be presented with this page - where they can enter a new password "
 "to use."
 msgstr ""
 
-#: lib/classes/options.php:659
+#: lib/classes/options.php:620
 msgid ""
 "Any new users registering for your site will have to use the form on this "
 "page."
 msgstr ""
 
-#: lib/classes/options.php:682
+#: lib/classes/options.php:643
 #, php-format
 msgid "Enter your %s in the field above."
 msgstr ""
 
-#: lib/classes/options.php:717
+#: lib/classes/options.php:678
 msgctxt "WordPress Site Name"
 msgid ""
 "Thank you for signing up for our site! Please click the link below to set "
 "your password and login to the site."
 msgstr ""
 
-#: lib/classes/options.php:718
+#: lib/classes/options.php:679
 msgid "Thanks you so much!"
 msgstr ""
 
@@ -647,38 +634,35 @@ msgstr ""
 msgid "You must be logged in to edit your profile."
 msgstr ""
 
-#: templates/account-info-form.php:54
-#: templates/account-password-reset-popup.php:20
-#: templates/account-password-reset-popup.php:36
-msgid "New Password"
-msgstr ""
-
-#: templates/account-info-form.php:111
+#: templates/account-info-form.php:84
 msgid "Update Profile"
 msgstr ""
 
-#: templates/account-password-reset-popup.php:21
-msgid "Enter your new password in the fields below."
+#: templates/account-info-form.php:86
+#: templates/account-password-reset-popup.php:18
+#: templates/account-password-reset-popup.php:31
+msgid "New Password"
 msgstr ""
 
-#: templates/account-password-reset-popup.php:23
-#, php-format
-msgid "Your new password strength must be %s or higher before it can be saved."
+#: templates/account-password-reset-popup.php:19
+msgid ""
+"Enter your new password in the fields below. You must enter a strong "
+"password before you can update it."
 msgstr ""
 
-#: templates/account-password-reset-popup.php:40
+#: templates/account-password-reset-popup.php:35
 msgid "Confirm Password"
 msgstr ""
 
-#: templates/account-password-reset-popup.php:59
+#: templates/account-password-reset-popup.php:49
 msgid "Set New Password"
 msgstr ""
 
-#: templates/account-password-reset-popup.php:64
+#: templates/account-password-reset-popup.php:54
 msgid "Note: After you change your password, you will need to login again."
 msgstr ""
 
-#: templates/email/password-reset.php:315 yikes-inc-custom-login.php:296
+#: templates/email/password-reset.php:315 yikes-inc-custom-login.php:277
 msgid "Forgot Your Password?"
 msgstr ""
 
@@ -693,12 +677,12 @@ msgid ""
 "link below."
 msgstr ""
 
-#: templates/email/password-reset.php:335 templates/password-lost-form.php:45
+#: templates/email/password-reset.php:335 templates/password-lost-form.php:47
 #: templates/password-reset-form.php:48
 msgid "Reset Password"
 msgstr ""
 
-#: templates/email/password-reset.php:352
+#: templates/email/password-reset.php:350
 #, php-format
 msgctxt "<a> tag, linking back to the site to reset the password."
 msgid ""
@@ -723,7 +707,7 @@ msgid "Log Out"
 msgstr ""
 
 #: templates/login-form.php:20 templates/login-form.php:68
-#: yikes-inc-custom-login.php:284 yikes-inc-custom-login.php:1476
+#: yikes-inc-custom-login.php:265 yikes-inc-custom-login.php:1445
 msgid "Sign In"
 msgstr ""
 
@@ -760,13 +744,13 @@ msgstr ""
 msgid "Reset Your Password"
 msgstr ""
 
-#: templates/password-lost-form.php:33
+#: templates/password-lost-form.php:34
 msgid ""
 "Enter your email address and click Reset Password to send yourself a link to "
 "choose a new password."
 msgstr ""
 
-#: templates/password-reset-form.php:21 yikes-inc-custom-login.php:300
+#: templates/password-reset-form.php:21 yikes-inc-custom-login.php:281
 msgid "Pick a New Password"
 msgstr ""
 
@@ -794,77 +778,77 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: yikes-inc-custom-login.php:288
+#: yikes-inc-custom-login.php:269
 msgid "Your Account"
 msgstr ""
 
-#: yikes-inc-custom-login.php:292
+#: yikes-inc-custom-login.php:273
 msgid "Registration"
 msgstr ""
 
-#: yikes-inc-custom-login.php:384
+#: yikes-inc-custom-login.php:365
 #, php-format
 msgid "%s page successfully created."
 msgid_plural "%s pages successfully created."
 msgstr[0] ""
 msgstr[1] ""
 
-#: yikes-inc-custom-login.php:710
+#: yikes-inc-custom-login.php:689
 msgid "View Account"
 msgstr ""
 
-#: yikes-inc-custom-login.php:712
+#: yikes-inc-custom-login.php:691
 #, php-format
 msgctxt "The \"Account Info\" page link."
 msgid "You are already signed in. %s"
 msgstr ""
 
-#: yikes-inc-custom-login.php:716
+#: yikes-inc-custom-login.php:695
 msgid "Registering new users is currently disabled."
 msgstr ""
 
-#: yikes-inc-custom-login.php:746 yikes-inc-custom-login.php:777
+#: yikes-inc-custom-login.php:725 yikes-inc-custom-login.php:756
 msgid "You are already signed in."
 msgstr ""
 
-#: yikes-inc-custom-login.php:796
+#: yikes-inc-custom-login.php:775
 msgid "Invalid password reset link."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1080
+#: yikes-inc-custom-login.php:1050
 #, php-format
 msgctxt "Unicode value for \"X\"."
-msgid "%s An error occured. Please try again."
+msgid "%s An error occured, please try again."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1084
+#: yikes-inc-custom-login.php:1054
 #, php-format
 msgctxt "Unicode value for \"X\"."
 msgid ""
 "%s The security check did not pass. Please refresh the page and try again."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1088
+#: yikes-inc-custom-login.php:1058
 #, php-format
-msgctxt "custom-wp-login"
+msgctxt "yikes-inc-custom-login"
 msgid "%s Profile successfully updated."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1283
+#: yikes-inc-custom-login.php:1252
 msgid "You do have an email address, right?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1286
+#: yikes-inc-custom-login.php:1255
 msgid "You need to enter a password to login."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1290
+#: yikes-inc-custom-login.php:1259
 msgid ""
 "We don't have any users with that email address. Maybe you used a different "
 "one when signing up?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1296
+#: yikes-inc-custom-login.php:1265
 #, php-format
 msgctxt "The WordPress lost password URL."
 msgid ""
@@ -872,47 +856,47 @@ msgid ""
 "your password</a>?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1305
+#: yikes-inc-custom-login.php:1274
 msgid "The email address you entered is not valid."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1308
+#: yikes-inc-custom-login.php:1277
 msgid "An account exists with this email address."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1311
+#: yikes-inc-custom-login.php:1280
 msgid "Registering new users is currently not allowed."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1314
+#: yikes-inc-custom-login.php:1283
 msgid "The Google reCAPTCHA check failed. Are you a robot?"
 msgstr ""
 
-#: yikes-inc-custom-login.php:1319
+#: yikes-inc-custom-login.php:1288
 msgid "You need to enter your email address to continue."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1323
+#: yikes-inc-custom-login.php:1292
 msgid "There are no users registered with this email address."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1329
+#: yikes-inc-custom-login.php:1298
 msgid "The password reset link you used is not valid anymore."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1332
+#: yikes-inc-custom-login.php:1301
 msgid "The two passwords you entered don't match."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1335
+#: yikes-inc-custom-login.php:1304
 msgid "Sorry, we don't accept empty passwords."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1341
+#: yikes-inc-custom-login.php:1310
 msgid "An unknown error occurred. Please try again later."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1440
+#: yikes-inc-custom-login.php:1409
 #, php-format
 msgctxt ""
 "First: Unicode for lightning bolt. Second: Anchor tag linking back to "
@@ -920,7 +904,7 @@ msgctxt ""
 msgid "%s Powered by %s."
 msgstr ""
 
-#: yikes-inc-custom-login.php:1476
+#: yikes-inc-custom-login.php:1445
 #, php-format
 msgctxt "The Login page URL. <a> tag."
 msgid "Already a member? %s"

@@ -233,6 +233,13 @@ class YIKES_Login_Settings {
 			'yikes-custom-login', // Page
 			'yikes_custom_login_general_section' // Section
 		);
+		add_settings_field(
+			'minimum_password_strength', // ID
+			__( 'Minimum Allowed Password Strength', 'custom-wp-login' ), // Title
+			array( $this, 'minimum_password_strength_callback' ), // Callback
+			'yikes-custom-login', // Page
+			'yikes_custom_login_general_section' // Section
+		);
 		/* Notice Animations */
 		add_settings_field(
 			'notice_anmation', // ID
@@ -392,8 +399,10 @@ class YIKES_Login_Settings {
 		$new_input['admin_redirect'] = ( isset( $input['admin_redirect'] ) ) ? absint( $input['admin_redirect'] ) : (int) 0;
 		// Restrict Dashboard Access Sanitization
 		$new_input['restrict_dashboard_access'] = ( isset( $input['restrict_dashboard_access'] ) ) ? (int) 1 : (int) 0;
-		// Use password strength meter and enforce strong passwords
+		// Use password strength meter
 		$new_input['password_strength_meter'] = ( isset( $input['password_strength_meter'] ) ) ? (int) 1 : (int) 0;
+		// What is the minimum accepted password strength? Default to 'strong'
+		$new_input['minimum_password_strength'] = ( isset( $input['minimum_password_strength'] ) ) ? $input['minimum_password_strength'] : '';
 		// Notice animations
 		$new_input['notice_animation'] = ( isset( $input['notice_animation'] ) ) ? sanitize_text_field( $input['notice_animation'] ) : 'none';
 		// Full Width Page Templates
@@ -468,7 +477,7 @@ class YIKES_Login_Settings {
 	}
 
 	/**
-	 * Restrict dashboard access from certain users
+	 * Show the password strength meter
 	 */
 	public function password_strength_meter_callback() {
 		/* Field */
@@ -479,9 +488,39 @@ class YIKES_Login_Settings {
 		/* Description */
 		printf(
 			'<p class="description">%s</p>',
-			esc_attr__( 'Display the WordPress strength meter and encforce strong passwords?', 'custom-wp-login' )
+			esc_attr__( 'Display the WordPress strength meter and enforce password strengths?', 'custom-wp-login' )
 		);
 	}
+
+	/**
+	* Show the minimum password strength dropdown
+	*/
+	public function minimum_password_strength_callback() {
+
+		$options  = array( 'strong' => 'Strong', 'medium' => 'Medium', 'weak' => 'Weak' );
+
+		echo '<div class="password-strength-field-enabled">';
+
+		/* Field */
+		echo '<select id="minimum_password_strength" name="yikes_custom_login[minimum_password_strength]">';
+		foreach( $options as $option_slug => $option_name ) {
+			$selected = isset( $this->options['minimum_password_strength'] ) && $this->options['minimum_password_strength'] === $option_slug ? 'selected="selected"' : '';
+			echo '<option value="' . esc_attr( $option_slug ) . '"' . $selected . '>' . $option_name . '</option>';
+		}
+		echo '</select>';
+
+		/* Description */
+		printf(
+			'<p class="description">%s</p>',
+			esc_attr__( 'Choose the minimum strength to enforce', 'custom-wp-login' )
+		);
+
+		echo '</div>';
+
+		/* Description if password enforcing is not turned on */
+		echo '<p class="description password-strength-field-disabled">' . __( 'Enable the password strength meter to set the minimum password strength.', 'custom-wp-login' ) . '</p>';
+	}
+
 	/**
 	 * Get a complete list of users who are going to be restricted from the dashboard
 	 * @return string Comma delimited string of restricted user roles.

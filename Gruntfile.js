@@ -46,69 +46,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		appDetails: grunt.file.readJSON( 'package.json' ),
-		usebanner: {
-			taskName: {
-				options: {
-	        position: 'top',
-					replace: true,
-	        banner: '/*\n'+
-					' * Plugin: YIKES Inc. Custom Login \n'+
-					' * Version: <%= appDetails.version %> \n'+
-					' * Author: <%= appDetails.author %> \n'+
-					' * Contact: info@yikesinc.com \n'+
-					' * License: <%= appDetails.license %> \n'+
-					' */',
-					linebreak: true
-      	},
-				files: {
-					src: [
-						'lib/css/min/yikes-custom-login-admin.min.css',
-						'lib/css/min/yikes-custom-login-public.min.css',
-						'lib/js/min/yikes-custom-login-options.min.js',
-						'lib/js/min/yikes-login-page.min.js'
-					]
-				}
-			}
-		},
-
-		// watch our project for changes
-		watch: {
-			all_css_files: {
-			 	// public css
-				files: 'lib/css/*.css',
-				tasks: ['cssmin','usebanner'],
-				options: {
-					spawn: false,
-					event: ['all']
-				},
-			},
-			all_js_files: {
-			 	// public css
-				files: 'lib/js/*.js',
-				tasks: ['uglify','usebanner'],
-				options: {
-					spawn: false,
-					event: ['all']
-				},
-			},
-		},
-
-		// Autoprefixer for our CSS files
-		postcss: {
-			options: {
-				map: true,
-					processors: [
-						require('autoprefixer-core') ({
-							browsers: ['last 2 versions']
-						})
-					]
-				},
-			dist: {
-			  src: [ 'lib/css/*.css' ]
-			}
-		},
-
 		// generates POT file
 		pot: {
 			options: {
@@ -140,19 +77,13 @@ module.exports = function( grunt ) {
 
 	// load tasks
 	grunt.loadNpmTasks('grunt-contrib-uglify'); // uglify our JS files
-	grunt.loadNpmTasks('grunt-postcss'); // CSS autoprefixer plugin (cross-browser auto pre-fixes)
 	grunt.loadNpmTasks('grunt-contrib-cssmin'); // CSS Minifier
-	grunt.loadNpmTasks('grunt-contrib-watch'); // Watch files for changes
-	grunt.loadNpmTasks('grunt-banner'); // Banner task
 	grunt.loadNpmTasks('grunt-pot'); // POT file
 
 	// register task
 	grunt.registerTask('default', [
 		'uglify',
-		'postcss',
 		'cssmin',
-		'usebanner',
-		'watch',
 		'pot'
 	]);
 };
