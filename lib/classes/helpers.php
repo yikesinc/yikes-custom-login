@@ -23,6 +23,18 @@ if ( ! function_exists( 'get_yikes_account_info_page' ) ) {
 }
 
 /**
+ * Get the account info page ID
+ *
+ * @return int ID of the account info page, or 0 if it doesn't exist
+ */
+if ( ! function_exists( 'get_yikes_account_info_page_id' ) ) {
+	function get_yikes_account_info_page_id() {
+		$options = get_yikes_custom_login_options();
+		return ! empty( $options['account_info_page'] ) ? $options['account_info_page'] : 0;
+	}
+}
+
+/**
  * Get the login page URL
  *
  * @return string URL of the account info page, or home URL if not set

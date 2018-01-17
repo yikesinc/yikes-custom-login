@@ -1393,19 +1393,28 @@ class YIKES_Custom_Login {
 				$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/pick-new-password-page-template.php';
 			}
 		}
+
 		// New User Registration Page
 		if ( is_page( $this->options['register_page'] ) ) {
+
 			// check if the user is logged in
 			if ( is_user_logged_in() ) {
-				$account_info_page_url = ( 0 === $this->options['account_info_page'] ) ? site_url() : esc_url( get_the_permalink( $this->options['account_info_page'] ) );
-				// Redirect to account page with new password popup displayed
-				wp_redirect( esc_url( get_the_permalink( $account_info_page_url ) ) );
+
+				if ( ! current_user_can( 'manage_options' ) ) {
+					$account_info_page_url = get_yikes_account_info_page();
+					$account_info_page_id  = get_yikes_account_info_page_id();
+					wp_redirect( apply_filters( 'yikes-custom-login-login-redirect-url', $account_info_page_url, $account_info_page_id, wp_get_current_user() ) );
+					exit;
+				}
+				wp_redirect( admin_url() );
 				exit;
 			}
+
 			if ( get_post_meta( $this->options['register_page'], '_full_width_page_template', true ) ) {
 				$page_template = YIKES_CUSTOM_LOGIN_PATH . 'templates/page/new-user-registration-page-template.php';
 			}
 		}
+
 		return $page_template;
 	}
 
