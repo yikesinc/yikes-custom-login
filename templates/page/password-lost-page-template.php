@@ -8,9 +8,17 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-wp_head();
 ?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+
+<?php wp_head(); ?>
+</head>
 
 <body class="yikes-custom-page-template">
 	<div id="yikes-custom-user-registration-template" class="yikes-custom-page-template-interior">
@@ -40,6 +48,8 @@ wp_head();
 		<?php do_action( 'yikes-custom-login-password-lost-page-bottom' ); ?>
 
 	</div>
-</body>
 
 <?php wp_footer(); ?>
+
+</body>
+</html>
