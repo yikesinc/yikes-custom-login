@@ -687,6 +687,12 @@ class YIKES_Custom_Login {
 				$errors[] = $this->get_error_message( $code );
 			}
 		}
+
+		// Checking to see if shortcode has any props
+		if ( ! is_array( $attributes ) ) {
+			$attributes = array();
+		}
+
 		$attributes['errors'] = $errors;
 		// Render the login form using an external template
 		return $this->get_template_html( 'account-info-form', $attributes );
