@@ -3,7 +3,7 @@
  * Plugin Name:       YIKES Custom Login
  * Plugin URI:        https://yikesplugins.com/
  * Description:       A plugin that replaces the WordPress login flow with custom pages.
- * Version:           1.2.2
+ * Version:           1.2.3
  * Author:            YIKES, Inc.
  * Author URI:        http://www.yikesinc.com
  * License:           GPL-2.0+
@@ -26,7 +26,7 @@ class YIKES_Custom_Login {
 
 		// Define constants
 		if ( ! defined( 'YIKES_CUSTOM_LOGIN_VERSION' ) ) {
-			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.2.2' );
+			define( 'YIKES_CUSTOM_LOGIN_VERSION', '1.2.3' );
 		}
 		if ( ! defined( 'YIKES_CUSTOM_LOGIN_PATH' ) ) {
 			define( 'YIKES_CUSTOM_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
@@ -687,6 +687,12 @@ class YIKES_Custom_Login {
 				$errors[] = $this->get_error_message( $code );
 			}
 		}
+
+		// Checking to see if shortcode has any props
+		if ( ! is_array( $attributes ) ) {
+			$attributes = array();
+		}
+
 		$attributes['errors'] = $errors;
 		// Render the login form using an external template
 		return $this->get_template_html( 'account-info-form', $attributes );

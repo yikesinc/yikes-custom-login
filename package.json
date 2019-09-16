@@ -1,6 +1,6 @@
 {
   "name": "yikes-inc-custom-login",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Custom login forms and redirects.",
   "main": "yikes-inc-custom-login.php",
   "scripts": {
@@ -9,12 +9,12 @@
   "author": "Yikes Inc.",
   "license": "GPLv2",
   "dependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0"
   },
   "devDependencies": {
-    "grunt-contrib-cssmin": "^0.12.3",
-    "grunt-contrib-uglify": "^0.9.2",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
     "grunt-pot": "^0.3.0"
   }
 }
