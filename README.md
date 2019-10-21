@@ -19,7 +19,7 @@ A WordPress plugin that replaces the login flow with custom pages.
 
 ### Custom Templates:
 
-Users can override the default templates by copying `wp-content/plugins/custom-wp-login/templates/` into the theme root, and renaming the directory `/custom-wp-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
+Users can override the default templates by copying `wp-content/plugins/custom-wp-login/templates/` into the theme root, and renaming the directory to `/yikes-custom-login/`. You can remove any of the templates you don't need, and customize the ones you will be using.
 
 ### Additional Profile Fields
 
