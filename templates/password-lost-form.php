@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</p>
 
-	<form id="yikes-lost-password-form" action="<?php echo esc_url( wp_lostpassword_url() ); ?>" method="post">
+	<form id="yikes-lost-password-form" action="<?php echo esc_url( network_site_url( 'wp-login.php?action=lostpassword', 'login_post' ) ); ?>" method="post">
 		<p class="form-row">
 			<label for="user_login"><?php esc_attr_e( 'Email', 'custom-wp-login' ); ?>
 			<input type="text" name="user_login" id="user_login">
