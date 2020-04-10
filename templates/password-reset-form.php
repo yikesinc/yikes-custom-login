@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h3><?php esc_attr_e( 'Pick a New Password', 'custom-wp-login' ); ?></h3>
 	<?php endif; ?>
 
-	<form id="yikes-reset-password-form" name="resetpassform" action="<?php echo site_url( 'wp-login.php?action=resetpass' ); ?>" method="post" autocomplete="off">
+	<form id="yikes-reset-password-form" name="resetpassform" action="<?php echo esc_url( network_site_url( 'wp-login.php?action=resetpass', 'login_post' ) ); ?>" method="post" autocomplete="off">
 		<input type="hidden" id="user_login" name="login" value="<?php echo esc_attr( $attributes['login'] ); ?>" autocomplete="off" />
 		<input type="hidden" name="key" value="<?php echo esc_attr( $attributes['key'] ); ?>" />
 
