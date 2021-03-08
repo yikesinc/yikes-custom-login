@@ -8,7 +8,6 @@
 .gitignore
 .scrutinizer.yml
 Gruntfile.js
-LICENSE
 Readme.md
 composer.json
 composer.lock
