@@ -5,6 +5,7 @@
 /node_modules
 
 # Files
+.distignore
 .gitignore
 .scrutinizer.yml
 Gruntfile.js
