@@ -1,6 +1,6 @@
 {
   "name": "yikes-inc-custom-login",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Custom login forms and redirects.",
   "main": "yikes-inc-custom-login.php",
   "scripts": {
