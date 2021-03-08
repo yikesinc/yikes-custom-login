@@ -2,11 +2,11 @@
 Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
-Tested up to: 4.9.1
-Stable tag: 1.2.3
+Tested up to: 5.6.2
+Stable tag: 1.2.2
 License: GPLv2 or later
 
-Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site. 
+Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site.
 
 == Description ==
 
@@ -45,12 +45,9 @@ Shortcodes:
 6. Activating the plugin will automatically create 5 new WordPress pages
 7. The settings page
 8. Change which WordPress pages correspond to the default Login / Account / Registration / Reset Password / Select New Password screens
-9. You can create and choose your own page to act as the login screen 
+9. You can create and choose your own page to act as the login screen
 
 == Changelog ==
-
-= 1.2.3 - July 29, 2019 =
-* Bug fixed with `[account-info]` that caused red error box to appear.
 
 = 1.2.2 - December 5th, 2017 =
 * Added an option to set the minimum password strength required for a user to change their password.
@@ -67,4 +64,4 @@ Shortcodes:
 * Enabled i18n/l10n (partially)
 
 = 1.0.0 =
-* Initial Release
+* Initial Release* Initial Release
