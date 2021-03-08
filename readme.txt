@@ -3,7 +3,7 @@ Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
 Tested up to: 5.6.2
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 
 Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site.
@@ -48,6 +48,9 @@ Shortcodes:
 9. You can create and choose your own page to act as the login screen
 
 == Changelog ==
+
+= 1.2.3 - March 8th, 2021 =
+* Housekeeping
 
 = 1.2.2 - December 5th, 2017 =
 * Added an option to set the minimum password strength required for a user to change their password.
