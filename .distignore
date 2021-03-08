@@ -10,6 +10,7 @@
 .scrutinizer.yml
 Gruntfile.js
 Readme.md
+README.md
 composer.json
 composer.lock
 package.json
