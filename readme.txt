@@ -2,7 +2,7 @@
 Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
-Tested up to: 5.6.2
+Tested up to: 5.7
 Stable tag: 1.2.4
 License: GPLv2 or later
 
