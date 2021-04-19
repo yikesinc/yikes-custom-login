@@ -3,7 +3,7 @@ Contributors: yikesinc, eherman24, liljimmi, yikesitskevin
 Tags: custom, login, forms, redirects, member, guest, members, register
 Requires at least: 4.0
 Tested up to: 5.7
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 
 Quickly generate custom front-end login, register, password reset and account profile forms for a WordPress site.
