@@ -1376,7 +1376,7 @@ class YIKES_Custom_Login {
 
 			case 'invalid_username':
 				return __(
-					"We don't have any users with that email address. Maybe you used a different one when signing up?",
+					"The username you entered is unknown. Please check again or try your email address.",
 					'custom-wp-login'
 				);
 
