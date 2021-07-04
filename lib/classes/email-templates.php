@@ -28,9 +28,9 @@ class YIKES_Email_Templates {
 	 * @return string                     HTML markup for the email to be sent
 	 */
 	public function send_password_reset_email( $key, $user_login, $reset_pass_url ) {
-		if ( file_exists( get_stylesheet_directory_uri() . '/yikes-inc-custom-login/templates/email/password-reset.php' ) ) {
+		if ( file_exists( get_template_directory() . '/yikes-custom-login/email/password-reset.php' ) ) {
 			// include the password reset email
-			include_once( get_stylesheet_directory_uri() . '/yikes-inc-custom-login/templates/email/password-reset.php' );
+			include_once( get_template_directory() . '/yikes-custom-login/email/password-reset.php' );
 			return;
 		}
 		// include the password reset email
@@ -84,8 +84,8 @@ class YIKES_Email_Templates {
 		// Inclde our custom 'Welcome' email template
 		ob_start();
 		// Include the welcome email
-		if ( file_exists( get_stylesheet_directory_uri() . '/yikes-inc-custom-login/templates/email/welcome.php' ) ) {
-			include_once( get_stylesheet_directory_uri() . '/yikes-inc-custom-login/templates/email/welcome.php' );
+		if ( file_exists( get_template_directory() . '/yikes-custom-login/email/welcome.php' ) ) {
+			include_once( get_template_directory() . '/yikes-custom-login/email/welcome.php' );
 		} else {
 			include_once( YIKES_CUSTOM_LOGIN_PATH . 'templates/email/welcome.php' );
 		}
